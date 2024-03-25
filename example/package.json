@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "scripts": {
+    "postinstall": "elm-tooling install",
+    "start": "run-pty % npm run start:elm % npm run start:http",
+    "start:elm": "elm-watch hot",
+    "start:http": "serve public"
+  },
+  "devDependencies": {
+    "elm-tooling": "^1.14.1",
+    "elm-watch": "^1.2.0-beta.3",
+    "run-pty": "^4.0.4",
+    "serve": "^14.2.1"
+  }
+}
