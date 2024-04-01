@@ -366,6 +366,7 @@ styleListString xs =
     xs
         |> List.map (\( k, v ) -> k ++ ":" ++ v)
         |> String.join ";"
+        |> (\s -> s ++ ";")
 
 
 {-|
@@ -403,6 +404,11 @@ toThemeString (ThemeBuilder { data, extra }) =
     [ [ ( "font-heading", data.fonts.heading )
       , ( "font-text", data.fonts.text )
       , ( "font-code", data.fonts.code )
+      , ( "border-xs", px data.radius.xs )
+      , ( "border-sm", px data.radius.sm )
+      , ( "border-md", px data.radius.md )
+      , ( "border-lg", px data.radius.lg )
+      , ( "border-xl", px data.radius.xl )
       ]
     , colorSpec "base" data.base
     , colorSpec "primary" data.primary
@@ -413,9 +419,17 @@ toThemeString (ThemeBuilder { data, extra }) =
     , extra
     ]
         |> List.concat
-        |> List.map cssVarDef
-        |> String.join ";"
-        |> (\s -> s ++ "color-scheme: dark;")
+        |> List.map (Tuple.mapFirst cssVarId)
+        |> List.append
+            [ ( "color-scheme"
+              , if data.useDarkColorScheme then
+                    "dark"
+
+                else
+                    "light"
+              )
+            ]
+        |> styleListString
 
 
 colorSpec : String -> ThemeColorSet -> List ( String, String )
@@ -450,11 +464,6 @@ namespace =
 cssVarId : String -> String
 cssVarId v =
     "--" ++ namespace ++ "-" ++ v
-
-
-cssVarDef : ( String, String ) -> String
-cssVarDef ( k, v ) =
-    cssVarId k ++ ":" ++ v
 
 
 cssVar : String -> String
@@ -564,7 +573,7 @@ styles (Theme theme) =
                                 ++ theme.class
                                 ++ " { "
                                 ++ toString darkMode.theme
-                                ++ "; }"
+                                ++ " }"
                             )
                         ]
 
@@ -581,7 +590,7 @@ styles (Theme theme) =
                                 ++ theme.class
                                 ++ " { "
                                 ++ toString darkMode.theme
-                                ++ "; } }"
+                                ++ " } }"
                             )
                         ]
 
@@ -636,12 +645,12 @@ global (Theme theme) =
                     ClassStrategy darkClass ->
                         H.node "style"
                             []
-                            [ H.text ("." ++ darkClass ++ " { " ++ toString darkMode.theme ++ "; }") ]
+                            [ H.text ("body." ++ darkClass ++ ", body ." ++ darkClass ++ " { " ++ toString darkMode.theme ++ " }") ]
 
                     SystemStrategy ->
                         H.node "style"
                             []
-                            [ H.text ("@media (prefers-color-scheme: dark) { body { " ++ toString darkMode.theme ++ "; } }") ]
+                            [ H.text ("@media (prefers-color-scheme: dark) { body { " ++ toString darkMode.theme ++ " } }") ]
 
             Nothing ->
                 H.text ""
@@ -669,6 +678,11 @@ hashString =
 toString : Theme -> String
 toString (Theme theme) =
     theme.string
+
+
+px : Float -> String
+px v =
+    String.fromFloat v ++ "px"
 
 
 
