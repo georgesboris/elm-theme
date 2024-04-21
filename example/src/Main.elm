@@ -10,11 +10,7 @@ main : H.Html msg
 main =
     H.div
         []
-        [ H.node "style"
-            []
-            [ H.text ("""body { margin: 0; padding: 0; background: """ ++ W.Theme.base.bg ++ """; color: """ ++ W.Theme.base.text ++ """ }""")
-            ]
-        , W.Theme.global (W.Theme.lightWithDarkModeTheme W.Theme.systemStrategy)
+        [ W.Theme.global (W.Theme.lightWithDarkModeTheme W.Theme.systemStrategy)
         , W.Theme.styles W.Theme.lightTheme
         , W.Theme.styles W.Theme.darkTheme
         , sample
@@ -26,100 +22,122 @@ main =
 sample : H.Html msg
 sample =
     let
-        colorVars : List W.Theme.ThemeColorSetVariables
+        colorVars : List { colorSet : W.Theme.ThemeColorSetVariables, solid : String, outline : String, tint : String }
         colorVars =
-            [ W.Theme.primary
-            , W.Theme.secondary
-            , W.Theme.success
-            , W.Theme.warning
-            , W.Theme.danger
+            [ -- W.Theme.base
+              { colorSet = W.Theme.base
+              , solid = "ring-base-detail bg-base-solid hover:bg-base-solid-hover active:bg-base-solid-soft shadow-base-detail"
+              , outline = "ring-base-detail-soft text-base hover:bg-base-soft border-base-detail hover:border-base-detail-hover active:border-base-soft"
+              , tint = "ring-base-detail-hover bg-base-tint-soft hover:bg-base-tint active:bg-base-tint-soft"
+              }
+              -- W.Theme.primary
+            , { colorSet = W.Theme.primary
+              , solid = "ring-primary-detail focus:ring ring-primary-detail bg-primary-solid hover:bg-primary-solid-hover active:bg-primary-solid-soft shadow-primary-detail"
+              , outline = "ring-primary-detail-soft text-primary hover:bg-primary-soft border-primary-detail hover:border-primary-detail-hover active:border-primary-detail-soft"
+              , tint = "ring-primary-detail-hover bg-primary-tint-soft hover:bg-primary-tint active:bg-primary-tint-soft"
+              }
+            -- W.Theme.secondary
+            , { colorSet = W.Theme.secondary
+              , solid = "ring-secondary-detail bg-secondary-solid hover:bg-secondary-solid-hover active:bg-secondary-solid-soft shadow-secondary-detail"
+              , outline = "ring-secondary-detail-soft text-secondary hover:bg-secondary-soft border-secondary-detail hover:border-secondary-detail-hover active:border-secondary-detail-soft"
+              , tint = "bg-sering-secondary-detail-hover bg-secondary-tint-soft hover:bg-secondary-tint active:bg-secondary-tint-soft"
+              }
+            -- W.Theme.success
+            , { colorSet = W.Theme.success
+              , solid = "ring-success-detail bg-success-solid hover:bg-success-solid-hover active:bg-success-solid-soft shadow-success-detail"
+              , outline = "ring-success-detail-soft text-success hover:bg-success-soft border-success-detail hover:border-success-detail-hover active:border-success-detail-soft"
+              , tint = "ring-success-detail-hover bg-success-tint-soft hover:bg-success-tint active:bg-success-tint-soft"
+              }
+            -- W.Theme.warning
+            , { colorSet = W.Theme.warning
+              , solid = "ring-warning-detail bg-warning-solid hover:bg-warning-solid-hover active:bg-warning-solid-soft shadow-warning-detail"
+              , outline = "ring-warning-detail-soft text-warning hover:bg-warning-soft border-warning-detail hover:border-warning-detail-hover active:border-warning-detail-soft"
+              , tint = "ring-warning-detail-hover bg-warning-tint-soft hover:bg-warning-tint active:bg-warning-tint-soft"
+              }
+            -- W.Theme.danger
+            , { colorSet = W.Theme.danger
+              , solid = "ring-danger-detail bg-danger-solid hover:bg-danger-solid-hover active:bg-danger-solid-soft shadow-danger-detail"
+              , outline = "ring-danger-detail-soft text-danger hover:bg-danger-soft border-danger-detail hover:border-danger-detail-hover active:border-danger-detail-soft"
+              , tint = "ring-danger-detail-hover bg-danger-tint-soft hover:bg-danger-tint active:bg-danger-tint-soft"
+              }
             ]
 
-        colorSample : W.Theme.ThemeColorSetVariables -> H.Html msg
-        colorSample color =
+        colorSample : { colorSet : W.Theme.ThemeColorSetVariables, solid : String, outline : String, tint : String } -> H.Html msg
+        colorSample colorClasses =
             H.div
-                [ HA.style "display" "flex"
-                , HA.style "flex-direction" "column"
-                , HA.style "gap" "8px"
-                , HA.style "text-align" "center"
-                , HA.style "grid-column" "span 1 / span 1"
-                ]
-                [ H.div
-                    [ W.Theme.styleList
-                        [ ( "background", color.solid )
-                        , ( "border-radius", "4px" )
-                        , ( "box-shadow", ("0 0 6px " ++ color.borderSubtle) )
-                        , ( "color", color.solidText )
-                        , ( "padding", "8px 12px" )
-                        ]
+                [ HA.class "flex flex-col gap-2 text-center" ]
+                [ [ .bg
+                  , .bgSoft
+                  , .tintSoft
+                  , .tint
+                  , .tintHover
+                  , .detailSoft
+                  , .detail
+                  , .detailHover
+                  , .solidSoft
+                  , .solid
+                  , .solidHover
+                  , .solidText
+                  , .textSoft
+                  , .text
+                  ]
+                  |> List.map (\fn -> viewColor (fn colorClasses.colorSet))
+                  |> H.div [ HA.class "grid gap-2", HA.style "grid-template-columns" "repeat(14, minmax(0, 1fr))" ]
+                , H.button
+                    [ HA.class "py-2 px-3 shadow outline-none focus:ring"
+                    , HA.class "rounded-sm"
+                    , HA.class colorClasses.solid
                     ]
-                    [ H.text "Button" ]
-                , H.div
-                    [ W.Theme.styleList
-                        [ ( "background", color.tintSubtle )
-                        , ( "border-radius", "4px" )
-                        , ( "border", ("3px solid " ++ color.border))
-                        , ( "color", color.text )
-                        , ( "border-radius",  "4px" )
-                        , ( "padding", "8px 12px" )
-                        ]
+                    [ H.text "Solid Button" ]
+                , H.button
+                    [ HA.class "rounded-sm border-2 px-3 py-2 outline-none focus:ring"
+                    , HA.class colorClasses.outline
                     ]
-                    [ H.text "Text" ]
-                , H.div
-                    [ HA.style "background" (color.tint)
-                    , HA.style "border-radius" "4px"
-                    , HA.style "color" color.text
-                    , HA.style "padding" "8px 12px"
+                    [ H.text "Outline Button" ]
+                , H.button
+                    [ HA.class "rounded-sm py-2 px-3 outline-none focus:ring"
+                    , HA.class colorClasses.tint
                     ]
-                    [ H.text "Text" ]
+                    [ H.text "Tinted Button" ]
                 ]
     in
     H.article
-        [ HA.style "padding" "20px"
-        , HA.style "background" W.Theme.base.tintSubtle
+        [ HA.class "p-4"
+        , HA.class "bg-base-soft"
         ]
         [ H.section
-            [ HA.style "border-radius" "4px"
-            , HA.style "padding" "20px"
-            , HA.style "background" W.Theme.base.bg
-            , HA.style "box-shadow" "0 0 8px rgba(0, 0, 0, 0.1)"
-            , HA.style "font-family" W.Theme.font.text
-            , HA.style "color" W.Theme.base.text
+            [ HA.class "p-4 rounded shadow-lg"
+            , HA.class "bg-base"
             ]
             [ H.div
-                [ HA.style "display" "grid"
-                , HA.style "grid-template-columns" "repeat(2, minmax(0, 1fr))"
-                , HA.style "gap" "20px"
-                , HA.style "width" "100%"
-                ]
+                [ HA.class "grid grid-cols-2 gap-6" ]
                 (H.div
-                    [ HA.style "grid-column" "span 2 / span 2"
-                    , HA.style "display" "flex"
-                    , HA.style "flex-direction" "column"
-                    , HA.style "gap" "8px"
-                    , HA.style "padding-bottom" "12px"
-                    ]
-                    [ H.h1
-                        [ HA.style "font-family" W.Theme.font.heading
-                        , HA.style "color" W.Theme.base.text
-                        , HA.style "font-size" "20px"
-                        , HA.style "margin" "0"
-                        ]
-                        [ H.text "Theme Sample"
-                        ]
-                    , H.p
-                        [ HA.style "margin" "0" ]
-                        [ H.text "All theme colors and contrasts are displayed here." ]
-                    , H.p
-                        [ HA.style "margin" "0"
-                        , HA.style "font-size" "14px"
-                        , HA.style "color" W.Theme.base.textSubtle
-                        , HA.style "font-family" W.Theme.font.code
-                        ]
-                        [ H.text "Use accessibility ratings for making sure your theme works for everyone." ]
+                    [ HA.class "col-span-2 flex flex-col" ]
+                    [ H.h1 [ HA.class "text-xl" ] [ H.text "Theme Sample" ]
+                    , H.p [ HA.class "text-soft" ] [ H.text "All theme colors and contrasts are displayed here." ]
+                    , viewCode
                     ]
                     :: List.map colorSample colorVars
                 )
+            ]
+        ]
+
+
+viewColor : String -> H.Html msg
+viewColor c =
+    H.div [ HA.class "aspect-square rounded-xs", HA.style "background" c ] []
+
+
+viewCode : H.Html msg
+viewCode =
+    H.pre
+        [ HA.class "mt-4 text-md rounded-sm p-2 overflow-auto border"
+        , HA.class "bg-base-tint border-base-detail-soft"
+        ]
+        [ H.code
+            []
+            [ H.text "Use accessibility ratings for making sure your theme works for everyone."
+            , H.p [ HA.class "text-soft" ] [ H.text "This is a softer text but it is still quite readable, no?" ]
             ]
         ]
 
