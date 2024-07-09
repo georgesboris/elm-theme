@@ -1,1384 +1,1262 @@
 module W.Theme.Colors exposing
-    ( ThemeColorSet
-    , amber, amberDark
-    , blue, blueDark
-    , bronze, bronzeDark
-    , brown, brownDark
-    , crimson, crimsonDark
-    , cyan, cyanDark
-    , gold, goldDark
-    , grass, grassDark
-    , gray, grayDark
-    , green, greenDark
-    , indigo, indigoDark
-    , iris, irisDark
-    , jade, jadeDark
-    , lime, limeDark
-    , mauve, mauveDark
-    , mint, mintDark
-    , olive, oliveDark
-    , orange, orangeDark
-    , pink, pinkDark
-    , plum, plumDark
-    , purple, purpleDark
-    , red, redDark
-    , ruby, rubyDark
-    , sage, sageDark
-    , sand, sandDark
-    , sky, skyDark
-    , slate, slateDark
-    , teal, tealDark
-    , tomato, tomatoDark
-    , violet, violetDark
-    , yellow, yellowDark
-    , steel, steelDark
+    ( amber
+    , amberDark
+    , blue
+    , blueDark
+    , bronze
+    , bronzeDark
+    , brown
+    , brownDark
+    , crimson
+    , crimsonDark
+    , cyan
+    , cyanDark
+    , gold
+    , goldDark
+    , grass
+    , grassDark
+    , gray
+    , grayDark
+    , green
+    , greenDark
+    , indigo
+    , indigoDark
+    , iris
+    , irisDark
+    , jade
+    , jadeDark
+    , lime
+    , limeDark
+    , mauve
+    , mauveDark
+    , mint
+    , mintDark
+    , olive
+    , oliveDark
+    , orange
+    , orangeDark
+    , pink
+    , pinkDark
+    , plum
+    , plumDark
+    , purple
+    , purpleDark
+    , red
+    , redDark
+    , ruby
+    , rubyDark
+    , sage
+    , sageDark
+    , sand
+    , sandDark
+    , sky
+    , skyDark
+    , slate
+    , slateDark
+    , teal
+    , tealDark
+    , tomato
+    , tomatoDark
+    , violet
+    , violetDark
+    , yellow
+    , yellowDark
     )
 
-{-|
-
-Based on https://www.radix-ui.com/colors with subtle changes.
-
-- `bg` and `bgSubtle` are basically shades 1 and 2 of radix ui but `bgSubtle` is always **darker** than `bg`.
-- There is an additional `solidText` variable so we can always make sure what color has proper contrast with a solid background (instead of mixing rules based on colors).
-- There is an additional `solidSubtle` variable so `tint`, `detail` and `solid` sets have standard behavior (`*Strong` is used for hovers and `*Subtle` can both be used for subtle things as well as active state - this can be unexpected but clicking on a button having it become faded actually gives the impression of "pressing" it instead of highlighting it).
-
-@docs amber, amberDark
-@docs blue, blueDark
-@docs bronze, bronzeDark
-@docs brown, brownDark
-@docs crimson, crimsonDark
-@docs cyan, cyanDark
-@docs gold, goldDark
-@docs grass, grassDark
-@docs gray, grayDark
-@docs green, greenDark
-@docs indigo, indigoDark
-@docs iris, irisDark
-@docs jade, jadeDark
-@docs lime, limeDark
-@docs mauve, mauveDark
-@docs mint, mintDark
-@docs olive, oliveDark
-@docs orange, orangeDark
-@docs pink, pinkDark
-@docs plum, plumDark
-@docs purple, purpleDark
-@docs red, redDark
-@docs ruby, rubyDark
-@docs sage, sageDark
-@docs sand, sandDark
-@docs sky, skyDark
-@docs slate, slateDark
-@docs teal, tealDark
-@docs tomato, tomatoDark
-@docs violet, violetDark
-@docs yellow, yellowDark
-
--}
+import Color exposing (Color)
 
 
-{-| -}
-type alias ThemeColorSet =
-    { bg : String
-    , bgSubtle : String
-    , tint : String
-    , tintSubtle : String
-    , tintStrong : String
-    , detail : String
-    , detailSubtle : String
-    , detailStrong : String
-    , solid : String
-    , solidSubtle : String
-    , solidStrong : String
-    , solidText : String
-    , textSubtle : String
-    , text : String
+type alias ColorScale =
+    { bg : Color
+    , bgSubtle : Color
+    , tint : Color
+    , tintSubtle : Color
+    , tintStrong : Color
+    , accent : Color
+    , accentSubtle : Color
+    , accentStrong : Color
+    , solid : Color
+    , solidSubtle : Color
+    , solidStrong : Color
+    , solidText : Color
+    , text : Color
+    , textSubtle : Color
     }
 
 
-
--- Colors : Light
-
-
-{-| -}
-gray : ThemeColorSet
+gray : ColorScale
 gray =
-    { bg = "#fcfcfc"
-    , bgSubtle = "#f9f9f9"
-    , tintSubtle = "#f0f0f0"
-    , tint = "#e8e8e8"
-    , tintStrong = "#e0e0e0"
-    , detailSubtle = "#d9d9d9"
-    , detail = "#cecece"
-    , detailStrong = "#bbbbbb"
-    , solid = "#8d8d8d"
-    , solidSubtle = "#bbbbbb"
-    , solidStrong = "#838383"
-    , solidText = "#ffffff"
-    , textSubtle = "#202020"
-    , text = "#646464"
+    { bg = Color.rgb255 252 252 252
+    , bgSubtle = Color.rgb255 249 249 249
+    , tintSubtle = Color.rgb255 240 240 240
+    , tint = Color.rgb255 232 232 232
+    , tintStrong = Color.rgb255 224 224 224
+    , accentSubtle = Color.rgb255 217 217 217
+    , accent = Color.rgb255 206 206 206
+    , accentStrong = Color.rgb255 187 187 187
+    , solidSubtle = Color.rgb255 151 151 151
+    , solid = Color.rgb255 141 141 141
+    , solidStrong = Color.rgb255 131 131 131
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 100 100 100
+    , text = Color.rgb255 32 32 32
     }
 
 
-{-| -}
-mauve : ThemeColorSet
+mauve : ColorScale
 mauve =
-    { bg = "#fdfcfd"
-    , bgSubtle = "#faf9fb"
-    , tintSubtle = "#f2eff3"
-    , tint = "#eae7ec"
-    , tintStrong = "#e3dfe6"
-    , detailSubtle = "#dbd8e0"
-    , detail = "#d0cdd7"
-    , detailStrong = "#bcbac7"
-    , solid = "#8e8c99"
-    , solidSubtle = "#bcbac7"
-    , solidStrong = "#84828e"
-    , solidText = "#ffffff"
-    , textSubtle = "#211f26"
-    , text = "#65636d"
+    { bg = Color.rgb255 253 252 253
+    , bgSubtle = Color.rgb255 250 249 251
+    , tintSubtle = Color.rgb255 242 239 243
+    , tint = Color.rgb255 234 231 236
+    , tintStrong = Color.rgb255 227 223 230
+    , accentSubtle = Color.rgb255 219 216 224
+    , accent = Color.rgb255 208 205 215
+    , accentStrong = Color.rgb255 188 186 199
+    , solidSubtle = Color.rgb255 152 150 163
+    , solid = Color.rgb255 142 140 153
+    , solidStrong = Color.rgb255 132 130 142
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 101 99 109
+    , text = Color.rgb255 33 31 38
     }
 
 
-{-| -}
-slate : ThemeColorSet
+slate : ColorScale
 slate =
-    { bg = "#fcfcfd"
-    , bgSubtle = "#f9f9fb"
-    , tintSubtle = "#f0f0f3"
-    , tint = "#e8e8ec"
-    , tintStrong = "#e0e1e6"
-    , detailSubtle = "#d9d9e0"
-    , detail = "#cdced6"
-    , detailStrong = "#b9bbc6"
-    , solid = "#8b8d98"
-    , solidSubtle = "#b9bbc6"
-    , solidStrong = "#80838d"
-    , solidText = "#ffffff"
-    , textSubtle = "#1c2024"
-    , text = "#60646c"
+    { bg = Color.rgb255 252 252 253
+    , bgSubtle = Color.rgb255 249 249 251
+    , tintSubtle = Color.rgb255 240 240 243
+    , tint = Color.rgb255 232 232 236
+    , tintStrong = Color.rgb255 224 225 230
+    , accentSubtle = Color.rgb255 217 217 224
+    , accent = Color.rgb255 205 206 214
+    , accentStrong = Color.rgb255 185 187 198
+    , solidSubtle = Color.rgb255 150 152 162
+    , solid = Color.rgb255 139 141 152
+    , solidStrong = Color.rgb255 128 131 141
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 96 100 108
+    , text = Color.rgb255 28 32 36
     }
 
 
-{-| -}
-sage : ThemeColorSet
+sage : ColorScale
 sage =
-    { bg = "#fbfdfc"
-    , bgSubtle = "#f7f9f8"
-    , tintSubtle = "#eef1f0"
-    , tint = "#e6e9e8"
-    , tintStrong = "#dfe2e0"
-    , detailSubtle = "#d7dad9"
-    , detail = "#cbcfcd"
-    , detailStrong = "#b8bcba"
-    , solid = "#868e8b"
-    , solidSubtle = "#b8bcba"
-    , solidStrong = "#7c8481"
-    , solidText = "#ffffff"
-    , textSubtle = "#1a211e"
-    , text = "#5f6563"
+    { bg = Color.rgb255 251 253 252
+    , bgSubtle = Color.rgb255 247 249 248
+    , tintSubtle = Color.rgb255 238 241 240
+    , tint = Color.rgb255 230 233 232
+    , tintStrong = Color.rgb255 223 226 224
+    , accentSubtle = Color.rgb255 215 218 217
+    , accent = Color.rgb255 203 207 205
+    , accentStrong = Color.rgb255 184 188 186
+    , solidSubtle = Color.rgb255 144 151 148
+    , solid = Color.rgb255 134 142 139
+    , solidStrong = Color.rgb255 124 132 129
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 95 101 99
+    , text = Color.rgb255 26 33 30
     }
 
 
-{-| -}
-olive : ThemeColorSet
+olive : ColorScale
 olive =
-    { bg = "#fcfdfc"
-    , bgSubtle = "#f8faf8"
-    , tintSubtle = "#eff1ef"
-    , tint = "#e7e9e7"
-    , tintStrong = "#dfe2df"
-    , detailSubtle = "#d7dad7"
-    , detail = "#cccfcc"
-    , detailStrong = "#b9bcb8"
-    , solid = "#898e87"
-    , solidSubtle = "#b9bcb8"
-    , solidStrong = "#7f847d"
-    , solidText = "#ffffff"
-    , textSubtle = "#1d211c"
-    , text = "#60655f"
+    { bg = Color.rgb255 252 253 252
+    , bgSubtle = Color.rgb255 248 250 248
+    , tintSubtle = Color.rgb255 239 241 239
+    , tint = Color.rgb255 231 233 231
+    , tintStrong = Color.rgb255 223 226 223
+    , accentSubtle = Color.rgb255 215 218 215
+    , accent = Color.rgb255 204 207 204
+    , accentStrong = Color.rgb255 185 188 184
+    , solidSubtle = Color.rgb255 147 151 145
+    , solid = Color.rgb255 137 142 135
+    , solidStrong = Color.rgb255 127 132 125
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 96 101 95
+    , text = Color.rgb255 29 33 28
     }
 
 
-{-| -}
-sand : ThemeColorSet
+sand : ColorScale
 sand =
-    { bg = "#fdfdfc"
-    , bgSubtle = "#f9f9f8"
-    , tintSubtle = "#f1f0ef"
-    , tint = "#e9e8e6"
-    , tintStrong = "#e2e1de"
-    , detailSubtle = "#dad9d6"
-    , detail = "#cfceca"
-    , detailStrong = "#bcbbb5"
-    , solid = "#8d8d86"
-    , solidSubtle = "#bcbbb5"
-    , solidStrong = "#82827c"
-    , solidText = "#ffffff"
-    , textSubtle = "#21201c"
-    , text = "#63635e"
+    { bg = Color.rgb255 253 253 252
+    , bgSubtle = Color.rgb255 249 249 248
+    , tintSubtle = Color.rgb255 241 240 239
+    , tint = Color.rgb255 233 232 230
+    , tintStrong = Color.rgb255 226 225 222
+    , accentSubtle = Color.rgb255 218 217 214
+    , accent = Color.rgb255 207 206 202
+    , accentStrong = Color.rgb255 188 187 181
+    , solidSubtle = Color.rgb255 151 151 144
+    , solid = Color.rgb255 141 141 134
+    , solidStrong = Color.rgb255 130 130 124
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 99 99 94
+    , text = Color.rgb255 33 32 28
     }
 
 
-{-| -}
-tomato : ThemeColorSet
+tomato : ColorScale
 tomato =
-    { bg = "#fffcfc"
-    , bgSubtle = "#fff8f7"
-    , tintSubtle = "#feebe7"
-    , tint = "#ffdcd3"
-    , tintStrong = "#ffcdc2"
-    , detailSubtle = "#fdbdaf"
-    , detail = "#f5a898"
-    , detailStrong = "#ec8e7b"
-    , solid = "#e54d2e"
-    , solidSubtle = "#ec8e7b"
-    , solidStrong = "#dd4425"
-    , solidText = "#ffffff"
-    , textSubtle = "#5c271f"
-    , text = "#d13415"
+    { bg = Color.rgb255 255 252 252
+    , bgSubtle = Color.rgb255 255 248 247
+    , tintSubtle = Color.rgb255 254 235 231
+    , tint = Color.rgb255 255 220 211
+    , tintStrong = Color.rgb255 255 205 194
+    , accentSubtle = Color.rgb255 253 189 175
+    , accent = Color.rgb255 245 168 152
+    , accentStrong = Color.rgb255 236 142 123
+    , solidSubtle = Color.rgb255 236 86 55
+    , solid = Color.rgb255 229 77 46
+    , solidStrong = Color.rgb255 221 68 37
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 209 52 21
+    , text = Color.rgb255 92 39 31
     }
 
 
-{-| -}
-red : ThemeColorSet
+red : ColorScale
 red =
-    { bg = "#fffcfc"
-    , bgSubtle = "#fff7f7"
-    , tintSubtle = "#feebec"
-    , tint = "#ffdbdc"
-    , tintStrong = "#ffcdce"
-    , detailSubtle = "#fdbdbe"
-    , detail = "#f4a9aa"
-    , detailStrong = "#eb8e90"
-    , solid = "#e5484d"
-    , solidSubtle = "#eb8e90"
-    , solidStrong = "#dc3e42"
-    , solidText = "#ffffff"
-    , textSubtle = "#641723"
-    , text = "#ce2c31"
+    { bg = Color.rgb255 255 252 252
+    , bgSubtle = Color.rgb255 255 247 247
+    , tintSubtle = Color.rgb255 254 235 236
+    , tint = Color.rgb255 255 219 220
+    , tintStrong = Color.rgb255 255 205 206
+    , accentSubtle = Color.rgb255 253 189 190
+    , accent = Color.rgb255 244 169 170
+    , accentStrong = Color.rgb255 235 142 144
+    , solidSubtle = Color.rgb255 236 83 88
+    , solid = Color.rgb255 229 72 77
+    , solidStrong = Color.rgb255 220 62 66
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 206 44 49
+    , text = Color.rgb255 100 23 35
     }
 
 
-{-| -}
-ruby : ThemeColorSet
+ruby : ColorScale
 ruby =
-    { bg = "#fffcfd"
-    , bgSubtle = "#fff7f8"
-    , tintSubtle = "#feeaed"
-    , tint = "#ffdce1"
-    , tintStrong = "#ffced6"
-    , detailSubtle = "#f8bfc8"
-    , detail = "#efacb8"
-    , detailStrong = "#e592a3"
-    , solid = "#e54666"
-    , solidSubtle = "#e592a3"
-    , solidStrong = "#dc3b5d"
-    , solidText = "#ffffff"
-    , textSubtle = "#64172b"
-    , text = "#ca244d"
+    { bg = Color.rgb255 255 252 253
+    , bgSubtle = Color.rgb255 255 247 248
+    , tintSubtle = Color.rgb255 254 234 237
+    , tint = Color.rgb255 255 220 225
+    , tintStrong = Color.rgb255 255 206 214
+    , accentSubtle = Color.rgb255 248 191 200
+    , accent = Color.rgb255 239 172 184
+    , accentStrong = Color.rgb255 229 146 163
+    , solidSubtle = Color.rgb255 236 82 113
+    , solid = Color.rgb255 229 70 102
+    , solidStrong = Color.rgb255 220 59 93
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 202 36 77
+    , text = Color.rgb255 100 23 43
     }
 
 
-{-| -}
-crimson : ThemeColorSet
+crimson : ColorScale
 crimson =
-    { bg = "#fffcfd"
-    , bgSubtle = "#fef7f9"
-    , tintSubtle = "#ffe9f0"
-    , tint = "#fedce7"
-    , tintStrong = "#facedd"
-    , detailSubtle = "#f3bed1"
-    , detail = "#eaacc3"
-    , detailStrong = "#e093b2"
-    , solid = "#e93d82"
-    , solidSubtle = "#e093b2"
-    , solidStrong = "#df3478"
-    , solidText = "#ffffff"
-    , textSubtle = "#621639"
-    , text = "#cb1d63"
+    { bg = Color.rgb255 255 252 253
+    , bgSubtle = Color.rgb255 254 247 249
+    , tintSubtle = Color.rgb255 255 233 240
+    , tint = Color.rgb255 254 220 231
+    , tintStrong = Color.rgb255 250 206 221
+    , accentSubtle = Color.rgb255 243 190 209
+    , accent = Color.rgb255 234 172 195
+    , accentStrong = Color.rgb255 224 147 178
+    , solidSubtle = Color.rgb255 241 71 139
+    , solid = Color.rgb255 233 61 130
+    , solidStrong = Color.rgb255 223 52 120
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 203 29 99
+    , text = Color.rgb255 98 22 57
     }
 
 
-{-| -}
-pink : ThemeColorSet
+pink : ColorScale
 pink =
-    { bg = "#fffcfe"
-    , bgSubtle = "#fef7fb"
-    , tintSubtle = "#fee9f5"
-    , tint = "#fbdcef"
-    , tintStrong = "#f6cee7"
-    , detailSubtle = "#efbfdd"
-    , detail = "#e7acd0"
-    , detailStrong = "#dd93c2"
-    , solid = "#d6409f"
-    , solidSubtle = "#dd93c2"
-    , solidStrong = "#cf3897"
-    , solidText = "#ffffff"
-    , textSubtle = "#651249"
-    , text = "#c2298a"
+    { bg = Color.rgb255 255 252 254
+    , bgSubtle = Color.rgb255 254 247 251
+    , tintSubtle = Color.rgb255 254 233 245
+    , tint = Color.rgb255 251 220 239
+    , tintStrong = Color.rgb255 246 206 231
+    , accentSubtle = Color.rgb255 239 191 221
+    , accent = Color.rgb255 231 172 208
+    , accentStrong = Color.rgb255 221 147 194
+    , solidSubtle = Color.rgb255 220 72 166
+    , solid = Color.rgb255 214 64 159
+    , solidStrong = Color.rgb255 207 56 151
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 194 41 138
+    , text = Color.rgb255 101 18 73
     }
 
 
-{-| -}
-plum : ThemeColorSet
+plum : ColorScale
 plum =
-    { bg = "#fefcff"
-    , bgSubtle = "#fdf7fd"
-    , tintSubtle = "#fbebfb"
-    , tint = "#f7def8"
-    , tintStrong = "#f2d1f3"
-    , detailSubtle = "#e9c2ec"
-    , detail = "#deade3"
-    , detailStrong = "#cf91d8"
-    , solid = "#ab4aba"
-    , solidSubtle = "#cf91d8"
-    , solidStrong = "#a144af"
-    , solidText = "#ffffff"
-    , textSubtle = "#53195d"
-    , text = "#953ea3"
+    { bg = Color.rgb255 254 252 255
+    , bgSubtle = Color.rgb255 253 247 253
+    , tintSubtle = Color.rgb255 251 235 251
+    , tint = Color.rgb255 247 222 248
+    , tintStrong = Color.rgb255 242 209 243
+    , accentSubtle = Color.rgb255 233 194 236
+    , accent = Color.rgb255 222 173 227
+    , accentStrong = Color.rgb255 207 145 216
+    , solidSubtle = Color.rgb255 177 85 191
+    , solid = Color.rgb255 171 74 186
+    , solidStrong = Color.rgb255 161 68 175
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 149 62 163
+    , text = Color.rgb255 83 25 93
     }
 
 
-{-| -}
-purple : ThemeColorSet
+purple : ColorScale
 purple =
-    { bg = "#fefcfe"
-    , bgSubtle = "#fbf7fe"
-    , tintSubtle = "#f7edfe"
-    , tint = "#f2e2fc"
-    , tintStrong = "#ead5f9"
-    , detailSubtle = "#e0c4f4"
-    , detail = "#d1afec"
-    , detailStrong = "#be93e4"
-    , solid = "#8e4ec6"
-    , solidSubtle = "#be93e4"
-    , solidStrong = "#8347b9"
-    , solidText = "#ffffff"
-    , textSubtle = "#402060"
-    , text = "#8145b5"
+    { bg = Color.rgb255 254 252 254
+    , bgSubtle = Color.rgb255 251 247 254
+    , tintSubtle = Color.rgb255 247 237 254
+    , tint = Color.rgb255 242 226 252
+    , tintStrong = Color.rgb255 234 213 249
+    , accentSubtle = Color.rgb255 224 196 244
+    , accent = Color.rgb255 209 175 236
+    , accentStrong = Color.rgb255 190 147 228
+    , solidSubtle = Color.rgb255 152 86 209
+    , solid = Color.rgb255 142 78 198
+    , solidStrong = Color.rgb255 131 71 185
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 129 69 181
+    , text = Color.rgb255 64 32 96
     }
 
 
-{-| -}
-violet : ThemeColorSet
+violet : ColorScale
 violet =
-    { bg = "#fdfcfe"
-    , bgSubtle = "#faf8ff"
-    , tintSubtle = "#f4f0fe"
-    , tint = "#ebe4ff"
-    , tintStrong = "#e1d9ff"
-    , detailSubtle = "#d4cafe"
-    , detail = "#c2b5f5"
-    , detailStrong = "#aa99ec"
-    , solid = "#6e56cf"
-    , solidSubtle = "#aa99ec"
-    , solidStrong = "#654dc4"
-    , solidText = "#ffffff"
-    , textSubtle = "#2f265f"
-    , text = "#6550b9"
+    { bg = Color.rgb255 253 252 254
+    , bgSubtle = Color.rgb255 250 248 255
+    , tintSubtle = Color.rgb255 244 240 254
+    , tint = Color.rgb255 235 228 255
+    , tintStrong = Color.rgb255 225 217 255
+    , accentSubtle = Color.rgb255 212 202 254
+    , accent = Color.rgb255 194 181 245
+    , accentStrong = Color.rgb255 170 153 236
+    , solidSubtle = Color.rgb255 120 96 216
+    , solid = Color.rgb255 110 86 207
+    , solidStrong = Color.rgb255 101 77 196
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 101 80 185
+    , text = Color.rgb255 47 38 95
     }
 
 
-{-| -}
-iris : ThemeColorSet
+iris : ColorScale
 iris =
-    { bg = "#fdfdff"
-    , bgSubtle = "#f8f8ff"
-    , tintSubtle = "#f0f1fe"
-    , tint = "#e6e7ff"
-    , tintStrong = "#dadcff"
-    , detailSubtle = "#cbcdff"
-    , detail = "#b8baf8"
-    , detailStrong = "#9b9ef0"
-    , solid = "#5b5bd6"
-    , solidSubtle = "#9b9ef0"
-    , solidStrong = "#5151cd"
-    , solidText = "#ffffff"
-    , textSubtle = "#272962"
-    , text = "#5753c6"
+    { bg = Color.rgb255 253 253 255
+    , bgSubtle = Color.rgb255 248 248 255
+    , tintSubtle = Color.rgb255 240 241 254
+    , tint = Color.rgb255 230 231 255
+    , tintStrong = Color.rgb255 218 220 255
+    , accentSubtle = Color.rgb255 203 205 255
+    , accent = Color.rgb255 184 186 248
+    , accentStrong = Color.rgb255 155 158 240
+    , solidSubtle = Color.rgb255 101 101 222
+    , solid = Color.rgb255 91 91 214
+    , solidStrong = Color.rgb255 81 81 205
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 87 83 198
+    , text = Color.rgb255 39 41 98
     }
 
 
-{-| -}
-indigo : ThemeColorSet
+indigo : ColorScale
 indigo =
-    { bg = "#fdfdfe"
-    , bgSubtle = "#f7f9ff"
-    , tintSubtle = "#edf2fe"
-    , tint = "#e1e9ff"
-    , tintStrong = "#d2deff"
-    , detailSubtle = "#c1d0ff"
-    , detail = "#abbdf9"
-    , detailStrong = "#8da4ef"
-    , solid = "#3e63dd"
-    , solidSubtle = "#8da4ef"
-    , solidStrong = "#3358d4"
-    , solidText = "#ffffff"
-    , textSubtle = "#1f2d5c"
-    , text = "#3a5bc7"
+    { bg = Color.rgb255 253 253 254
+    , bgSubtle = Color.rgb255 247 249 255
+    , tintSubtle = Color.rgb255 237 242 254
+    , tint = Color.rgb255 225 233 255
+    , tintStrong = Color.rgb255 210 222 255
+    , accentSubtle = Color.rgb255 193 208 255
+    , accent = Color.rgb255 171 189 249
+    , accentStrong = Color.rgb255 141 164 239
+    , solidSubtle = Color.rgb255 73 110 229
+    , solid = Color.rgb255 62 99 221
+    , solidStrong = Color.rgb255 51 88 212
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 58 91 199
+    , text = Color.rgb255 31 45 92
     }
 
 
-{-| -}
-blue : ThemeColorSet
+blue : ColorScale
 blue =
-    { bg = "#fbfdff"
-    , bgSubtle = "#f4faff"
-    , tintSubtle = "#e6f4fe"
-    , tint = "#d5efff"
-    , tintStrong = "#c2e5ff"
-    , detailSubtle = "#acd8fc"
-    , detail = "#8ec8f6"
-    , detailStrong = "#5eb1ef"
-    , solid = "#0090ff"
-    , solidSubtle = "#5eb1ef"
-    , solidStrong = "#0588f0"
-    , solidText = "#ffffff"
-    , textSubtle = "#113264"
-    , text = "#0d74ce"
+    { bg = Color.rgb255 251 253 255
+    , bgSubtle = Color.rgb255 244 250 255
+    , tintSubtle = Color.rgb255 230 244 254
+    , tint = Color.rgb255 213 239 255
+    , tintStrong = Color.rgb255 194 229 255
+    , accentSubtle = Color.rgb255 172 216 252
+    , accent = Color.rgb255 142 200 246
+    , accentStrong = Color.rgb255 94 177 239
+    , solidSubtle = Color.rgb255 5 148 260
+    , solid = Color.rgb255 0 144 255
+    , solidStrong = Color.rgb255 5 136 240
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 13 116 206
+    , text = Color.rgb255 17 50 100
     }
 
 
-{-| -}
-steel : ThemeColorSet
-steel =
-    { bg = "#fbfcfd"
-    , bgSubtle = "#f7f9fb"
-    , tintSubtle = "#ecf1f5"
-    , tint = "#e2eaef"
-    , tintStrong = "#d9e2e9"
-    , detailSubtle = "#cedae3"
-    , detail = "#bfced9"
-    , detailStrong = "#a7bbca"
-    , solid = "#4e616f"
-    , solidSubtle = "#a7bbca"
-    , solidStrong = "#5b6f7d"
-    , solidText = "#ffffff"
-    , textSubtle = "#1b262d"
-    , text = "#546876"
-    }
-
-
-{-| -}
-steelDark : ThemeColorSet
-steelDark =
-    { bgSubtle = "#0f1114"
-    , bg = "#16191c"
-    , tintSubtle = "#1e2428"
-    , tint = "#232c32"
-    , tintStrong = "#2a343b"
-    , detailSubtle = "#323d45"
-    , detail = "#3e4c56"
-    , detailStrong = "#536573"
-    , solid = "#4f616e"
-    , solidSubtle = "#536573"
-    , solidStrong = "#5b6f7d"
-    , solidText = "#ffffff"
-    , textSubtle = "#e6eef3"
-    , text = "#a6b7c3"
-    }
-
-
-{-| -}
-cyan : ThemeColorSet
+cyan : ColorScale
 cyan =
-    { bg = "#fafdfe"
-    , bgSubtle = "#f2fafb"
-    , tintSubtle = "#def7f9"
-    , tint = "#caf1f6"
-    , tintStrong = "#b5e9f0"
-    , detailSubtle = "#9ddde7"
-    , detail = "#7dcedc"
-    , detailStrong = "#3db9cf"
-    , solid = "#00a2c7"
-    , solidSubtle = "#3db9cf"
-    , solidStrong = "#0797b9"
-    , solidText = "#ffffff"
-    , textSubtle = "#0d3c48"
-    , text = "#107d98"
+    { bg = Color.rgb255 250 253 254
+    , bgSubtle = Color.rgb255 242 250 251
+    , tintSubtle = Color.rgb255 222 247 249
+    , tint = Color.rgb255 202 241 246
+    , tintStrong = Color.rgb255 181 233 240
+    , accentSubtle = Color.rgb255 157 221 231
+    , accent = Color.rgb255 125 206 220
+    , accentStrong = Color.rgb255 61 185 207
+    , solidSubtle = Color.rgb255 247 172 213
+    , solid = Color.rgb255 0 162 199
+    , solidStrong = Color.rgb255 7 151 185
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 16 125 152
+    , text = Color.rgb255 13 60 72
     }
 
 
-{-| -}
-teal : ThemeColorSet
+teal : ColorScale
 teal =
-    { bg = "#fafefd"
-    , bgSubtle = "#f3fbf9"
-    , tintSubtle = "#e0f8f3"
-    , tint = "#ccf3ea"
-    , tintStrong = "#b8eae0"
-    , detailSubtle = "#a1ded2"
-    , detail = "#83cdc1"
-    , detailStrong = "#53b9ab"
-    , solid = "#12a594"
-    , solidSubtle = "#53b9ab"
-    , solidStrong = "#0d9b8a"
-    , solidText = "#ffffff"
-    , textSubtle = "#0d3d38"
-    , text = "#008573"
+    { bg = Color.rgb255 250 254 253
+    , bgSubtle = Color.rgb255 243 251 249
+    , tintSubtle = Color.rgb255 224 248 243
+    , tint = Color.rgb255 204 243 234
+    , tintStrong = Color.rgb255 184 234 224
+    , accentSubtle = Color.rgb255 161 222 210
+    , accent = Color.rgb255 131 205 193
+    , accentStrong = Color.rgb255 83 185 171
+    , solidSubtle = Color.rgb255 23 174 156
+    , solid = Color.rgb255 18 165 148
+    , solidStrong = Color.rgb255 13 155 138
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 0 133 115
+    , text = Color.rgb255 13 61 56
     }
 
 
-{-| -}
-jade : ThemeColorSet
+jade : ColorScale
 jade =
-    { bg = "#fbfefd"
-    , bgSubtle = "#f4fbf7"
-    , tintSubtle = "#e6f7ed"
-    , tint = "#d6f1e3"
-    , tintStrong = "#c3e9d7"
-    , detailSubtle = "#acdec8"
-    , detail = "#8bceb6"
-    , detailStrong = "#56ba9f"
-    , solid = "#29a383"
-    , solidSubtle = "#56ba9f"
-    , solidStrong = "#26997b"
-    , solidText = "#ffffff"
-    , textSubtle = "#1d3b31"
-    , text = "#208368"
+    { bg = Color.rgb255 251 254 253
+    , bgSubtle = Color.rgb255 244 251 247
+    , tintSubtle = Color.rgb255 230 247 237
+    , tint = Color.rgb255 214 241 227
+    , tintStrong = Color.rgb255 195 233 215
+    , accentSubtle = Color.rgb255 172 222 200
+    , accent = Color.rgb255 139 206 182
+    , accentStrong = Color.rgb255 86 186 159
+    , solidSubtle = Color.rgb255 44 172 139
+    , solid = Color.rgb255 41 163 131
+    , solidStrong = Color.rgb255 38 153 123
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 32 131 104
+    , text = Color.rgb255 29 59 49
     }
 
 
-{-| -}
-green : ThemeColorSet
+green : ColorScale
 green =
-    { bg = "#fbfefc"
-    , bgSubtle = "#f4fbf6"
-    , tintSubtle = "#e6f6eb"
-    , tint = "#d6f1df"
-    , tintStrong = "#c4e8d1"
-    , detailSubtle = "#adddc0"
-    , detail = "#8eceaa"
-    , detailStrong = "#5bb98b"
-    , solid = "#30a46c"
-    , solidSubtle = "#5bb98b"
-    , solidStrong = "#2b9a66"
-    , solidText = "#ffffff"
-    , textSubtle = "#193b2d"
-    , text = "#218358"
+    { bg = Color.rgb255 251 254 252
+    , bgSubtle = Color.rgb255 244 251 246
+    , tintSubtle = Color.rgb255 230 246 235
+    , tint = Color.rgb255 214 241 223
+    , tintStrong = Color.rgb255 196 232 209
+    , accentSubtle = Color.rgb255 173 221 192
+    , accent = Color.rgb255 142 206 170
+    , accentStrong = Color.rgb255 91 185 139
+    , solidSubtle = Color.rgb255 53 173 115
+    , solid = Color.rgb255 48 164 108
+    , solidStrong = Color.rgb255 43 154 102
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 33 131 88
+    , text = Color.rgb255 25 59 45
     }
 
 
-{-| -}
-grass : ThemeColorSet
+grass : ColorScale
 grass =
-    { bg = "#fbfefb"
-    , bgSubtle = "#f5fbf5"
-    , tintSubtle = "#e9f6e9"
-    , tint = "#daf1db"
-    , tintStrong = "#c9e8ca"
-    , detailSubtle = "#b2ddb5"
-    , detail = "#94ce9a"
-    , detailStrong = "#65ba74"
-    , solid = "#46a758"
-    , solidSubtle = "#65ba74"
-    , solidStrong = "#3e9b4f"
-    , solidText = "#ffffff"
-    , textSubtle = "#203c25"
-    , text = "#2a7e3b"
+    { bg = Color.rgb255 251 254 251
+    , bgSubtle = Color.rgb255 245 251 245
+    , tintSubtle = Color.rgb255 233 246 233
+    , tint = Color.rgb255 218 241 219
+    , tintStrong = Color.rgb255 201 232 202
+    , accentSubtle = Color.rgb255 178 221 181
+    , accent = Color.rgb255 148 206 154
+    , accentStrong = Color.rgb255 101 186 116
+    , solidSubtle = Color.rgb255 79 177 97
+    , solid = Color.rgb255 70 167 88
+    , solidStrong = Color.rgb255 62 155 79
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 42 126 59
+    , text = Color.rgb255 32 60 37
     }
 
 
-{-| -}
-brown : ThemeColorSet
+brown : ColorScale
 brown =
-    { bg = "#fefdfc"
-    , bgSubtle = "#fcf9f6"
-    , tintSubtle = "#f6eee7"
-    , tint = "#f0e4d9"
-    , tintStrong = "#ebdaca"
-    , detailSubtle = "#e4cdb7"
-    , detail = "#dcbc9f"
-    , detailStrong = "#cea37e"
-    , solid = "#ad7f58"
-    , solidSubtle = "#cea37e"
-    , solidStrong = "#a07553"
-    , solidText = "#ffffff"
-    , textSubtle = "#3e332e"
-    , text = "#815e46"
+    { bg = Color.rgb255 254 253 252
+    , bgSubtle = Color.rgb255 252 249 246
+    , tintSubtle = Color.rgb255 246 238 231
+    , tint = Color.rgb255 240 228 217
+    , tintStrong = Color.rgb255 235 218 202
+    , accentSubtle = Color.rgb255 228 205 183
+    , accent = Color.rgb255 220 188 159
+    , accentStrong = Color.rgb255 206 163 126
+    , solidSubtle = Color.rgb255 181 136 97
+    , solid = Color.rgb255 173 127 88
+    , solidStrong = Color.rgb255 160 117 83
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 129 94 70
+    , text = Color.rgb255 62 51 46
     }
 
 
-{-| -}
-bronze : ThemeColorSet
+bronze : ColorScale
 bronze =
-    { bg = "#fdfcfc"
-    , bgSubtle = "#fdf7f5"
-    , tintSubtle = "#f6edea"
-    , tint = "#efe4df"
-    , tintStrong = "#e7d9d3"
-    , detailSubtle = "#dfcdc5"
-    , detail = "#d3bcb3"
-    , detailStrong = "#c2a499"
-    , solid = "#a18072"
-    , solidSubtle = "#c2a499"
-    , solidStrong = "#957468"
-    , solidText = "#ffffff"
-    , textSubtle = "#43302b"
-    , text = "#7d5e54"
+    { bg = Color.rgb255 253 252 252
+    , bgSubtle = Color.rgb255 253 247 245
+    , tintSubtle = Color.rgb255 246 237 234
+    , tint = Color.rgb255 239 228 223
+    , tintStrong = Color.rgb255 231 217 211
+    , accentSubtle = Color.rgb255 223 205 197
+    , accent = Color.rgb255 211 188 179
+    , accentStrong = Color.rgb255 194 164 153
+    , solidSubtle = Color.rgb255 172 138 124
+    , solid = Color.rgb255 161 128 114
+    , solidStrong = Color.rgb255 149 116 104
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 125 94 84
+    , text = Color.rgb255 67 48 43
     }
 
 
-{-| -}
-gold : ThemeColorSet
+gold : ColorScale
 gold =
-    { bg = "#fdfdfc"
-    , bgSubtle = "#faf9f2"
-    , tintSubtle = "#f2f0e7"
-    , tint = "#eae6db"
-    , tintStrong = "#e1dccf"
-    , detailSubtle = "#d8d0bf"
-    , detail = "#cbc0aa"
-    , detailStrong = "#b9a88d"
-    , solid = "#978365"
-    , solidSubtle = "#b9a88d"
-    , solidStrong = "#8c7a5e"
-    , solidText = "#ffffff"
-    , textSubtle = "#3b352b"
-    , text = "#71624b"
+    { bg = Color.rgb255 253 253 252
+    , bgSubtle = Color.rgb255 250 249 242
+    , tintSubtle = Color.rgb255 242 240 231
+    , tint = Color.rgb255 234 230 219
+    , tintStrong = Color.rgb255 225 220 207
+    , accentSubtle = Color.rgb255 216 208 191
+    , accent = Color.rgb255 203 192 170
+    , accentStrong = Color.rgb255 185 168 141
+    , solidSubtle = Color.rgb255 159 139 110
+    , solid = Color.rgb255 151 131 101
+    , solidStrong = Color.rgb255 140 122 94
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 113 98 75
+    , text = Color.rgb255 59 53 43
     }
 
 
-{-| -}
-sky : ThemeColorSet
+sky : ColorScale
 sky =
-    { bg = "#f9feff"
-    , bgSubtle = "#f1fafd"
-    , tintSubtle = "#e1f6fd"
-    , tint = "#d1f0fa"
-    , tintStrong = "#bee7f5"
-    , detailSubtle = "#a9daed"
-    , detail = "#8dcae3"
-    , detailStrong = "#60b3d7"
-    , solid = "#7ce2fe"
-    , solidSubtle = "#60b3d7"
-    , solidStrong = "#74daf8"
-    , solidText = "#0d141f"
-    , textSubtle = "#1d3e56"
-    , text = "#00749e"
+    { bg = Color.rgb255 249 254 255
+    , bgSubtle = Color.rgb255 241 250 253
+    , tintSubtle = Color.rgb255 225 246 253
+    , tint = Color.rgb255 209 240 250
+    , tintStrong = Color.rgb255 190 231 245
+    , accentSubtle = Color.rgb255 169 218 237
+    , accent = Color.rgb255 141 202 227
+    , accentStrong = Color.rgb255 96 179 215
+    , solidSubtle = Color.rgb255 133 231 258
+    , solid = Color.rgb255 124 226 254
+    , solidStrong = Color.rgb255 116 218 248
+    , solidText = Color.rgb255 29 62 86
+    , textSubtle = Color.rgb255 0 116 158
+    , text = Color.rgb255 29 62 86
     }
 
 
-{-| -}
-mint : ThemeColorSet
+mint : ColorScale
 mint =
-    { bg = "#f9fefd"
-    , bgSubtle = "#f2fbf9"
-    , tintSubtle = "#ddf9f2"
-    , tint = "#c8f4e9"
-    , tintStrong = "#b3ecde"
-    , detailSubtle = "#9ce0d0"
-    , detail = "#7ecfbd"
-    , detailStrong = "#4cbba5"
-    , solid = "#86ead4"
-    , solidSubtle = "#4cbba5"
-    , solidStrong = "#7de0cb"
-    , solidText = "#0e1515"
-    , textSubtle = "#16433c"
-    , text = "#027864"
+    { bg = Color.rgb255 249 254 253
+    , bgSubtle = Color.rgb255 242 251 249
+    , tintSubtle = Color.rgb255 221 249 242
+    , tint = Color.rgb255 200 244 233
+    , tintStrong = Color.rgb255 179 236 222
+    , accentSubtle = Color.rgb255 156 224 208
+    , accent = Color.rgb255 126 207 189
+    , accentStrong = Color.rgb255 76 187 165
+    , solidSubtle = Color.rgb255 144 242 220
+    , solid = Color.rgb255 134 234 212
+    , solidStrong = Color.rgb255 125 224 203
+    , solidText = Color.rgb255 22 67 60
+    , textSubtle = Color.rgb255 2 120 100
+    , text = Color.rgb255 22 67 60
     }
 
 
-{-| -}
-lime : ThemeColorSet
+lime : ColorScale
 lime =
-    { bg = "#fbfdfa"
-    , bgSubtle = "#f6fbf3"
-    , tintSubtle = "#e6f9d9"
-    , tint = "#d6f4c1"
-    , tintStrong = "#c6ebaa"
-    , detailSubtle = "#b4de94"
-    , detail = "#9ecd7a"
-    , detailStrong = "#81b952"
-    , solid = "#a8f365"
-    , solidSubtle = "#81b952"
-    , solidStrong = "#9aea4c"
-    , solidText = "#0e130b"
-    , textSubtle = "#2f421f"
-    , text = "#537e2d"
+    { bg = Color.rgb255 252 253 250
+    , bgSubtle = Color.rgb255 248 250 243
+    , tintSubtle = Color.rgb255 238 246 214
+    , tint = Color.rgb255 226 240 189
+    , tintStrong = Color.rgb255 211 231 166
+    , accentSubtle = Color.rgb255 194 218 145
+    , accent = Color.rgb255 171 201 120
+    , accentStrong = Color.rgb255 141 182 84
+    , solidSubtle = Color.rgb255 201 244 123
+    , solid = Color.rgb255 189 238 99
+    , solidStrong = Color.rgb255 176 230 76
+    , solidText = Color.rgb255 55 64 28
+    , textSubtle = Color.rgb255 92 124 47
+    , text = Color.rgb255 55 64 28
     }
 
 
-{-| -}
-yellow : ThemeColorSet
+yellow : ColorScale
 yellow =
-    { bg = "#fdfdf9"
-    , bgSubtle = "#fefce9"
-    , tintSubtle = "#fffab8"
-    , tint = "#fff394"
-    , tintStrong = "#ffe770"
-    , detailSubtle = "#f3d768"
-    , detail = "#e4c767"
-    , detailStrong = "#d5ae39"
-    , solid = "#ffe629"
-    , solidSubtle = "#d5ae39"
-    , solidStrong = "#ffdc00"
-    , solidText = "#473b1f"
-    , textSubtle = "#473b1f"
-    , text = "#9e6c00"
+    { bg = Color.rgb255 253 253 249
+    , bgSubtle = Color.rgb255 254 252 233
+    , tintSubtle = Color.rgb255 255 250 184
+    , tint = Color.rgb255 255 243 148
+    , tintStrong = Color.rgb255 255 231 112
+    , accentSubtle = Color.rgb255 243 215 104
+    , accent = Color.rgb255 228 199 103
+    , accentStrong = Color.rgb255 213 174 57
+    , solidSubtle = Color.rgb255 255 234 82
+    , solid = Color.rgb255 255 230 41
+    , solidStrong = Color.rgb255 255 220 0
+    , solidText = Color.rgb255 71 59 31
+    , textSubtle = Color.rgb255 158 108 0
+    , text = Color.rgb255 71 59 31
     }
 
 
-{-| -}
-amber : ThemeColorSet
+amber : ColorScale
 amber =
-    { bg = "#fefdfb"
-    , bgSubtle = "#fefbe9"
-    , tintSubtle = "#fff7c2"
-    , tint = "#ffee9c"
-    , tintStrong = "#fbe577"
-    , detailSubtle = "#f3d673"
-    , detail = "#e9c162"
-    , detailStrong = "#e2a336"
-    , solid = "#ffc53d"
-    , solidSubtle = "#e2a336"
-    , solidStrong = "#ffba18"
-    , solidText = "#16120c"
-    , textSubtle = "#4f3422"
-    , text = "#ab6400"
+    { bg = Color.rgb255 254 253 251
+    , bgSubtle = Color.rgb255 254 251 233
+    , tintSubtle = Color.rgb255 255 247 194
+    , tint = Color.rgb255 255 238 156
+    , tintStrong = Color.rgb255 251 229 119
+    , accentSubtle = Color.rgb255 243 214 115
+    , accent = Color.rgb255 233 193 98
+    , accentStrong = Color.rgb255 226 163 54
+    , solidSubtle = Color.rgb255 255 208 97
+    , solid = Color.rgb255 255 197 61
+    , solidStrong = Color.rgb255 255 186 24
+    , solidText = Color.rgb255 79 52 34
+    , textSubtle = Color.rgb255 171 100 0
+    , text = Color.rgb255 79 52 34
     }
 
 
-{-| -}
-orange : ThemeColorSet
+orange : ColorScale
 orange =
-    { bg = "#fefcfb"
-    , bgSubtle = "#fff7ed"
-    , tintSubtle = "#ffefd6"
-    , tint = "#ffdfb5"
-    , tintStrong = "#ffd19a"
-    , detailSubtle = "#ffc182"
-    , detail = "#f5ae73"
-    , detailStrong = "#ec9455"
-    , solid = "#f76b15"
-    , solidSubtle = "#ec9455"
-    , solidStrong = "#ef5f00"
-    , solidText = "#ffffff"
-    , textSubtle = "#582d1d"
-    , text = "#cc4e00"
+    { bg = Color.rgb255 254 252 251
+    , bgSubtle = Color.rgb255 255 247 237
+    , tintSubtle = Color.rgb255 255 239 214
+    , tint = Color.rgb255 255 223 181
+    , tintStrong = Color.rgb255 255 209 154
+    , accentSubtle = Color.rgb255 255 193 130
+    , accent = Color.rgb255 245 174 115
+    , accentStrong = Color.rgb255 236 148 85
+    , solidSubtle = Color.rgb255 240 126 56
+    , solid = Color.rgb255 247 107 21
+    , solidStrong = Color.rgb255 239 95 0
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 204 78 0
+    , text = Color.rgb255 88 45 29
     }
 
 
-
--- Colors : Dark
-
-
-{-| -}
-grayDark : ThemeColorSet
+grayDark : ColorScale
 grayDark =
-    { bgSubtle = "#111111"
-    , bg = "#191919"
-    , tintSubtle = "#222222"
-    , tint = "#2a2a2a"
-    , tintStrong = "#313131"
-    , detailSubtle = "#3a3a3a"
-    , detail = "#484848"
-    , detailStrong = "#606060"
-    , solid = "#6e6e6e"
-    , solidSubtle = "#606060"
-    , solidStrong = "#7b7b7b"
-    , solidText = "#ffffff"
-    , textSubtle = "#eeeeee"
-    , text = "#b4b4b4"
+    { bg = Color.rgb255 25 25 25
+    , bgSubtle = Color.rgb255 17 17 17
+    , tintSubtle = Color.rgb255 34 34 34
+    , tint = Color.rgb255 42 42 42
+    , tintStrong = Color.rgb255 49 49 49
+    , accentSubtle = Color.rgb255 58 58 58
+    , accent = Color.rgb255 72 72 72
+    , accentStrong = Color.rgb255 96 96 96
+    , solidSubtle = Color.rgb255 97 97 97
+    , solid = Color.rgb255 110 110 110
+    , solidStrong = Color.rgb255 123 123 123
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 180 180 180
+    , text = Color.rgb255 238 238 238
     }
 
 
-{-| -}
-mauveDark : ThemeColorSet
+mauveDark : ColorScale
 mauveDark =
-    { bgSubtle = "#121113"
-    , bg = "#1a191b"
-    , tintSubtle = "#232225"
-    , tint = "#2b292d"
-    , tintStrong = "#323035"
-    , detailSubtle = "#3c393f"
-    , detail = "#49474e"
-    , detailStrong = "#625f69"
-    , solid = "#6f6d78"
-    , solidSubtle = "#625f69"
-    , solidStrong = "#7c7a85"
-    , solidText = "#ffffff"
-    , textSubtle = "#eeeef0"
-    , text = "#b5b2bc"
+    { bg = Color.rgb255 26 25 27
+    , bgSubtle = Color.rgb255 18 17 19
+    , tintSubtle = Color.rgb255 35 34 37
+    , tint = Color.rgb255 43 41 45
+    , tintStrong = Color.rgb255 50 48 53
+    , accentSubtle = Color.rgb255 60 57 63
+    , accent = Color.rgb255 73 71 78
+    , accentStrong = Color.rgb255 98 95 105
+    , solidSubtle = Color.rgb255 98 96 106
+    , solid = Color.rgb255 111 109 120
+    , solidStrong = Color.rgb255 124 122 133
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 181 178 188
+    , text = Color.rgb255 238 238 240
     }
 
 
-{-| -}
-slateDark : ThemeColorSet
+slateDark : ColorScale
 slateDark =
-    { bgSubtle = "#111113"
-    , bg = "#18191b"
-    , tintSubtle = "#212225"
-    , tint = "#272a2d"
-    , tintStrong = "#2e3135"
-    , detailSubtle = "#363a3f"
-    , detail = "#43484e"
-    , detailStrong = "#5a6169"
-    , solid = "#696e77"
-    , solidSubtle = "#5a6169"
-    , solidStrong = "#777b84"
-    , solidText = "#ffffff"
-    , textSubtle = "#edeef0"
-    , text = "#b0b4ba"
+    { bg = Color.rgb255 24 25 27
+    , bgSubtle = Color.rgb255 17 17 19
+    , tintSubtle = Color.rgb255 33 34 37
+    , tint = Color.rgb255 39 42 45
+    , tintStrong = Color.rgb255 46 49 53
+    , accentSubtle = Color.rgb255 54 58 63
+    , accent = Color.rgb255 67 72 78
+    , accentStrong = Color.rgb255 90 97 105
+    , solidSubtle = Color.rgb255 91 96 105
+    , solid = Color.rgb255 105 110 119
+    , solidStrong = Color.rgb255 119 123 132
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 176 180 186
+    , text = Color.rgb255 237 238 240
     }
 
 
-{-| -}
-sageDark : ThemeColorSet
+sageDark : ColorScale
 sageDark =
-    { bgSubtle = "#101211"
-    , bg = "#171918"
-    , tintSubtle = "#202221"
-    , tint = "#272a29"
-    , tintStrong = "#2e3130"
-    , detailSubtle = "#373b39"
-    , detail = "#444947"
-    , detailStrong = "#5b625f"
-    , solid = "#63706b"
-    , solidSubtle = "#5b625f"
-    , solidStrong = "#717d79"
-    , solidText = "#ffffff"
-    , textSubtle = "#eceeed"
-    , text = "#adb5b2"
+    { bg = Color.rgb255 23 25 24
+    , bgSubtle = Color.rgb255 16 18 17
+    , tintSubtle = Color.rgb255 32 34 33
+    , tint = Color.rgb255 39 42 41
+    , tintStrong = Color.rgb255 46 49 48
+    , accentSubtle = Color.rgb255 55 59 57
+    , accent = Color.rgb255 68 73 71
+    , accentStrong = Color.rgb255 91 98 95
+    , solidSubtle = Color.rgb255 85 98 93
+    , solid = Color.rgb255 99 112 107
+    , solidStrong = Color.rgb255 113 125 121
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 173 181 178
+    , text = Color.rgb255 236 238 237
     }
 
 
-{-| -}
-oliveDark : ThemeColorSet
+oliveDark : ColorScale
 oliveDark =
-    { bgSubtle = "#111210"
-    , bg = "#181917"
-    , tintSubtle = "#212220"
-    , tint = "#282a27"
-    , tintStrong = "#2f312e"
-    , detailSubtle = "#383a36"
-    , detail = "#454843"
-    , detailStrong = "#5c625b"
-    , solid = "#687066"
-    , solidSubtle = "#5c625b"
-    , solidStrong = "#767d74"
-    , solidText = "#ffffff"
-    , textSubtle = "#eceeec"
-    , text = "#afb5ad"
+    { bg = Color.rgb255 24 25 23
+    , bgSubtle = Color.rgb255 17 18 16
+    , tintSubtle = Color.rgb255 33 34 32
+    , tint = Color.rgb255 40 42 39
+    , tintStrong = Color.rgb255 47 49 46
+    , accentSubtle = Color.rgb255 56 58 54
+    , accent = Color.rgb255 69 72 67
+    , accentStrong = Color.rgb255 92 98 91
+    , solidSubtle = Color.rgb255 90 98 88
+    , solid = Color.rgb255 104 112 102
+    , solidStrong = Color.rgb255 118 125 116
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 175 181 173
+    , text = Color.rgb255 236 238 236
     }
 
 
-{-| -}
-sandDark : ThemeColorSet
+sandDark : ColorScale
 sandDark =
-    { bgSubtle = "#111110"
-    , bg = "#191918"
-    , tintSubtle = "#222221"
-    , tint = "#2a2a28"
-    , tintStrong = "#31312e"
-    , detailSubtle = "#3b3a37"
-    , detail = "#494844"
-    , detailStrong = "#62605b"
-    , solid = "#6f6d66"
-    , solidSubtle = "#62605b"
-    , solidStrong = "#7c7b74"
-    , solidText = "#ffffff"
-    , textSubtle = "#eeeeec"
-    , text = "#b5b3ad"
+    { bg = Color.rgb255 25 25 24
+    , bgSubtle = Color.rgb255 17 17 16
+    , tintSubtle = Color.rgb255 34 34 33
+    , tint = Color.rgb255 42 42 40
+    , tintStrong = Color.rgb255 49 49 46
+    , accentSubtle = Color.rgb255 59 58 55
+    , accent = Color.rgb255 73 72 68
+    , accentStrong = Color.rgb255 98 96 91
+    , solidSubtle = Color.rgb255 97 95 88
+    , solid = Color.rgb255 111 109 102
+    , solidStrong = Color.rgb255 124 123 116
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 181 179 173
+    , text = Color.rgb255 238 238 236
     }
 
 
-{-| -}
-tomatoDark : ThemeColorSet
+tomatoDark : ColorScale
 tomatoDark =
-    { bgSubtle = "#181111"
-    , bg = "#1f1513"
-    , tintSubtle = "#391714"
-    , tint = "#4e1511"
-    , tintStrong = "#5e1c16"
-    , detailSubtle = "#6e2920"
-    , detail = "#853a2d"
-    , detailStrong = "#ac4d39"
-    , solid = "#e54d2e"
-    , solidSubtle = "#ac4d39"
-    , solidStrong = "#ec6142"
-    , solidText = "#ffffff"
-    , textSubtle = "#fbd3cb"
-    , text = "#ff977d"
+    { bg = Color.rgb255 31 21 19
+    , bgSubtle = Color.rgb255 24 17 17
+    , tintSubtle = Color.rgb255 57 23 20
+    , tint = Color.rgb255 78 21 17
+    , tintStrong = Color.rgb255 94 28 22
+    , accentSubtle = Color.rgb255 110 41 32
+    , accent = Color.rgb255 133 58 45
+    , accentStrong = Color.rgb255 172 77 57
+    , solidSubtle = Color.rgb255 215 63 32
+    , solid = Color.rgb255 229 77 46
+    , solidStrong = Color.rgb255 236 97 66
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 255 151 125
+    , text = Color.rgb255 251 211 203
     }
 
 
-{-| -}
-redDark : ThemeColorSet
+redDark : ColorScale
 redDark =
-    { bgSubtle = "#191111"
-    , bg = "#201314"
-    , tintSubtle = "#3b1219"
-    , tint = "#500f1c"
-    , tintStrong = "#611623"
-    , detailSubtle = "#72232d"
-    , detail = "#8c333a"
-    , detailStrong = "#b54548"
-    , solid = "#e5484d"
-    , solidSubtle = "#b54548"
-    , solidStrong = "#ec5d5e"
-    , solidText = "#ffffff"
-    , textSubtle = "#ffd1d9"
-    , text = "#ff9592"
+    { bg = Color.rgb255 32 19 20
+    , bgSubtle = Color.rgb255 25 17 17
+    , tintSubtle = Color.rgb255 59 18 25
+    , tint = Color.rgb255 80 15 28
+    , tintStrong = Color.rgb255 97 22 35
+    , accentSubtle = Color.rgb255 114 35 45
+    , accent = Color.rgb255 140 51 58
+    , accentStrong = Color.rgb255 181 69 72
+    , solidSubtle = Color.rgb255 220 52 57
+    , solid = Color.rgb255 229 72 77
+    , solidStrong = Color.rgb255 236 93 94
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 255 149 146
+    , text = Color.rgb255 255 209 217
     }
 
 
-{-| -}
-rubyDark : ThemeColorSet
+rubyDark : ColorScale
 rubyDark =
-    { bgSubtle = "#191113"
-    , bg = "#1e1517"
-    , tintSubtle = "#3a141e"
-    , tint = "#4e1325"
-    , tintStrong = "#5e1a2e"
-    , detailSubtle = "#6f2539"
-    , detail = "#883447"
-    , detailStrong = "#b3445a"
-    , solid = "#e54666"
-    , solidSubtle = "#b3445a"
-    , solidStrong = "#ec5a72"
-    , solidText = "#ffffff"
-    , textSubtle = "#fed2e1"
-    , text = "#ff949d"
+    { bg = Color.rgb255 30 21 23
+    , bgSubtle = Color.rgb255 25 17 19
+    , tintSubtle = Color.rgb255 58 20 30
+    , tint = Color.rgb255 78 19 37
+    , tintStrong = Color.rgb255 94 26 46
+    , accentSubtle = Color.rgb255 111 37 57
+    , accent = Color.rgb255 136 52 71
+    , accentStrong = Color.rgb255 179 68 90
+    , solidSubtle = Color.rgb255 220 51 85
+    , solid = Color.rgb255 229 70 102
+    , solidStrong = Color.rgb255 236 90 114
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 255 148 157
+    , text = Color.rgb255 254 210 225
     }
 
 
-{-| -}
-crimsonDark : ThemeColorSet
+crimsonDark : ColorScale
 crimsonDark =
-    { bgSubtle = "#191114"
-    , bg = "#201318"
-    , tintSubtle = "#381525"
-    , tint = "#4d122f"
-    , tintStrong = "#5c1839"
-    , detailSubtle = "#6d2545"
-    , detail = "#873356"
-    , detailStrong = "#b0436e"
-    , solid = "#e93d82"
-    , solidSubtle = "#b0436e"
-    , solidStrong = "#ee518a"
-    , solidText = "#ffffff"
-    , textSubtle = "#fdd3e8"
-    , text = "#ff92ad"
+    { bg = Color.rgb255 32 19 24
+    , bgSubtle = Color.rgb255 25 17 20
+    , tintSubtle = Color.rgb255 56 21 37
+    , tint = Color.rgb255 77 18 47
+    , tintStrong = Color.rgb255 92 24 57
+    , accentSubtle = Color.rgb255 109 37 69
+    , accent = Color.rgb255 135 51 86
+    , accentStrong = Color.rgb255 176 67 110
+    , solidSubtle = Color.rgb255 227 41 116
+    , solid = Color.rgb255 233 61 130
+    , solidStrong = Color.rgb255 238 81 138
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 255 146 173
+    , text = Color.rgb255 253 211 232
     }
 
 
-{-| -}
-pinkDark : ThemeColorSet
+pinkDark : ColorScale
 pinkDark =
-    { bgSubtle = "#191117"
-    , bg = "#21121d"
-    , tintSubtle = "#37172f"
-    , tint = "#4b143d"
-    , tintStrong = "#591c47"
-    , detailSubtle = "#692955"
-    , detail = "#833869"
-    , detailStrong = "#a84885"
-    , solid = "#d6409f"
-    , solidSubtle = "#a84885"
-    , solidStrong = "#de51a8"
-    , solidText = "#ffffff"
-    , textSubtle = "#fdd1ea"
-    , text = "#ff8dcc"
+    { bg = Color.rgb255 33 18 29
+    , bgSubtle = Color.rgb255 25 17 23
+    , tintSubtle = Color.rgb255 55 23 47
+    , tint = Color.rgb255 75 20 61
+    , tintStrong = Color.rgb255 89 28 71
+    , accentSubtle = Color.rgb255 105 41 85
+    , accent = Color.rgb255 131 56 105
+    , accentStrong = Color.rgb255 168 72 133
+    , solidSubtle = Color.rgb255 203 49 147
+    , solid = Color.rgb255 214 64 159
+    , solidStrong = Color.rgb255 222 81 168
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 255 141 204
+    , text = Color.rgb255 253 209 234
     }
 
 
-{-| -}
-plumDark : ThemeColorSet
+plumDark : ColorScale
 plumDark =
-    { bgSubtle = "#181118"
-    , bg = "#201320"
-    , tintSubtle = "#351a35"
-    , tint = "#451d47"
-    , tintStrong = "#512454"
-    , detailSubtle = "#5e3061"
-    , detail = "#734079"
-    , detailStrong = "#92549c"
-    , solid = "#ab4aba"
-    , solidSubtle = "#92549c"
-    , solidStrong = "#b658c4"
-    , solidText = "#ffffff"
-    , textSubtle = "#f4d4f4"
-    , text = "#e796f3"
+    { bg = Color.rgb255 32 19 32
+    , bgSubtle = Color.rgb255 24 17 24
+    , tintSubtle = Color.rgb255 53 26 53
+    , tint = Color.rgb255 69 29 71
+    , tintStrong = Color.rgb255 81 36 84
+    , accentSubtle = Color.rgb255 94 48 97
+    , accent = Color.rgb255 115 64 121
+    , accentStrong = Color.rgb255 146 84 156
+    , solidSubtle = Color.rgb255 154 68 167
+    , solid = Color.rgb255 171 74 186
+    , solidStrong = Color.rgb255 182 88 196
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 231 150 243
+    , text = Color.rgb255 244 212 244
     }
 
 
-{-| -}
-purpleDark : ThemeColorSet
+purpleDark : ColorScale
 purpleDark =
-    { bgSubtle = "#18111b"
-    , bg = "#1e1523"
-    , tintSubtle = "#301c3b"
-    , tint = "#3d224e"
-    , tintStrong = "#48295c"
-    , detailSubtle = "#54346b"
-    , detail = "#664282"
-    , detailStrong = "#8457aa"
-    , solid = "#8e4ec6"
-    , solidSubtle = "#8457aa"
-    , solidStrong = "#9a5cd0"
-    , solidText = "#ffffff"
-    , textSubtle = "#ecd9fa"
-    , text = "#d19dff"
+    { bg = Color.rgb255 30 21 35
+    , bgSubtle = Color.rgb255 24 17 27
+    , tintSubtle = Color.rgb255 48 28 59
+    , tint = Color.rgb255 61 34 78
+    , tintStrong = Color.rgb255 72 41 92
+    , accentSubtle = Color.rgb255 84 52 107
+    , accent = Color.rgb255 102 66 130
+    , accentStrong = Color.rgb255 132 87 170
+    , solidSubtle = Color.rgb255 129 66 185
+    , solid = Color.rgb255 142 78 198
+    , solidStrong = Color.rgb255 154 92 208
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 209 157 255
+    , text = Color.rgb255 236 217 250
     }
 
 
-{-| -}
-violetDark : ThemeColorSet
+violetDark : ColorScale
 violetDark =
-    { bgSubtle = "#14121f"
-    , bg = "#1b1525"
-    , tintSubtle = "#291f43"
-    , tint = "#33255b"
-    , tintStrong = "#3c2e69"
-    , detailSubtle = "#473876"
-    , detail = "#56468b"
-    , detailStrong = "#6958ad"
-    , solid = "#6e56cf"
-    , solidSubtle = "#6958ad"
-    , solidStrong = "#7d66d9"
-    , solidText = "#ffffff"
-    , textSubtle = "#e2ddfe"
-    , text = "#baa7ff"
+    { bg = Color.rgb255 27 21 37
+    , bgSubtle = Color.rgb255 20 18 31
+    , tintSubtle = Color.rgb255 41 31 67
+    , tint = Color.rgb255 51 37 91
+    , tintStrong = Color.rgb255 60 46 105
+    , accentSubtle = Color.rgb255 71 56 118
+    , accent = Color.rgb255 86 70 139
+    , accentStrong = Color.rgb255 105 88 173
+    , solidSubtle = Color.rgb255 95 71 195
+    , solid = Color.rgb255 110 86 207
+    , solidStrong = Color.rgb255 125 102 217
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 186 167 255
+    , text = Color.rgb255 226 221 254
     }
 
 
-{-| -}
-irisDark : ThemeColorSet
+irisDark : ColorScale
 irisDark =
-    { bgSubtle = "#13131e"
-    , bg = "#171625"
-    , tintSubtle = "#202248"
-    , tint = "#262a65"
-    , tintStrong = "#303374"
-    , detailSubtle = "#3d3e82"
-    , detail = "#4a4a95"
-    , detailStrong = "#5958b1"
-    , solid = "#5b5bd6"
-    , solidSubtle = "#5958b1"
-    , solidStrong = "#6e6ade"
-    , solidText = "#ffffff"
-    , textSubtle = "#e0dffe"
-    , text = "#b1a9ff"
+    { bg = Color.rgb255 23 22 37
+    , bgSubtle = Color.rgb255 19 19 30
+    , tintSubtle = Color.rgb255 32 34 72
+    , tint = Color.rgb255 38 42 101
+    , tintStrong = Color.rgb255 48 51 116
+    , accentSubtle = Color.rgb255 61 62 130
+    , accent = Color.rgb255 74 74 149
+    , accentStrong = Color.rgb255 89 88 177
+    , solidSubtle = Color.rgb255 76 76 205
+    , solid = Color.rgb255 91 91 214
+    , solidStrong = Color.rgb255 110 106 222
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 177 169 255
+    , text = Color.rgb255 224 223 254
     }
 
 
-{-| -}
-indigoDark : ThemeColorSet
+indigoDark : ColorScale
 indigoDark =
-    { bgSubtle = "#11131f"
-    , bg = "#141726"
-    , tintSubtle = "#182449"
-    , tint = "#1d2e62"
-    , tintStrong = "#253974"
-    , detailSubtle = "#304384"
-    , detail = "#3a4f97"
-    , detailStrong = "#435db1"
-    , solid = "#3e63dd"
-    , solidSubtle = "#435db1"
-    , solidStrong = "#5472e4"
-    , solidText = "#ffffff"
-    , textSubtle = "#d6e1ff"
-    , text = "#9eb1ff"
+    { bg = Color.rgb255 20 23 38
+    , bgSubtle = Color.rgb255 17 19 31
+    , tintSubtle = Color.rgb255 24 36 73
+    , tint = Color.rgb255 29 46 98
+    , tintStrong = Color.rgb255 37 57 116
+    , accentSubtle = Color.rgb255 48 67 132
+    , accent = Color.rgb255 58 79 151
+    , accentStrong = Color.rgb255 67 93 177
+    , solidSubtle = Color.rgb255 41 81 212
+    , solid = Color.rgb255 62 99 221
+    , solidStrong = Color.rgb255 84 114 228
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 158 177 255
+    , text = Color.rgb255 214 225 255
     }
 
 
-{-| -}
-blueDark : ThemeColorSet
+blueDark : ColorScale
 blueDark =
-    { bgSubtle = "#0d1520"
-    , bg = "#111927"
-    , tintSubtle = "#0d2847"
-    , tint = "#003362"
-    , tintStrong = "#004074"
-    , detailSubtle = "#104d87"
-    , detail = "#205d9e"
-    , detailStrong = "#2870bd"
-    , solid = "#0090ff"
-    , solidSubtle = "#2870bd"
-    , solidStrong = "#3b9eff"
-    , solidText = "#ffffff"
-    , textSubtle = "#c2e6ff"
-    , text = "#70b8ff"
+    { bg = Color.rgb255 17 25 39
+    , bgSubtle = Color.rgb255 13 21 32
+    , tintSubtle = Color.rgb255 13 40 71
+    , tint = Color.rgb255 0 51 98
+    , tintStrong = Color.rgb255 0 64 116
+    , accentSubtle = Color.rgb255 16 77 135
+    , accent = Color.rgb255 32 93 158
+    , accentStrong = Color.rgb255 40 112 189
+    , solidSubtle = Color.rgb255 0 110 195
+    , solid = Color.rgb255 0 144 255
+    , solidStrong = Color.rgb255 59 158 255
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 112 184 255
+    , text = Color.rgb255 194 230 255
     }
 
 
-{-| -}
-cyanDark : ThemeColorSet
+cyanDark : ColorScale
 cyanDark =
-    { bgSubtle = "#0b161a"
-    , bg = "#101b20"
-    , tintSubtle = "#082c36"
-    , tint = "#003848"
-    , tintStrong = "#004558"
-    , detailSubtle = "#045468"
-    , detail = "#12677e"
-    , detailStrong = "#11809c"
-    , solid = "#00a2c7"
-    , solidSubtle = "#11809c"
-    , solidStrong = "#23afd0"
-    , solidText = "#ffffff"
-    , textSubtle = "#b6ecf7"
-    , text = "#4ccce6"
+    { bg = Color.rgb255 16 27 32
+    , bgSubtle = Color.rgb255 11 22 26
+    , tintSubtle = Color.rgb255 8 44 54
+    , tint = Color.rgb255 0 56 72
+    , tintStrong = Color.rgb255 0 69 88
+    , accentSubtle = Color.rgb255 4 84 104
+    , accent = Color.rgb255 18 103 126
+    , accentStrong = Color.rgb255 17 128 156
+    , solidSubtle = Color.rgb255 232 140 177
+    , solid = Color.rgb255 0 162 199
+    , solidStrong = Color.rgb255 35 175 208
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 76 204 230
+    , text = Color.rgb255 182 236 247
     }
 
 
-{-| -}
-tealDark : ThemeColorSet
+tealDark : ColorScale
 tealDark =
-    { bgSubtle = "#0d1514"
-    , bg = "#111c1b"
-    , tintSubtle = "#0d2d2a"
-    , tint = "#023b37"
-    , tintStrong = "#084843"
-    , detailSubtle = "#145750"
-    , detail = "#1c6961"
-    , detailStrong = "#207e73"
-    , solid = "#12a594"
-    , solidSubtle = "#207e73"
-    , solidStrong = "#0eb39e"
-    , solidText = "#ffffff"
-    , textSubtle = "#adf0dd"
-    , text = "#0bd8b6"
+    { bg = Color.rgb255 17 28 27
+    , bgSubtle = Color.rgb255 13 21 20
+    , tintSubtle = Color.rgb255 13 45 42
+    , tint = Color.rgb255 2 59 55
+    , tintStrong = Color.rgb255 8 72 67
+    , accentSubtle = Color.rgb255 20 87 80
+    , accent = Color.rgb255 28 105 97
+    , accentStrong = Color.rgb255 32 126 115
+    , solidSubtle = Color.rgb255 21 151 136
+    , solid = Color.rgb255 18 165 148
+    , solidStrong = Color.rgb255 14 179 158
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 11 216 182
+    , text = Color.rgb255 173 240 221
     }
 
 
-{-| -}
-jadeDark : ThemeColorSet
+jadeDark : ColorScale
 jadeDark =
-    { bgSubtle = "#0d1512"
-    , bg = "#121c18"
-    , tintSubtle = "#0f2e22"
-    , tint = "#0b3b2c"
-    , tintStrong = "#114837"
-    , detailSubtle = "#1b5745"
-    , detail = "#246854"
-    , detailStrong = "#2a7e68"
-    , solid = "#29a383"
-    , solidSubtle = "#2a7e68"
-    , solidStrong = "#27b08b"
-    , solidText = "#ffffff"
-    , textSubtle = "#adf0d4"
-    , text = "#1fd8a4"
+    { bg = Color.rgb255 18 28 24
+    , bgSubtle = Color.rgb255 13 21 18
+    , tintSubtle = Color.rgb255 15 46 34
+    , tint = Color.rgb255 11 59 44
+    , tintStrong = Color.rgb255 17 72 55
+    , accentSubtle = Color.rgb255 27 87 69
+    , accent = Color.rgb255 36 104 84
+    , accentStrong = Color.rgb255 42 126 104
+    , solidSubtle = Color.rgb255 42 150 122
+    , solid = Color.rgb255 41 163 131
+    , solidStrong = Color.rgb255 39 176 139
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 31 216 164
+    , text = Color.rgb255 173 240 212
     }
 
 
-{-| -}
-greenDark : ThemeColorSet
+greenDark : ColorScale
 greenDark =
-    { bgSubtle = "#0e1512"
-    , bg = "#121b17"
-    , tintSubtle = "#132d21"
-    , tint = "#113b29"
-    , tintStrong = "#174933"
-    , detailSubtle = "#20573e"
-    , detail = "#28684a"
-    , detailStrong = "#2f7c57"
-    , solid = "#30a46c"
-    , solidSubtle = "#2f7c57"
-    , solidStrong = "#33b074"
-    , solidText = "#ffffff"
-    , textSubtle = "#b1f1cb"
-    , text = "#3dd68c"
+    { bg = Color.rgb255 18 27 23
+    , bgSubtle = Color.rgb255 14 21 18
+    , tintSubtle = Color.rgb255 19 45 33
+    , tint = Color.rgb255 17 59 41
+    , tintStrong = Color.rgb255 23 73 51
+    , accentSubtle = Color.rgb255 32 87 62
+    , accent = Color.rgb255 40 104 74
+    , accentStrong = Color.rgb255 47 124 87
+    , solidSubtle = Color.rgb255 44 152 100
+    , solid = Color.rgb255 48 164 108
+    , solidStrong = Color.rgb255 51 176 116
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 61 214 140
+    , text = Color.rgb255 177 241 203
     }
 
 
-{-| -}
-grassDark : ThemeColorSet
+grassDark : ColorScale
 grassDark =
-    { bgSubtle = "#0e1511"
-    , bg = "#141a15"
-    , tintSubtle = "#1b2a1e"
-    , tint = "#1d3a24"
-    , tintStrong = "#25482d"
-    , detailSubtle = "#2d5736"
-    , detail = "#366740"
-    , detailStrong = "#3e7949"
-    , solid = "#46a758"
-    , solidSubtle = "#3e7949"
-    , solidStrong = "#53b365"
-    , solidText = "#ffffff"
-    , textSubtle = "#c2f0c2"
-    , text = "#71d083"
+    { bg = Color.rgb255 20 26 21
+    , bgSubtle = Color.rgb255 14 21 17
+    , tintSubtle = Color.rgb255 27 42 30
+    , tint = Color.rgb255 29 58 36
+    , tintStrong = Color.rgb255 37 72 45
+    , accentSubtle = Color.rgb255 45 87 54
+    , accent = Color.rgb255 54 103 64
+    , accentStrong = Color.rgb255 62 121 73
+    , solidSubtle = Color.rgb255 60 151 77
+    , solid = Color.rgb255 70 167 88
+    , solidStrong = Color.rgb255 83 179 101
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 113 208 131
+    , text = Color.rgb255 194 240 194
     }
 
 
-{-| -}
-brownDark : ThemeColorSet
+brownDark : ColorScale
 brownDark =
-    { bgSubtle = "#12110f"
-    , bg = "#1c1816"
-    , tintSubtle = "#28211d"
-    , tint = "#322922"
-    , tintStrong = "#3e3128"
-    , detailSubtle = "#4d3c2f"
-    , detail = "#614a39"
-    , detailStrong = "#7c5f46"
-    , solid = "#ad7f58"
-    , solidSubtle = "#7c5f46"
-    , solidStrong = "#b88c67"
-    , solidText = "#ffffff"
-    , textSubtle = "#f2e1ca"
-    , text = "#dbb594"
+    { bg = Color.rgb255 28 24 22
+    , bgSubtle = Color.rgb255 18 17 15
+    , tintSubtle = Color.rgb255 40 33 29
+    , tint = Color.rgb255 50 41 34
+    , tintStrong = Color.rgb255 62 49 40
+    , accentSubtle = Color.rgb255 77 60 47
+    , accent = Color.rgb255 97 74 57
+    , accentStrong = Color.rgb255 124 95 70
+    , solidSubtle = Color.rgb255 155 114 79
+    , solid = Color.rgb255 173 127 88
+    , solidStrong = Color.rgb255 184 140 103
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 219 181 148
+    , text = Color.rgb255 242 225 202
     }
 
 
-{-| -}
-bronzeDark : ThemeColorSet
+bronzeDark : ColorScale
 bronzeDark =
-    { bgSubtle = "#141110"
-    , bg = "#1c1917"
-    , tintSubtle = "#262220"
-    , tint = "#302a27"
-    , tintStrong = "#3b3330"
-    , detailSubtle = "#493e3a"
-    , detail = "#5a4c47"
-    , detailStrong = "#6f5f58"
-    , solid = "#a18072"
-    , solidSubtle = "#6f5f58"
-    , solidStrong = "#ae8c7e"
-    , solidText = "#ffffff"
-    , textSubtle = "#ede0d9"
-    , text = "#d4b3a5"
+    { bg = Color.rgb255 28 25 23
+    , bgSubtle = Color.rgb255 20 17 16
+    , tintSubtle = Color.rgb255 38 34 32
+    , tint = Color.rgb255 48 42 39
+    , tintStrong = Color.rgb255 59 51 48
+    , accentSubtle = Color.rgb255 73 62 58
+    , accent = Color.rgb255 90 76 71
+    , accentStrong = Color.rgb255 111 95 88
+    , solidSubtle = Color.rgb255 146 116 103
+    , solid = Color.rgb255 161 128 114
+    , solidStrong = Color.rgb255 174 140 126
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 212 179 165
+    , text = Color.rgb255 237 224 217
     }
 
 
-{-| -}
-goldDark : ThemeColorSet
+goldDark : ColorScale
 goldDark =
-    { bgSubtle = "#121211"
-    , bg = "#1b1a17"
-    , tintSubtle = "#24231f"
-    , tint = "#2d2b26"
-    , tintStrong = "#38352e"
-    , detailSubtle = "#444039"
-    , detail = "#544f46"
-    , detailStrong = "#696256"
-    , solid = "#978365"
-    , solidSubtle = "#696256"
-    , solidStrong = "#a39073"
-    , solidText = "#ffffff"
-    , textSubtle = "#e8e2d9"
-    , text = "#cbb99f"
+    { bg = Color.rgb255 27 26 23
+    , bgSubtle = Color.rgb255 18 18 17
+    , tintSubtle = Color.rgb255 36 35 31
+    , tint = Color.rgb255 45 43 38
+    , tintStrong = Color.rgb255 56 53 46
+    , accentSubtle = Color.rgb255 68 64 57
+    , accent = Color.rgb255 84 79 70
+    , accentStrong = Color.rgb255 105 98 86
+    , solidSubtle = Color.rgb255 134 117 91
+    , solid = Color.rgb255 151 131 101
+    , solidStrong = Color.rgb255 163 144 115
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 203 185 159
+    , text = Color.rgb255 232 226 217
     }
 
 
-{-| -}
-skyDark : ThemeColorSet
+skyDark : ColorScale
 skyDark =
-    { bgSubtle = "#0d141f"
-    , bg = "#111a27"
-    , tintSubtle = "#112840"
-    , tint = "#113555"
-    , tintStrong = "#154467"
-    , detailSubtle = "#1b537b"
-    , detail = "#1f6692"
-    , detailStrong = "#197cae"
-    , solid = "#7ce2fe"
-    , solidSubtle = "#197cae"
-    , solidStrong = "#a8eeff"
-    , solidText = "#0d141f"
-    , textSubtle = "#c2f3ff"
-    , text = "#75c7f0"
+    { bg = Color.rgb255 17 26 39
+    , bgSubtle = Color.rgb255 13 20 31
+    , tintSubtle = Color.rgb255 17 40 64
+    , tint = Color.rgb255 17 53 85
+    , tintStrong = Color.rgb255 21 68 103
+    , accentSubtle = Color.rgb255 27 83 123
+    , accent = Color.rgb255 31 102 146
+    , accentStrong = Color.rgb255 25 124 174
+    , solidSubtle = Color.rgb255 80 215 252
+    , solid = Color.rgb255 124 226 254
+    , solidStrong = Color.rgb255 168 238 255
+    , solidText = Color.rgb255 17 26 39
+    , textSubtle = Color.rgb255 117 199 240
+    , text = Color.rgb255 194 243 255
     }
 
 
-{-| -}
-mintDark : ThemeColorSet
+mintDark : ColorScale
 mintDark =
-    { bgSubtle = "#0e1515"
-    , bg = "#0f1b1b"
-    , tintSubtle = "#092c2b"
-    , tint = "#003a38"
-    , tintStrong = "#004744"
-    , detailSubtle = "#105650"
-    , detail = "#1e685f"
-    , detailStrong = "#277f70"
-    , solid = "#86ead4"
-    , solidSubtle = "#277f70"
-    , solidStrong = "#a8f5e5"
-    , solidText = "#0e1515"
-    , textSubtle = "#c4f5e1"
-    , text = "#58d5ba"
+    { bg = Color.rgb255 15 27 27
+    , bgSubtle = Color.rgb255 14 21 21
+    , tintSubtle = Color.rgb255 9 44 43
+    , tint = Color.rgb255 0 58 56
+    , tintStrong = Color.rgb255 0 71 68
+    , accentSubtle = Color.rgb255 16 86 80
+    , accent = Color.rgb255 30 104 95
+    , accentStrong = Color.rgb255 39 127 112
+    , solidSubtle = Color.rgb255 104 218 193
+    , solid = Color.rgb255 134 234 212
+    , solidStrong = Color.rgb255 168 245 229
+    , solidText = Color.rgb255 15 27 27
+    , textSubtle = Color.rgb255 88 213 186
+    , text = Color.rgb255 196 245 225
     }
 
 
-{-| -}
-limeDark : ThemeColorSet
+limeDark : ColorScale
 limeDark =
-    { bgSubtle = "#0e130b"
-    , bg = "#141a10"
-    , tintSubtle = "#1e2a15"
-    , tint = "#263818"
-    , tintStrong = "#2f461c"
-    , detailSubtle = "#395421"
-    , detail = "#446527"
-    , detailStrong = "#50782c"
-    , solid = "#96e647"
-    , solidSubtle = "#50782c"
-    , solidStrong = "#8cdb3a"
-    , solidText = "#0e130b"
-    , textSubtle = "#d2f9b6"
-    , text = "#9ee65d"
+    { bg = Color.rgb255 21 26 16
+    , bgSubtle = Color.rgb255 17 19 12
+    , tintSubtle = Color.rgb255 31 41 23
+    , tint = Color.rgb255 41 55 29
+    , tintStrong = Color.rgb255 51 68 35
+    , accentSubtle = Color.rgb255 61 82 42
+    , accent = Color.rgb255 73 98 49
+    , accentStrong = Color.rgb255 87 117 56
+    , solidSubtle = Color.rgb255 171 215 91
+    , solid = Color.rgb255 189 238 99
+    , solidStrong = Color.rgb255 212 255 112
+    , solidText = Color.rgb255 21 26 16
+    , textSubtle = Color.rgb255 189 229 108
+    , text = Color.rgb255 227 247 186
     }
 
 
-{-| -}
-yellowDark : ThemeColorSet
+yellowDark : ColorScale
 yellowDark =
-    { bgSubtle = "#14120b"
-    , bg = "#1b180f"
-    , tintSubtle = "#2d2305"
-    , tint = "#362b00"
-    , tintStrong = "#433500"
-    , detailSubtle = "#524202"
-    , detail = "#665417"
-    , detailStrong = "#836a21"
-    , solid = "#ffe629"
-    , solidSubtle = "#836a21"
-    , solidStrong = "#ffff57"
-    , solidText = "#14120b"
-    , textSubtle = "#f6eeb4"
-    , text = "#f5e147"
+    { bg = Color.rgb255 27 24 15
+    , bgSubtle = Color.rgb255 20 18 11
+    , tintSubtle = Color.rgb255 45 35 5
+    , tint = Color.rgb255 54 43 0
+    , tintStrong = Color.rgb255 67 53 0
+    , accentSubtle = Color.rgb255 82 66 2
+    , accent = Color.rgb255 102 84 23
+    , accentStrong = Color.rgb255 131 106 33
+    , solidSubtle = Color.rgb255 250 220 0
+    , solid = Color.rgb255 255 230 41
+    , solidStrong = Color.rgb255 255 255 87
+    , solidText = Color.rgb255 27 24 15
+    , textSubtle = Color.rgb255 245 225 71
+    , text = Color.rgb255 246 238 180
     }
 
 
-{-| -}
-amberDark : ThemeColorSet
+amberDark : ColorScale
 amberDark =
-    { bgSubtle = "#16120c"
-    , bg = "#1d180f"
-    , tintSubtle = "#302008"
-    , tint = "#3f2700"
-    , tintStrong = "#4d3000"
-    , detailSubtle = "#5c3d05"
-    , detail = "#714f19"
-    , detailStrong = "#8f6424"
-    , solid = "#ffc53d"
-    , solidSubtle = "#8f6424"
-    , solidStrong = "#ffd60a"
-    , solidText = "#16120c"
-    , textSubtle = "#ffe7b3"
-    , text = "#ffca16"
+    { bg = Color.rgb255 29 24 15
+    , bgSubtle = Color.rgb255 22 18 12
+    , tintSubtle = Color.rgb255 48 32 8
+    , tint = Color.rgb255 63 39 0
+    , tintStrong = Color.rgb255 77 48 0
+    , accentSubtle = Color.rgb255 92 61 5
+    , accent = Color.rgb255 113 79 25
+    , accentStrong = Color.rgb255 143 100 36
+    , solidSubtle = Color.rgb255 255 212 111
+    , solid = Color.rgb255 255 197 61
+    , solidStrong = Color.rgb255 255 214 10
+    , solidText = Color.rgb255 29 24 15
+    , textSubtle = Color.rgb255 255 202 22
+    , text = Color.rgb255 255 231 179
     }
 
 
-{-| -}
-orangeDark : ThemeColorSet
+orangeDark : ColorScale
 orangeDark =
-    { bgSubtle = "#17120e"
-    , bg = "#1e160f"
-    , tintSubtle = "#331e0b"
-    , tint = "#462100"
-    , tintStrong = "#562800"
-    , detailSubtle = "#66350c"
-    , detail = "#7e451d"
-    , detailStrong = "#a35829"
-    , solid = "#f76b15"
-    , solidSubtle = "#a35829"
-    , solidStrong = "#ff801f"
-    , solidText = "#ffffff"
-    , textSubtle = "#ffe0c2"
-    , text = "#ffa057"
+    { bg = Color.rgb255 30 22 15
+    , bgSubtle = Color.rgb255 23 18 14
+    , tintSubtle = Color.rgb255 51 30 11
+    , tint = Color.rgb255 70 33 0
+    , tintStrong = Color.rgb255 86 40 0
+    , accentSubtle = Color.rgb255 102 53 12
+    , accent = Color.rgb255 126 69 29
+    , accentStrong = Color.rgb255 163 88 41
+    , solidSubtle = Color.rgb255 233 99 16
+    , solid = Color.rgb255 247 107 21
+    , solidStrong = Color.rgb255 255 128 31
+    , solidText = Color.rgb255 255 255 255
+    , textSubtle = Color.rgb255 255 160 87
+    , text = Color.rgb255 255 224 194
     }
