@@ -1,67 +1,10 @@
-module W.Theme.Colors exposing
-    ( amber
-    , amberDark
-    , blue
-    , blueDark
-    , bronze
-    , bronzeDark
-    , brown
-    , brownDark
-    , crimson
-    , crimsonDark
-    , cyan
-    , cyanDark
-    , gold
-    , goldDark
-    , grass
-    , grassDark
-    , gray
-    , grayDark
-    , green
-    , greenDark
-    , indigo
-    , indigoDark
-    , iris
-    , irisDark
-    , jade
-    , jadeDark
-    , lime
-    , limeDark
-    , mauve
-    , mauveDark
-    , mint
-    , mintDark
-    , olive
-    , oliveDark
-    , orange
-    , orangeDark
-    , pink
-    , pinkDark
-    , plum
-    , plumDark
-    , purple
-    , purpleDark
-    , red
-    , redDark
-    , ruby
-    , rubyDark
-    , sage
-    , sageDark
-    , sand
-    , sandDark
-    , sky
-    , skyDark
-    , slate
-    , slateDark
-    , teal
-    , tealDark
-    , tomato
-    , tomatoDark
-    , violet
-    , violetDark
-    , yellow
-    , yellowDark
-    )
+module W.Theme.Colors exposing (amber, amberDark, blue, blueDark, bronze, bronzeDark, brown, brownDark, crimson, crimsonDark, cyan, cyanDark, gold, goldDark, grass, grassDark, gray, grayDark, green, greenDark, indigo, indigoDark, iris, irisDark, jade, jadeDark, lime, limeDark, mauve, mauveDark, mint, mintDark, olive, oliveDark, orange, orangeDark, pink, pinkDark, plum, plumDark, purple, purpleDark, red, redDark, ruby, rubyDark, sage, sageDark, sand, sandDark, sky, skyDark, slate, slateDark, teal, tealDark, tomato, tomatoDark, violet, violetDark, yellow, yellowDark)
+
+{-|
+
+@docs amber, amberDark, blue, blueDark, bronze, bronzeDark, brown, brownDark, crimson, crimsonDark, cyan, cyanDark, gold, goldDark, grass, grassDark, gray, grayDark, green, greenDark, indigo, indigoDark, iris, irisDark, jade, jadeDark, lime, limeDark, mauve, mauveDark, mint, mintDark, olive, oliveDark, orange, orangeDark, pink, pinkDark, plum, plumDark, purple, purpleDark, red, redDark, ruby, rubyDark, sage, sageDark, sand, sandDark, sky, skyDark, slate, slateDark, teal, tealDark, tomato, tomatoDark, violet, violetDark, yellow, yellowDark
+
+-}
 
 import Color exposing (Color)
 
@@ -85,6 +28,7 @@ type alias ColorScale =
     }
 
 
+{-| -}
 gray : ColorScale
 gray =
     { bg = Color.rgb255 252 252 252
@@ -105,6 +49,7 @@ gray =
     }
 
 
+{-| -}
 mauve : ColorScale
 mauve =
     { bg = Color.rgb255 253 252 253
@@ -125,6 +70,7 @@ mauve =
     }
 
 
+{-| -}
 slate : ColorScale
 slate =
     { bg = Color.rgb255 252 252 253
@@ -145,6 +91,7 @@ slate =
     }
 
 
+{-| -}
 sage : ColorScale
 sage =
     { bg = Color.rgb255 251 253 252
@@ -165,6 +112,7 @@ sage =
     }
 
 
+{-| -}
 olive : ColorScale
 olive =
     { bg = Color.rgb255 252 253 252
@@ -185,6 +133,7 @@ olive =
     }
 
 
+{-| -}
 sand : ColorScale
 sand =
     { bg = Color.rgb255 253 253 252
@@ -205,6 +154,7 @@ sand =
     }
 
 
+{-| -}
 tomato : ColorScale
 tomato =
     { bg = Color.rgb255 255 252 252
@@ -225,6 +175,7 @@ tomato =
     }
 
 
+{-| -}
 red : ColorScale
 red =
     { bg = Color.rgb255 255 252 252
@@ -245,6 +196,7 @@ red =
     }
 
 
+{-| -}
 ruby : ColorScale
 ruby =
     { bg = Color.rgb255 255 252 253
@@ -265,6 +217,7 @@ ruby =
     }
 
 
+{-| -}
 crimson : ColorScale
 crimson =
     { bg = Color.rgb255 255 252 253
@@ -285,6 +238,7 @@ crimson =
     }
 
 
+{-| -}
 pink : ColorScale
 pink =
     { bg = Color.rgb255 255 252 254
@@ -305,6 +259,7 @@ pink =
     }
 
 
+{-| -}
 plum : ColorScale
 plum =
     { bg = Color.rgb255 254 252 255
@@ -325,6 +280,7 @@ plum =
     }
 
 
+{-| -}
 purple : ColorScale
 purple =
     { bg = Color.rgb255 254 252 254
@@ -345,6 +301,7 @@ purple =
     }
 
 
+{-| -}
 violet : ColorScale
 violet =
     { bg = Color.rgb255 253 252 254
@@ -365,6 +322,7 @@ violet =
     }
 
 
+{-| -}
 iris : ColorScale
 iris =
     { bg = Color.rgb255 253 253 255
@@ -385,6 +343,7 @@ iris =
     }
 
 
+{-| -}
 indigo : ColorScale
 indigo =
     { bg = Color.rgb255 253 253 254
@@ -405,6 +364,7 @@ indigo =
     }
 
 
+{-| -}
 blue : ColorScale
 blue =
     { bg = Color.rgb255 251 253 255
@@ -425,6 +385,7 @@ blue =
     }
 
 
+{-| -}
 cyan : ColorScale
 cyan =
     { bg = Color.rgb255 250 253 254
@@ -445,6 +406,7 @@ cyan =
     }
 
 
+{-| -}
 teal : ColorScale
 teal =
     { bg = Color.rgb255 250 254 253
@@ -465,6 +427,7 @@ teal =
     }
 
 
+{-| -}
 jade : ColorScale
 jade =
     { bg = Color.rgb255 251 254 253
@@ -485,6 +448,7 @@ jade =
     }
 
 
+{-| -}
 green : ColorScale
 green =
     { bg = Color.rgb255 251 254 252
@@ -505,6 +469,7 @@ green =
     }
 
 
+{-| -}
 grass : ColorScale
 grass =
     { bg = Color.rgb255 251 254 251
@@ -525,6 +490,7 @@ grass =
     }
 
 
+{-| -}
 brown : ColorScale
 brown =
     { bg = Color.rgb255 254 253 252
@@ -545,6 +511,7 @@ brown =
     }
 
 
+{-| -}
 bronze : ColorScale
 bronze =
     { bg = Color.rgb255 253 252 252
@@ -565,6 +532,7 @@ bronze =
     }
 
 
+{-| -}
 gold : ColorScale
 gold =
     { bg = Color.rgb255 253 253 252
@@ -585,6 +553,7 @@ gold =
     }
 
 
+{-| -}
 sky : ColorScale
 sky =
     { bg = Color.rgb255 249 254 255
@@ -605,6 +574,7 @@ sky =
     }
 
 
+{-| -}
 mint : ColorScale
 mint =
     { bg = Color.rgb255 249 254 253
@@ -625,6 +595,7 @@ mint =
     }
 
 
+{-| -}
 lime : ColorScale
 lime =
     { bg = Color.rgb255 252 253 250
@@ -645,6 +616,7 @@ lime =
     }
 
 
+{-| -}
 yellow : ColorScale
 yellow =
     { bg = Color.rgb255 253 253 249
@@ -665,6 +637,7 @@ yellow =
     }
 
 
+{-| -}
 amber : ColorScale
 amber =
     { bg = Color.rgb255 254 253 251
@@ -685,6 +658,7 @@ amber =
     }
 
 
+{-| -}
 orange : ColorScale
 orange =
     { bg = Color.rgb255 254 252 251
@@ -705,6 +679,7 @@ orange =
     }
 
 
+{-| -}
 grayDark : ColorScale
 grayDark =
     { bg = Color.rgb255 25 25 25
@@ -725,6 +700,7 @@ grayDark =
     }
 
 
+{-| -}
 mauveDark : ColorScale
 mauveDark =
     { bg = Color.rgb255 26 25 27
@@ -745,6 +721,7 @@ mauveDark =
     }
 
 
+{-| -}
 slateDark : ColorScale
 slateDark =
     { bg = Color.rgb255 24 25 27
@@ -765,6 +742,7 @@ slateDark =
     }
 
 
+{-| -}
 sageDark : ColorScale
 sageDark =
     { bg = Color.rgb255 23 25 24
@@ -785,6 +763,7 @@ sageDark =
     }
 
 
+{-| -}
 oliveDark : ColorScale
 oliveDark =
     { bg = Color.rgb255 24 25 23
@@ -805,6 +784,7 @@ oliveDark =
     }
 
 
+{-| -}
 sandDark : ColorScale
 sandDark =
     { bg = Color.rgb255 25 25 24
@@ -825,6 +805,7 @@ sandDark =
     }
 
 
+{-| -}
 tomatoDark : ColorScale
 tomatoDark =
     { bg = Color.rgb255 31 21 19
@@ -845,6 +826,7 @@ tomatoDark =
     }
 
 
+{-| -}
 redDark : ColorScale
 redDark =
     { bg = Color.rgb255 32 19 20
@@ -865,6 +847,7 @@ redDark =
     }
 
 
+{-| -}
 rubyDark : ColorScale
 rubyDark =
     { bg = Color.rgb255 30 21 23
@@ -885,6 +868,7 @@ rubyDark =
     }
 
 
+{-| -}
 crimsonDark : ColorScale
 crimsonDark =
     { bg = Color.rgb255 32 19 24
@@ -905,6 +889,7 @@ crimsonDark =
     }
 
 
+{-| -}
 pinkDark : ColorScale
 pinkDark =
     { bg = Color.rgb255 33 18 29
@@ -925,6 +910,7 @@ pinkDark =
     }
 
 
+{-| -}
 plumDark : ColorScale
 plumDark =
     { bg = Color.rgb255 32 19 32
@@ -945,6 +931,7 @@ plumDark =
     }
 
 
+{-| -}
 purpleDark : ColorScale
 purpleDark =
     { bg = Color.rgb255 30 21 35
@@ -965,6 +952,7 @@ purpleDark =
     }
 
 
+{-| -}
 violetDark : ColorScale
 violetDark =
     { bg = Color.rgb255 27 21 37
@@ -985,6 +973,7 @@ violetDark =
     }
 
 
+{-| -}
 irisDark : ColorScale
 irisDark =
     { bg = Color.rgb255 23 22 37
@@ -1005,6 +994,7 @@ irisDark =
     }
 
 
+{-| -}
 indigoDark : ColorScale
 indigoDark =
     { bg = Color.rgb255 20 23 38
@@ -1025,6 +1015,7 @@ indigoDark =
     }
 
 
+{-| -}
 blueDark : ColorScale
 blueDark =
     { bg = Color.rgb255 17 25 39
@@ -1045,6 +1036,7 @@ blueDark =
     }
 
 
+{-| -}
 cyanDark : ColorScale
 cyanDark =
     { bg = Color.rgb255 16 27 32
@@ -1065,6 +1057,7 @@ cyanDark =
     }
 
 
+{-| -}
 tealDark : ColorScale
 tealDark =
     { bg = Color.rgb255 17 28 27
@@ -1085,6 +1078,7 @@ tealDark =
     }
 
 
+{-| -}
 jadeDark : ColorScale
 jadeDark =
     { bg = Color.rgb255 18 28 24
@@ -1105,6 +1099,7 @@ jadeDark =
     }
 
 
+{-| -}
 greenDark : ColorScale
 greenDark =
     { bg = Color.rgb255 18 27 23
@@ -1125,6 +1120,7 @@ greenDark =
     }
 
 
+{-| -}
 grassDark : ColorScale
 grassDark =
     { bg = Color.rgb255 20 26 21
@@ -1145,6 +1141,7 @@ grassDark =
     }
 
 
+{-| -}
 brownDark : ColorScale
 brownDark =
     { bg = Color.rgb255 28 24 22
@@ -1165,6 +1162,7 @@ brownDark =
     }
 
 
+{-| -}
 bronzeDark : ColorScale
 bronzeDark =
     { bg = Color.rgb255 28 25 23
@@ -1185,6 +1183,7 @@ bronzeDark =
     }
 
 
+{-| -}
 goldDark : ColorScale
 goldDark =
     { bg = Color.rgb255 27 26 23
@@ -1205,6 +1204,7 @@ goldDark =
     }
 
 
+{-| -}
 skyDark : ColorScale
 skyDark =
     { bg = Color.rgb255 17 26 39
@@ -1225,6 +1225,7 @@ skyDark =
     }
 
 
+{-| -}
 mintDark : ColorScale
 mintDark =
     { bg = Color.rgb255 15 27 27
@@ -1245,6 +1246,7 @@ mintDark =
     }
 
 
+{-| -}
 limeDark : ColorScale
 limeDark =
     { bg = Color.rgb255 21 26 16
@@ -1265,6 +1267,7 @@ limeDark =
     }
 
 
+{-| -}
 yellowDark : ColorScale
 yellowDark =
     { bg = Color.rgb255 27 24 15
@@ -1285,6 +1288,7 @@ yellowDark =
     }
 
 
+{-| -}
 amberDark : ColorScale
 amberDark =
     { bg = Color.rgb255 29 24 15
@@ -1305,6 +1309,7 @@ amberDark =
     }
 
 
+{-| -}
 orangeDark : ColorScale
 orangeDark =
     { bg = Color.rgb255 30 22 15

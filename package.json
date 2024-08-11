@@ -1,19 +1,22 @@
 {
   "name": "elm-package-template",
-  "description": "Template repository for creating Elm packages",
-  "version": "0.0.1",
+  "description": "Elm implementation of the w-theme framework.",
+  "version": "1.0.0",
   "license": "MPL-2.0",
   "author": "Georges Boris",
-  "homepage": "https://github.com/georgesboris/elm-package-template#readme",
+  "homepage": "https://github.com/georgesboris/elm-theme",
   "keywords": [
-    "elm"
+    "elm",
+    "w-theme",
+    "design",
+    "systems"
   ],
   "bugs": {
-    "url": "https://github.com/georgesboris/elm-package-template/issues"
+    "url": "https://github.com/georgesboris/elm-theme/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/georgesboris/elm-package-template.git"
+    "url": "git+https://github.com/georgesboris/elm-theme.git"
   },
   "scripts": {
     "postinstall": "elm-tooling install",

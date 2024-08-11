@@ -3,13 +3,15 @@ module W.Theme exposing
     , globalTheme, classTheme
     , darkModeFromClass, darkModeFromSystemPreferences, DarkMode
     , Theme, ColorScale, FontFamilies, RadiusScale, SpacingScale
+    , withId
     , withHeadingFont, withBaseFont, withCodeFont
     , withSpacing, withRadius
-    , withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
+    , withColorPalette, withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
+    , toId, toFontFamilies, toSpacingScale, toRadiusScale, toColorPalette, toExtraVariables
     , styleList
-    , font, spacing, radius, base, primary, secondary, success, warning, danger
+    , font, spacing, radius, color, base, primary, secondary, success, warning, danger, alpha
     , ColorScaleValues, RadiusScaleValues, SpacingScaleValues
-    , alpha, color, getId, themeComponents, toColorPalette, toExtraVariables, toFontFamilies, toRadiusScale, toSpacingScale, withColorPalette
+    , themeComponents
     )
 
 {-|
@@ -25,16 +27,23 @@ module W.Theme exposing
 ## Creating Custom Themes
 
 @docs Theme, ColorScale, FontFamilies, RadiusScale, SpacingScale
+@docs withId
 @docs withHeadingFont, withBaseFont, withCodeFont
 @docs withSpacing, withRadius
-@docs withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
+@docs withColorPalette, withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
+@docs toId, toFontFamilies, toSpacingScale, toRadiusScale, toColorPalette, toExtraVariables
 
 
 ## Using Theme Values
 
 @docs styleList
-@docs font, spacing, radius, base, primary, secondary, success, warning, danger
+@docs font, spacing, radius, color, base, primary, secondary, success, warning, danger, alpha
 @docs ColorScaleValues, RadiusScaleValues, SpacingScaleValues
+
+
+## Theme Components
+
+@docs themeComponents
 
 -}
 
@@ -209,8 +218,8 @@ colorScaleColors =
 
 
 {-| -}
-getId : Theme -> String
-getId (Theme theme) =
+toId : Theme -> String
+toId (Theme theme) =
     theme.id
 
 
@@ -373,8 +382,8 @@ spacing =
     , md = cssValue "spacing-md"
     , lg = cssValue "spacing-lg"
     , xl = cssValue "spacing-xl"
-    , xl2 = cssValue "spacing-xl2"
-    , xl3 = cssValue "spacing-xl3"
+    , xl2 = cssValue "spacing-2xl"
+    , xl3 = cssValue "spacing-3xl"
     }
 
 
@@ -386,8 +395,8 @@ radius =
     , md = cssValue "radius-md"
     , lg = cssValue "radius-lg"
     , xl = cssValue "radius-xl"
-    , xl2 = cssValue "radius-xl2"
-    , xl3 = cssValue "radius-xl3"
+    , xl2 = cssValue "radius-2xl"
+    , xl3 = cssValue "radius-3xl"
     }
 
 
@@ -478,6 +487,13 @@ toColorValues name =
 -- Customizing Themes
 
 
+{-| -}
+withId : String -> Theme -> Theme
+withId value (Theme theme) =
+    Theme { theme | id = value }
+
+
+{-| -}
 withHeadingFont : String -> Theme -> Theme
 withHeadingFont value (Theme theme) =
     let
@@ -611,29 +627,22 @@ styleComponents : String
 styleComponents =
     wClass "tint" ++ """ {
   background-color: """ ++ cssColorValue "tint" ++ """;
-  border-color: ${""" ++ cssColorValue "accent" ++ """;
-  color: """ ++ cssColorValue "text" ++ """;
 }
 """ ++ wClass "tint:is(a,button):is(:hover)" ++ """ {
   background-color: """ ++ cssColorValue "tint-strong" ++ """;
-  border-color: ${""" ++ cssColorValue "accent-strong" ++ """;
 }
 """ ++ wClass "tint:is(a,button):is(:active)" ++ """ {
   background-color: """ ++ cssColorValue "tint-subtle" ++ """;
-  border-color: ${""" ++ cssColorValue "accent-subtle" ++ """;
 }
 """ ++ wClass "solid" ++ """ {
   background-color: """ ++ cssColorValue "solid" ++ """;
-  border-color: ${""" ++ cssColorValue "accent" ++ """;
   color: """ ++ cssColorValue "solid-text" ++ """;
 }
 """ ++ wClass "solid:is(a,button):is(:hover)" ++ """ {
   background-color: """ ++ cssColorValue "solid-strong" ++ """;
-  border-color: ${""" ++ cssColorValue "accent-strong" ++ """;
 }
 """ ++ wClass "solid:is(a,button):is(:active)" ++ """ {
   background-color: """ ++ cssColorValue "solid-subtle" ++ """;
-  border-color: ${""" ++ cssColorValue "accent-subtle" ++ """;
 }
 """ ++ wClass "tint:is(a,button):is(:focus-visible)" ++ """,
 """ ++ wClass "solid:is(a,button):is(:focus-visible)" ++ """,
@@ -760,15 +769,15 @@ themeBaseStyles (Theme theme) =
     , cssVar "spacing-md" (rem theme.spacing.md)
     , cssVar "spacing-lg" (rem theme.spacing.lg)
     , cssVar "spacing-xl" (rem theme.spacing.xl)
-    , cssVar "spacing-xl2" (rem theme.spacing.xl2)
-    , cssVar "spacing-xl3" (rem theme.spacing.xl3)
+    , cssVar "spacing-2xl" (rem theme.spacing.xl2)
+    , cssVar "spacing-3xl" (rem theme.spacing.xl3)
     , cssVar "radius-xs" (rem theme.radius.xs)
     , cssVar "radius-sm" (rem theme.radius.sm)
     , cssVar "radius-md" (rem theme.radius.md)
     , cssVar "radius-lg" (rem theme.radius.lg)
     , cssVar "radius-xl" (rem theme.radius.xl)
-    , cssVar "radius-xl2" (rem theme.radius.xl2)
-    , cssVar "radius-xl3" (rem theme.radius.xl3)
+    , cssVar "radius-2xl" (rem theme.radius.xl2)
+    , cssVar "radius-3xl" (rem theme.radius.xl3)
     ]
         |> String.join ";"
 
