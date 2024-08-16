@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+ * ======================================================
+ * W.Box
+ * ======================================================
+ */
+
+.w--box {
+  width: var(--width);
+  height: var(--height);
+}
+
+.w--box.w--block>*+* {
+  margin-top: var(--gap);
+}
+
+.w--box.w--flex,
+.w--box.w--inline-flex,
+.w--box.w--grid {
+  gap: var(--gap);
+}
+
+@media (min-width: 1024px) {
+  .w--box {
+    width: var(--lg-width, var(--width));
+    height: var(--lg-height, var(--height));
+  }
+
+  .w--box.w--block>*+* {
+    margin-top: var(--lg-gap, var(--gap));
+  }
+
+  .w--box.w--flex,
+  .w--box.w--inline-flex,
+  .w--box.w--grid {
+    gap: var(--lg-gap, var(--gap));
+  }
+}
+
+/* 
+ * ======================================================
+ * W.Loading
+ * ======================================================
+ */
+
+.w--loading-dots {
+  display: inline-block;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+}
+
+.w--loading-dots div {
+  position: absolute;
+  top: calc(var(--size) * 0.4);
+  width: calc(var(--size) * 0.2);
+  height: calc(var(--size) * 0.2);
+  border-radius: calc(var(--size) * 0.2);
+  background: var(--color);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.w--loading-dots>div:nth-child(1) {
+  left: 0;
+  animation: w--loading-dots-1 0.6s infinite;
+}
+
+.w--loading-dots>div:nth-child(2) {
+  left: 0;
+  animation: w--loading-dots-2 0.6s infinite;
+}
+
+.w--loading-dots>div:nth-child(3) {
+  left: calc(var(--size) * 0.4);
+  animation: w--loading-dots-2 0.6s infinite;
+}
+
+.w--loading-dots>div:nth-child(4) {
+  left: calc(var(--size) * 0.8);
+  animation: w--loading-dots-3 0.6s infinite;
+}
+
+
+@keyframes w--loading-dots-1 {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes w--loading-dots-2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(calc(var(--size) * 0.4), 0);
+  }
+}
+
+@keyframes w--loading-dots-3 {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+.w--loading-ripples {
+  display: inline-block;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+}
+
+.w--loading-ripples>div {
+  position: absolute;
+  border: calc(var(--size) * 0.06) solid var(--color);
+  opacity: 1;
+  border-radius: 50%;
+  animation: w--loading-ripples 1.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.w--loading-ripples>div:nth-child(2) {
+  animation-delay: -0.6s;
+}
+
+@keyframes w--loading-ripples {
+  0% {
+    top: calc(var(--size) * 0.5);
+    left: calc(var(--size) * 0.5);
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  100% {
+    top: 0;
+    left: 0;
+    width: var(--size);
+    height: var(--size);
+    opacity: 0;
+  }
+}
