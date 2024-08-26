@@ -3,15 +3,16 @@ module Main exposing (main)
 import Attr
 import Html as H
 import Html.Attributes as HA
+import W.Avatar
 import W.Badge
 import W.Box
 import W.Button
+import W.DataRow
 import W.Divider
-import W.Flex
-import W.Grid
 import W.Heading
 import W.Loading
 import W.Skeleton
+import W.Spacing
 import W.TextBlock
 import W.TextInline
 import W.Theme
@@ -143,32 +144,54 @@ viewLayout =
                 ]
             ]
           )
+        , ( "DataRow"
+          , [ W.DataRow.viewExtra
+                [ W.DataRow.padding W.Spacing.md
+                ]
+                { header = [ H.text "Header" ]
+                , main = [ H.text "Main" ]
+                , footer = [ H.text "footer" ]
+                , left =
+                    [ W.Avatar.view
+                        [ W.Avatar.large
+                        , W.Avatar.names "Georges" "Boris"
+                        ]
+                    ]
+                , right =
+                    [ W.Avatar.view
+                        [ W.Avatar.large
+                        , W.Avatar.names "Georges" "Boris"
+                        ]
+                    ]
+                }
+            ]
+          )
         , ( "Flex"
-          , [ W.Grid.view
-                [ W.Grid.gap 2 ]
-                [ W.Flex.view
-                    [ W.Flex.gap 0.5, W.Flex.xSpaceBetween ]
+          , [ W.Box.view
+                [ W.Box.grid [], W.Box.gap 2 ]
+                [ W.Box.view
+                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xSpaceBetween ] ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     ]
-                , W.Flex.view
-                    [ W.Flex.gap 0.5, W.Flex.xSpaceEvenly ]
+                , W.Box.view
+                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xSpaceEvenly ] ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     ]
-                , W.Flex.view
-                    [ W.Flex.gap 0.5, W.Flex.xCenter ]
+                , W.Box.view
+                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xCenter ] ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     ]
-                , W.Flex.view
-                    [ W.Flex.xCenter ]
+                , W.Box.view
+                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xCenter ] ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
@@ -177,37 +200,39 @@ viewLayout =
                 ]
             ]
           )
-        , ( "Grid"
-          , [ W.Grid.view [ W.Grid.gap 1 ]
-                [ W.Grid.viewColumn
-                    [ W.Grid.largeScreen [ W.Grid.span 1 ] ]
-                    [ placeholder ]
-                , W.Grid.viewColumn
-                    [ W.Grid.largeScreen [ W.Grid.span 3 ] ]
-                    [ placeholder ]
-                , W.Grid.viewColumn
-                    [ W.Grid.largeScreen [ W.Grid.span 6 ] ]
-                    [ placeholder ]
-                , W.Grid.viewColumn
-                    [ W.Grid.largeScreen [ W.Grid.start 2, W.Grid.end 12 ] ]
-                    [ placeholder ]
-                ]
-            ]
-          )
+
+        -- , ( "Grid"
+        --   , [ W.Grid.view [ W.Grid.gap 1 ]
+        --         [ W.Grid.viewColumn
+        --             [ W.Grid.largeScreen [ W.Grid.span 1 ] ]
+        --             [ placeholder ]
+        --         , W.Grid.viewColumn
+        --             [ W.Grid.largeScreen [ W.Grid.span 3 ] ]
+        --             [ placeholder ]
+        --         , W.Grid.viewColumn
+        --             [ W.Grid.largeScreen [ W.Grid.span 6 ] ]
+        --             [ placeholder ]
+        --         , W.Grid.viewColumn
+        --             [ W.Grid.largeScreen [ W.Grid.start 2, W.Grid.end 12 ] ]
+        --             [ placeholder ]
+        --         ]
+        --     ]
+        --   )
         , ( "Box"
           , [ W.Box.view
-                [ W.Box.gap 1
-                , W.Box.grid
+                [ W.Box.gap 0.5
+                , W.Box.grid []
                 , W.Box.height 5
                 , W.Box.tint
                 ]
                 [ W.Box.view
                     [ W.Box.flex []
                     , W.Box.gap 0.5
-                    , W.Box.solid
                     , W.Box.rounded
                     , W.Box.shadowLarge
                     , W.Box.pad
+                    , W.Box.primary
+                    , W.Box.solid
                     ]
                     [ placeholderSquare, placeholderSquare ]
                 , W.Box.view
@@ -220,6 +245,7 @@ viewLayout =
                     [ W.Box.shadowLarge
                     , W.Box.rounded
                     , W.Box.solid
+                    , W.Box.danger
                     ]
                     { href = "#"
                     , content = [ H.text "Click moi" ]

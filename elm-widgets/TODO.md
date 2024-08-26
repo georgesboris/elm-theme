@@ -51,13 +51,13 @@
 
 ## Data Display
 
-- [ ] ~ W.Avatar
+- [ ] W.Avatar
 - [ ] W.Menu
 - [ ] W.Message
 - [ ] W.Notification
 - [ ] W.Table
 - [ ] W.Tag
-- [ ] W.Details
+- [ ] ~ W.Details
 
 
 ## Navigation

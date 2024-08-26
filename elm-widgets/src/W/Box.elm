@@ -1,5 +1,5 @@
 module W.Box exposing
-    ( view, viewButton, viewLink, Attribute
+    ( view, viewButton, viewLink, asAttrs, Attribute
     , inline, block
     , width, widthRelative, height, heightRelative, gap
     , rounded, roundedSmall, roundedLarge, roundedFull, radius
@@ -18,13 +18,15 @@ module W.Box exposing
     , xyCenter
     , xCenter, xLeft, xRight, xStretch, xSpaceBetween, xSpaceAround, xSpaceEvenly
     , yCenter, yTop, yBottom, yStretch, ySpaceBetween, ySpaceAround, ySpaceEvenly
+    , grow
     , grid, GridAttribute
     , largeScreen
+    , columns, styles
     )
 
 {-|
 
-@docs view, viewButton, viewLink, Attribute
+@docs view, viewButton, viewLink, asAttrs, Attribute
 @docs inline, block
 @docs width, widthRelative, height, heightRelative, gap
 @docs rounded, roundedSmall, roundedLarge, roundedFull, radius
@@ -89,7 +91,7 @@ type alias FlexAttribute =
 
 {-| -}
 type alias GridAttribute =
-    Attr.Attr Attributes
+    Attr.Attr GridAttributes
 
 
 type alias Attributes =
@@ -110,6 +112,7 @@ type alias Attributes =
             { class : String
             , styles : List ( String, String )
             }
+    , styles : List ( String, String )
     }
 
 
@@ -128,6 +131,7 @@ defaultAttrs =
     , themeClass = ""
     , background = "transparent"
     , largeScreen = Nothing
+    , styles = []
     }
 
 
@@ -147,8 +151,19 @@ type Padding
 type Layout
     = Default
     | Block
-    | Grid
+    | Grid GridAttributes
     | Flex FlexAttributes
+
+
+
+-- Attrs : Base --------------------------------------------------------------
+
+
+{-| Pass in extra CSS styles. Note: these styles might conflict with W.Box's own styles.
+-}
+styles : List ( String, String ) -> Attribute
+styles v =
+    Attr.attr (\attrs -> { attrs | styles = v })
 
 
 
@@ -500,6 +515,11 @@ inline =
     Attr.attr (\attrs -> { attrs | inline = True })
 
 
+block : Attribute
+block =
+    Attr.attr (\attrs -> { attrs | layout = Block })
+
+
 
 -- Attrs : Themes & Variants ---------------------------------------------------
 
@@ -608,6 +628,12 @@ flex =
                     { attrs | layout = Flex flexAttrs }
                 )
         )
+
+
+{-| -}
+grow : H.Attribute msg
+grow =
+    HA.class "w--grow"
 
 
 {-| -}
@@ -839,18 +865,55 @@ largePaddingClass attrs =
 -- Attrs : Grid ---------------------------------------------------------------
 
 
-block : Attribute
-block =
-    Attr.attr (\attrs -> { attrs | layout = Block })
+type alias GridAttributes =
+    { columns : ( String, String )
+    }
 
 
-grid : Attribute
+gridDefaultAttrs : GridAttributes
+gridDefaultAttrs =
+    { columns =
+        ( "grid-template-columns"
+        , "repeat(12, minmax(0, 1fr))"
+        )
+    }
+
+
+grid : List GridAttribute -> Attribute
 grid =
-    Attr.attr (\attrs -> { attrs | layout = Grid })
+    Attr.withAttrs gridDefaultAttrs
+        (\gridAttrs ->
+            Attr.attr
+                (\attrs ->
+                    { attrs | layout = Grid gridAttrs }
+                )
+        )
+
+
+columns : Int -> GridAttribute
+columns v =
+    Attr.attr
+        (\attrs ->
+            { attrs
+                | columns =
+                    ( "grid-template-columns"
+                    , "repeat(" ++ String.fromInt v ++ ", minmax(0, 1fr))"
+                    )
+            }
+        )
 
 
 
+-- gridColumn : List
 -- Views
+
+
+view : List Attribute -> List (H.Html msg) -> H.Html msg
+view =
+    Attr.withAttrs defaultAttrs
+        (\attrs children ->
+            H.div (baseAttrs attrs) children
+        )
 
 
 viewButton : List Attribute -> { onClick : msg, content : List (H.Html msg) } -> H.Html msg
@@ -873,12 +936,14 @@ viewLink =
         )
 
 
-view : List Attribute -> List (H.Html msg) -> H.Html msg
-view =
-    Attr.withAttrs defaultAttrs
-        (\attrs children ->
-            H.div (baseAttrs attrs) children
-        )
+{-| Use `W.Box` as an utility for any element.
+
+Use carefully. Don't mix it with `Html.Attribute.style` otherwise the default styles won't be applied.
+
+-}
+asAttrs : Attributes -> List (H.Attribute msg)
+asAttrs attrs =
+    baseAttrs attrs
 
 
 baseAttrs : Attributes -> List (H.Attribute msg)
@@ -892,7 +957,8 @@ baseAttrs attrs =
     , WH.maybeAttr
         (\lg -> HA.class lg.class)
         attrs.largeScreen
-    , [ [ ( "--gap", attrs.gap )
+    , [ attrs.styles
+      , [ ( "--gap", attrs.gap )
         , ( "--width", attrs.width )
         , ( "--height", attrs.height )
         , ( "border-radius", attrs.radius )
@@ -932,7 +998,7 @@ layoutClass prefix attrs =
         classes : List String
         classes =
             case ( attrs.layout, attrs.inline ) of
-                ( Grid, _ ) ->
+                ( Grid gridAttrs, _ ) ->
                     [ "w--grid", "w--grid-cols-12" ]
 
                 ( Flex flexAttrs, False ) ->
