@@ -5,38 +5,144 @@
 /* 
  * ======================================================
  * W.Box
+ *
+ * We define each variable default value inside the .w--box scope.
+ * This prevents inheritance between W.Box widgets.
+ * Each widget can then customize itself by inlining their css variables.
+ *
  * ======================================================
  */
 
 .w--box {
-  width: var(--width);
-  height: var(--height);
+  --w-width: auto;
+  --w-height: auto;
+  --w-radius: 0px;
+  --w-border-color: var(--w-accent);
+  --tw-shadow-color: var(--w-shadow);
+  --tw-shadow: var(--tw-shadow-colored);
+  width: var(--w-width);
+  height: var(--w-height);
+  border-radius: var(--w-radius);
+  border-color: var(--w-border-color);
+  box-sizing: border-box;
+}
+
+.w--box.w--box-padding {
+  padding: var(--w-padding);
+}
+
+.w--box.w--box-min-width {
+  min-width: var(--w-min-width);
+}
+
+.w--box.w--box-max-width {
+  max-width: var(--w-max-width);
 }
 
 .w--box.w--block>*+* {
-  margin-top: var(--gap);
+  margin-top: var(--w-gap);
+}
+
+.w--box.w--flex>*,
+.w--box.w--inline-flex>* {
+  flex-shrink: 0;
 }
 
 .w--box.w--flex,
 .w--box.w--inline-flex,
 .w--box.w--grid {
-  gap: var(--gap);
+  --w-gap: 0;
+  gap: var(--w-gap);
+}
+
+.w--box.w--grid {
+  --w-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: var(--w-columns);
+}
+
+
+.w--box.w--grid-span {
+  grid-column: var(--w-col-span);
+}
+
+.w--box.w--grid-start {
+  grid-column-start: var(--w-col-start);
+}
+
+.w--box.w--grid-end {
+  grid-column-end: var(--w-col-end);
 }
 
 @media (min-width: 1024px) {
   .w--box {
-    width: var(--lg-width, var(--width));
-    height: var(--lg-height, var(--height));
-  }
-
-  .w--box.w--block>*+* {
-    margin-top: var(--lg-gap, var(--gap));
+    width: var(--lg-w-width, var(--w-width));
+    height: var(--lg-w-height, var(--w-height));
+    border-radius: var(--lg-w-border-radius, var(--w-radius));
+    border-color: var(--lg-w-border-color, var(--w-border-color));
   }
 
   .w--box.w--flex,
   .w--box.w--inline-flex,
   .w--box.w--grid {
-    gap: var(--lg-gap, var(--gap));
+    gap: var(--lg-w-gap, var(--w-gap));
+  }
+
+  .w--box.w-box-padding {
+    padding: var(--lg-w-padding, var(--w-padding));
+  }
+
+  .w--box.w--box-min-width {
+    min-width: var(--lg-w-min-width, var(--w-min-width));
+  }
+
+  .w--box.w--box-max-width {
+    max-width: var(--lg-w-max-width, var(--w-max-width));
+  }
+
+  .w--box.w--block>*+* {
+    margin-top: var(--lg-w-gap, var(--w-gap));
+  }
+
+  .w--box.w--grid {
+    grid-template-columns: var(--w-columns);
+  }
+
+  .w--box.w--grid-span {
+    grid-column: var(--lg-w-col-span, var(--w-col-span));
+  }
+
+  .w--box.w--grid-start {
+    grid-column-start: var(--lg-w-col-start, var(--w-col-start));
+  }
+
+  .w--box.w--grid-end {
+    grid-column-end: var(--lg-w-col-end, var(--w-col-end));
+  }
+}
+
+/* 
+ * ======================================================
+ * W.Grid
+ * ======================================================
+ */
+
+.w--grid-wrapper {
+  grid-template-columns: var(--w-columns, repeat(12, minmax(0, 1fr)));
+  gap: var(--w-gap, 0);
+}
+
+.w--grid-column {
+  grid-column: var(--w-span, auto);
+}
+
+@media (min-width: 1024px) {
+  .w--grid-wrapper {
+    grid-template-columns: var(--lg-w-columns, var(--w-columns, repeat(12, minmax(0, 1fr))));
+    gap: var(--lg-w-gap, var(--w-gap, 0));
+  }
+
+  .w--grid-column {
+    grid-column: var(--lg-w-span, var(--w-span, auto));
   }
 }
 

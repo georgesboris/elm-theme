@@ -1,4 +1,4 @@
-module W.Divider exposing (color, margins, subtle, vertical, view)
+module W.Divider exposing (color, margins, subtle, thin, vertical, view)
 
 import Attr
 import Html as H
@@ -15,6 +15,7 @@ type alias Attribute =
 type alias Attributes =
     { color : String
     , vertical : Bool
+    , thin : Bool
     , margins : Float
     }
 
@@ -23,12 +24,19 @@ defaultAttrs : Attributes
 defaultAttrs =
     { color = W.Theme.color.accent
     , vertical = False
+    , thin = False
     , margins = 0
     }
 
 
 
 -- Attrs : Setters
+
+
+{-| -}
+thin : Attribute
+thin =
+    Attr.attr (\attrs -> { attrs | thin = True })
 
 
 {-| -}
@@ -67,10 +75,17 @@ view =
             if List.isEmpty children then
                 H.hr
                     [ HA.class "w--self-stretch w--border-solid w--border-0"
-                    , HA.classList
-                        [ ( "w--border-t-2", not attrs.vertical )
-                        , ( "w--border-l-2", attrs.vertical )
-                        ]
+                    , if attrs.thin then
+                        HA.classList
+                            [ ( "w--border-t", not attrs.vertical )
+                            , ( "w--border-l", attrs.vertical )
+                            ]
+
+                      else
+                        HA.classList
+                            [ ( "w--border-t-2", not attrs.vertical )
+                            , ( "w--border-l-2", attrs.vertical )
+                            ]
                     , if attrs.vertical then
                         W.Theme.styleList
                             [ ( "color", attrs.color )
@@ -93,10 +108,17 @@ view =
                     , HA.class "before:w--content-[''] before:w--block before:w--grow"
                     , HA.class "after:w--content-[''] after:w--block after:w--grow"
                     , HA.class "before:w--bg-current after:w--bg-current"
-                    , HA.classList
-                        [ ( "before:w--h-[2px] after:w--h-[2px]", not attrs.vertical )
-                        , ( "w--flex-col before:w--w-[2px] after:w--w-[2px]", attrs.vertical )
-                        ]
+                    , if attrs.thin then
+                        HA.classList
+                            [ ( "before:w--h-[1px] after:w--h-[1px]", not attrs.vertical )
+                            , ( "w--flex-col before:w--w-[1px] after:w--w-[1px]", attrs.vertical )
+                            ]
+
+                      else
+                        HA.classList
+                            [ ( "before:w--h-[2px] after:w--h-[2px]", not attrs.vertical )
+                            , ( "w--flex-col before:w--w-[2px] after:w--w-[2px]", attrs.vertical )
+                            ]
                     , if attrs.vertical then
                         W.Theme.styleList
                             [ ( "color", attrs.color )

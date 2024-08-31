@@ -96,7 +96,7 @@ viewExtra =
                     ]
                 ]
                 [ viewPart [] props.left
-                , H.div [ W.Box.grow ]
+                , H.div [ W.Box.growAttr ]
                     [ viewPart [ HA.class "w--text-sm w--text-subtle" ] props.header
                     , H.div [] props.main
                     , viewPart [ HA.class "w--text-sm w--text-subtle" ] props.footer

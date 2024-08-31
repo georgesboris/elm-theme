@@ -12,6 +12,7 @@ module W.Theme exposing
     , font, spacing, radius, color, base, primary, secondary, success, warning, danger, alpha
     , ColorScaleValues, RadiusScaleValues, SpacingScaleValues
     , themeComponents
+    , ColorPalette
     )
 
 {-|
@@ -667,7 +668,7 @@ globalTheme config =
 
         lightStyles : String
         lightStyles =
-            "body { " ++ themeBaseStyles config.theme ++ " " ++ themeColorStyles theme ++ " }"
+            "body { " ++ themeBaseStyles config.theme ++ "; " ++ themeColorStyles theme ++ " }"
 
         darkStyles : String
         darkStyles =
@@ -700,7 +701,7 @@ classTheme config =
 
         lightStyles : String
         lightStyles =
-            "." ++ config.class ++ " { " ++ themeBaseStyles config.theme ++ " " ++ themeColorStyles theme ++ " }"
+            "." ++ config.class ++ " { " ++ themeBaseStyles config.theme ++ "; " ++ themeColorStyles theme ++ " }"
 
         darkStyles : String
         darkStyles =
@@ -784,7 +785,7 @@ themeBaseStyles (Theme theme) =
 
 themeColorStyles : ThemeData -> String
 themeColorStyles theme =
-    [ [ cssVar "color-scheme" (toColorScheme theme) ]
+    [ [ "color-scheme:" ++ toColorScheme theme ]
     , toColorScaleVariables "base" theme.colorPalette.base
     , toColorScaleVariables "primary" theme.colorPalette.primary
     , toColorScaleVariables "secondary" theme.colorPalette.secondary

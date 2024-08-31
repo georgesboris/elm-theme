@@ -38,7 +38,7 @@
   - [x] ~ W.Grid
     - GridColumns
     - Columns (Start / End / Span)
-    - Alignment
+    - [~Alignment]
     - Gap
   - [x] ~ W.Flex
     - Alignment
@@ -46,7 +46,7 @@
     - Gap
 
 - [x] W.Divider
-- [ ] W.DataRow
+- [ ] [W.DataRow]
 
 
 ## Data Display

@@ -1,8 +1,11 @@
 module Main exposing (main)
 
 import Attr
+import Color
 import Html as H
 import Html.Attributes as HA
+import SolidColor
+import Theme
 import W.Avatar
 import W.Badge
 import W.Box
@@ -11,6 +14,8 @@ import W.DataRow
 import W.Divider
 import W.Heading
 import W.Loading
+import W.Radius
+import W.Sizing
 import W.Skeleton
 import W.Spacing
 import W.TextBlock
@@ -18,87 +23,339 @@ import W.TextInline
 import W.Theme
 
 
+
+-- Types
+
+
+type Chapter msg
+    = Chapter String (List (Section msg))
+
+
+type Section msg
+    = Section String (List (H.Html msg))
+
+
 main : H.Html msg
 main =
-    H.div
-        []
-        [ W.Theme.globalTheme
-            { theme = W.Theme.lightTheme |> W.Theme.withHeadingFont "serif"
-            , darkMode = Just (W.Theme.darkModeFromClass "dark" W.Theme.darkTheme)
-            }
-        , H.div
-            [ HA.class "w--p-sm w--bg w--space-y-3xl" ]
+    Theme.main
+
+
+main2 : H.Html msg
+main2 =
+    let
+        theme : W.Theme.Theme
+        theme =
+            W.Theme.lightTheme
+
+        chapters : List (Chapter msg)
+        chapters =
             [ viewTypography
+            , viewSpacing
+            , viewColors theme
             , viewActions
             , viewLayout
             , viewFeedback
+            , viewOverlays
+            ]
+    in
+    H.div
+        []
+        [ W.Theme.globalTheme
+            { theme = theme
+            , darkMode = Just (W.Theme.darkModeFromClass "dark" W.Theme.darkTheme)
+            }
+        , W.Box.view
+            [ W.Box.flex [ W.Box.yTop ] ]
+            [ viewNavigation chapters
+            , H.ul [ W.Box.growAttr ] (List.map viewChapter chapters)
             ]
         ]
 
 
-viewTypography : H.Html msg
+viewColors : W.Theme.Theme -> Chapter msg
+viewColors theme =
+    let
+        themeColors : W.Theme.ColorPalette
+        themeColors =
+            W.Theme.toColorPalette theme
+    in
+    chapter "Colors"
+        [ ( "Brand Colors"
+          , [ W.Box.view
+                [ W.Box.gap W.Spacing.xs ]
+                [ viewColorScale "Neutral" W.Box.base themeColors.base
+                , viewColorScale "Primary" W.Box.primary themeColors.primary
+                , viewColorScale "Secondary" W.Box.secondary themeColors.secondary
+                ]
+            ]
+          )
+        , ( "Semantic Colors"
+          , [ W.Box.view
+                [ W.Box.gap W.Spacing.xs ]
+                [ viewColorScale "Success" W.Box.success themeColors.success
+                , viewColorScale "Warning" W.Box.warning themeColors.warning
+                , viewColorScale "Danger" W.Box.danger themeColors.danger
+                ]
+            ]
+          )
+        , ( "Data Visualization"
+          , [ W.Skeleton.view [ W.Skeleton.height 8 ] ]
+          )
+        ]
+
+
+viewColorScale : String -> W.Box.Attribute -> W.Theme.ColorScale -> H.Html msg
+viewColorScale name colorScaleAttr colorScale =
+    W.Box.view
+        [ colorScaleAttr
+        , W.Box.roundedSmall
+        , W.Box.padding W.Spacing.sm
+        , W.Box.rounded
+        , W.Box.grid []
+        ]
+        [ W.Box.view
+            [ W.Box.columnSpan 2 ]
+            [ W.Heading.view
+                [ W.Heading.extraSmall ]
+                [ H.text name ]
+            ]
+        , W.Box.view
+            [ W.Box.columnSpan 10 ]
+            [ W.Box.view
+                [ W.Box.grid [ W.Box.columns 15 ]
+                , W.Box.gap W.Spacing.xs
+                ]
+                [ viewColorWithBorder "Bg" colorScale.bg
+                , viewColorWithBorder "Bg Subtle" colorScale.bgSubtle
+                , viewColorWithBorder "Tint Subtle" colorScale.tintSubtle
+                , viewColor "Tint" colorScale.tint
+                , viewColor "Tint Strong" colorScale.tintStrong
+                , viewColor "Accent Subtle" colorScale.accentSubtle
+                , viewColor "Accent" colorScale.accent
+                , viewColor "Accent Strong" colorScale.accentStrong
+                , viewColor "Solid Subtle" colorScale.solidSubtle
+                , viewColor "Solid" colorScale.solid
+                , viewColor "Solid Strong" colorScale.solidStrong
+                , viewColorWithBorder "Solid Text" colorScale.solidText
+                , viewColor "Text Subtle" colorScale.textSubtle
+                , viewColor "Text" colorScale.text
+                , viewColor "Shadow" colorScale.shadow
+                ]
+            ]
+        ]
+
+
+viewColorWithBorder : String -> Color.Color -> H.Html msg
+viewColorWithBorder name color =
+    W.Box.view []
+        [ W.Box.view
+            [ W.Box.background (Color.toCssString color)
+            , W.Box.widthFull
+            , W.Box.square
+            , W.Box.rounded
+            , W.Box.borderLarge
+            , W.Box.borderColor W.Theme.color.tint
+            ]
+            []
+        ]
+
+
+viewColor : String -> Color.Color -> H.Html msg
+viewColor name color =
+    W.Box.view
+        []
+        [ W.Box.view
+            [ W.Box.background (Color.toCssString color)
+            , W.Box.square
+            , W.Box.widthFull
+            , W.Box.rounded
+            ]
+            []
+
+        -- , W.TextBlock.view [ W.TextBlock.small ] [ H.text name ]
+        -- , W.TextBlock.view [ W.TextBlock.small ] [ H.text (toHex color) ]
+        -- , W.TextBlock.view [ W.TextBlock.small ] [ H.text (colorToRgbText color) ]
+        ]
+
+
+colorToRgbText : Color.Color -> String
+colorToRgbText color =
+    let
+        c : { red : Float, green : Float, blue : Float, alpha : Float }
+        c =
+            Color.toRgba color
+    in
+    "RGB " ++ String.fromInt (to255 c.red) ++ " " ++ String.fromInt (to255 c.green) ++ " " ++ String.fromInt (to255 c.blue)
+
+
+to255 : Float -> Int
+to255 v =
+    Basics.round (v * 255)
+
+
+toHex : Color.Color -> String
+toHex color =
+    color
+        |> Color.toRgba
+        |> (\c ->
+                SolidColor.fromRGB
+                    ( Basics.toFloat (to255 c.red)
+                    , Basics.toFloat (to255 c.green)
+                    , Basics.toFloat (to255 c.blue)
+                    )
+           )
+        |> SolidColor.toHex
+
+
+viewTypography : Chapter msg
 viewTypography =
-    viewCategory "Typography"
-        [ ( "Heading"
-          , [ W.Heading.view
-                [ W.Heading.extraLarge ]
-                [ H.text "H1 Heading" ]
-            , W.Heading.view
-                [ W.Heading.h2, W.Heading.large ]
-                [ H.text "H2 Heading" ]
-            , W.Heading.view
-                [ W.Heading.h3 ]
-                [ H.text "H3 Heading" ]
-            , W.Heading.view
-                [ W.Heading.h4, W.Heading.small ]
-                [ H.text "H4 Heading" ]
-            , W.Heading.view
-                [ W.Heading.h5, W.Heading.extraSmall ]
-                [ H.text "H5 Heading" ]
-            , W.Heading.view
-                [ W.Heading.h6, W.Heading.extraSmall, W.Heading.subtle ]
-                [ H.text "H6 Heading" ]
+    chapter "Typography"
+        [ ( ""
+          , [ ( W.Spacing.xl, W.Heading.extraLarge, W.TextBlock.extraLarge )
+            , ( W.Spacing.lg, W.Heading.large, W.TextBlock.large )
+            , ( W.Spacing.md, Attr.none, Attr.none )
+            , ( W.Spacing.sm, W.Heading.small, W.TextBlock.small )
+            , ( W.Spacing.xs, W.Heading.extraSmall, W.TextBlock.extraSmall )
             ]
-          )
-        , ( "TextBlock & TextInline"
-          , [ W.TextBlock.view
-                [ W.TextBlock.extraLarge ]
-                [ H.text "The "
-                , W.TextInline.view [ W.TextInline.bold, W.TextInline.underline ] [ H.text "quick brown fox" ]
-                , H.text " jumps over the lazy dog"
-                ]
-            , W.TextBlock.view
-                [ W.TextBlock.large ]
-                [ H.text "The "
-                , W.TextInline.view [ W.TextInline.subtle, W.TextInline.lineThrough ] [ H.text "quick brown fox" ]
-                , H.text " jumps over the lazy dog"
-                ]
-            , W.TextBlock.view
-                []
-                [ H.text "The "
-                , W.TextInline.view [ W.TextInline.superscript ] [ H.text "quick brown fox" ]
-                , H.text " jumps over the lazy dog"
-                ]
-            , W.TextBlock.view
-                [ W.TextBlock.small, W.TextBlock.subtle ]
-                [ H.text "The "
-                , W.TextInline.view [ W.TextInline.subscript ] [ H.text "quick brown fox" ]
-                , H.text " jumps over the lazy dog"
-                ]
-            , W.TextBlock.view
-                [ W.TextBlock.extraSmall, W.TextBlock.subtle ]
-                [ H.text "The "
-                , W.TextInline.view [ W.TextInline.bold, W.TextInline.notSubtle, W.TextInline.italic ] [ H.text "quick brown fox" ]
-                , H.text " jumps over the lazy dog"
-                ]
-            ]
+                |> List.map
+                    (\( spacing, headingSize, textSize ) ->
+                        W.Box.view
+                            [ W.Box.flex [ W.Box.xRight ] ]
+                            [ W.Box.view
+                                [ W.Box.maxWidth W.Sizing.xl
+                                , W.Box.gap spacing
+                                , W.Box.padding W.Spacing.md
+                                ]
+                                [ W.Heading.view
+                                    [ headingSize ]
+                                    [ H.text "The quick brown fox jumps over the lazy dog" ]
+                                , W.TextBlock.view
+                                    [ textSize ]
+                                    [ H.text "Lorem ipsum dolor sit amet, "
+                                    , W.TextInline.view
+                                        [ W.TextInline.bold, W.TextInline.underline ]
+                                        [ H.text "consectetur adipiscing elit" ]
+                                    , H.text ", sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+                                    , W.TextInline.view
+                                        [ W.TextInline.subtle ]
+                                        [ H.text "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex"
+                                        , W.TextInline.view [ W.TextInline.subscript ] [ H.text "ea" ]
+                                        , H.text " commodo consequat."
+                                        ]
+                                    ]
+                                ]
+                            ]
+                    )
+                |> List.intersperse
+                    (W.Divider.view
+                        [ W.Divider.subtle, W.Divider.thin ]
+                        []
+                    )
           )
         ]
 
 
-viewActions : H.Html msg
+viewSpacing : Chapter msg
+viewSpacing =
+    chapter "Foundation"
+        [ ( "Radius"
+          , [ ( "xs", W.Spacing.xs, W.Radius.xs )
+            , ( "sm", W.Spacing.sm, W.Radius.sm )
+            , ( "md", W.Spacing.md, W.Radius.md )
+            , ( "lg", W.Spacing.lg, W.Radius.lg )
+            , ( "xl", W.Spacing.xl, W.Radius.xl )
+            , ( "xl2", W.Spacing.xl2, W.Radius.xl2 )
+            , ( "xl3", W.Spacing.xl3, W.Radius.xl3 )
+            ]
+                |> List.map
+                    (\( name, spacing, radius ) ->
+                        W.Box.view
+                            [ W.Box.flex [ W.Box.yCenter ]
+                            , W.Box.gap W.Spacing.xs
+                            ]
+                            [ W.Box.view
+                                [ W.Box.width 2 ]
+                                [ W.TextBlock.view
+                                    [ W.TextBlock.subtle ]
+                                    [ H.text name ]
+                                ]
+                            , W.Box.view
+                                [ W.Box.padding spacing
+                                , W.Box.tint
+                                , W.Box.radius radius
+                                ]
+                                []
+                            ]
+                    )
+          )
+        , ( "Spacing"
+          , [ ( "xs", W.Spacing.xs )
+            , ( "sm", W.Spacing.sm )
+            , ( "md", W.Spacing.md )
+            , ( "lg", W.Spacing.lg )
+            , ( "xl", W.Spacing.xl )
+            , ( "xl2", W.Spacing.xl2 )
+            , ( "xl3", W.Spacing.xl3 )
+            ]
+                |> List.map
+                    (\( name, spacing ) ->
+                        W.Box.view
+                            [ W.Box.flex [ W.Box.yCenter ]
+                            , W.Box.gap W.Spacing.xs
+                            ]
+                            [ W.Box.view
+                                [ W.Box.width 2 ]
+                                [ W.TextBlock.view
+                                    [ W.TextBlock.subtle ]
+                                    [ H.text name ]
+                                ]
+                            , W.Box.view
+                                [ W.Box.widthCustom (W.Spacing.toCSS spacing)
+                                , W.Box.height 2
+                                , W.Box.tint
+                                , W.Box.rounded
+                                ]
+                                []
+                            ]
+                    )
+          )
+        , ( "Sizing"
+          , [ ( "xs", W.Sizing.xs )
+            , ( "sm", W.Sizing.sm )
+            , ( "md", W.Sizing.md )
+            , ( "lg", W.Sizing.lg )
+            , ( "xl", W.Sizing.xl )
+            , ( "xl2", W.Sizing.xl2 )
+            , ( "xl3", W.Sizing.xl3 )
+            ]
+                |> List.map
+                    (\( name, sizing ) ->
+                        W.Box.view
+                            [ W.Box.flex [ W.Box.yCenter ]
+                            , W.Box.gap W.Spacing.xs
+                            ]
+                            [ W.Box.view
+                                [ W.Box.width 2 ]
+                                [ W.TextBlock.view
+                                    [ W.TextBlock.subtle ]
+                                    [ H.text name ]
+                                ]
+                            , W.Box.view
+                                [ W.Box.widthCustom (W.Sizing.toCSS sizing)
+                                , W.Box.height 2
+                                , W.Box.tint
+                                , W.Box.rounded
+                                ]
+                                []
+                            ]
+                    )
+          )
+        ]
+
+
+viewActions : Chapter msg
 viewActions =
-    viewCategory "Actions"
+    chapter "Actions"
         [ ( "Buttons"
           , List.concat
                 [ [ Attr.none, W.Button.outline, W.Button.tint, W.Button.invisible ]
@@ -121,9 +378,9 @@ viewActions =
         ]
 
 
-viewLayout : H.Html msg
+viewLayout : Chapter msg
 viewLayout =
-    viewCategory "Layout"
+    chapter "Layout"
         [ ( "Divider"
           , [ H.div
                 [ HA.class "w--grid w--grid-cols-2" ]
@@ -168,30 +425,42 @@ viewLayout =
           )
         , ( "Flex"
           , [ W.Box.view
-                [ W.Box.grid [], W.Box.gap 2 ]
+                [ W.Box.gap W.Spacing.xs
+                , W.Box.padding W.Spacing.lg
+                , W.Box.background W.Theme.color.tintSubtle
+                , W.Box.rounded
+                ]
                 [ W.Box.view
-                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xSpaceBetween ] ]
+                    [ W.Box.gap W.Spacing.xs
+                    , W.Box.flex [ W.Box.xSpaceBetween ]
+                    ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     ]
                 , W.Box.view
-                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xSpaceEvenly ] ]
+                    [ W.Box.gap W.Spacing.xs
+                    , W.Box.flex [ W.Box.xSpaceEvenly ]
+                    ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     ]
                 , W.Box.view
-                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xCenter ] ]
+                    [ W.Box.gap W.Spacing.xs
+                    , W.Box.flex [ W.Box.xCenter ]
+                    ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
                     ]
                 , W.Box.view
-                    [ W.Box.gap 0.5, W.Box.flex [ W.Box.xCenter ] ]
+                    [ W.Box.gap W.Spacing.xs
+                    , W.Box.flex [ W.Box.xCenter ]
+                    ]
                     [ placeholderSquare
                     , placeholderSquare
                     , placeholderSquare
@@ -200,37 +469,54 @@ viewLayout =
                 ]
             ]
           )
+        , ( "Grid"
+          , let
+                gridColumn : List W.Box.Attribute -> H.Html msg
+                gridColumn attrs =
+                    W.Box.view
+                        (attrs
+                            ++ [ W.Box.height 2
+                               , W.Box.tint
+                               ]
+                        )
+                        []
+            in
+            [ W.Box.view
+                [ W.Box.gap W.Spacing.sm
+                , W.Box.grid []
+                ]
+                [ gridColumn [ W.Box.columnSpan 3 ]
+                , gridColumn [ W.Box.columnSpan 2 ]
+                , gridColumn [ W.Box.columnSpan 5 ]
+                , gridColumn [ W.Box.columnSpan 3, W.Box.columnStart 2 ]
 
-        -- , ( "Grid"
-        --   , [ W.Grid.view [ W.Grid.gap 1 ]
-        --         [ W.Grid.viewColumn
-        --             [ W.Grid.largeScreen [ W.Grid.span 1 ] ]
-        --             [ placeholder ]
-        --         , W.Grid.viewColumn
-        --             [ W.Grid.largeScreen [ W.Grid.span 3 ] ]
-        --             [ placeholder ]
-        --         , W.Grid.viewColumn
-        --             [ W.Grid.largeScreen [ W.Grid.span 6 ] ]
-        --             [ placeholder ]
-        --         , W.Grid.viewColumn
-        --             [ W.Grid.largeScreen [ W.Grid.start 2, W.Grid.end 12 ] ]
-        --             [ placeholder ]
-        --         ]
-        --     ]
-        --   )
+                -- , W.Box.viewColumn
+                --     [ W.Box.largeScreen [ W.Box.span 3 ] ]
+                --     [ placeholder ]
+                -- , W.Box.viewColumn
+                --     [ W.Box.largeScreen [ W.Box.span 6 ] ]
+                --     [ placeholder ]
+                -- , W.Box.viewColumn
+                --     [ W.Box.largeScreen [ W.Box.start 2, W.Box.end 12 ] ]
+                --     [ placeholder ]
+                ]
+            ]
+          )
         , ( "Box"
           , [ W.Box.view
-                [ W.Box.gap 0.5
-                , W.Box.grid []
-                , W.Box.height 5
+                [ W.Box.gap W.Spacing.xs
+                , W.Box.height 6
+                , W.Box.padding W.Spacing.md
                 , W.Box.tint
+                , W.Box.rounded
+                , W.Box.grid []
                 ]
                 [ W.Box.view
                     [ W.Box.flex []
-                    , W.Box.gap 0.5
+                    , W.Box.gap W.Spacing.xs
                     , W.Box.rounded
                     , W.Box.shadowLarge
-                    , W.Box.pad
+                    , W.Box.padding W.Spacing.md
                     , W.Box.primary
                     , W.Box.solid
                     ]
@@ -256,9 +542,9 @@ viewLayout =
         ]
 
 
-viewFeedback : H.Html msg
+viewFeedback : Chapter msg
 viewFeedback =
-    viewCategory "Feedback"
+    chapter "Feedback"
         [ ( "Badge"
           , [ viewHorizontal
                 [ W.Badge.view [ W.Badge.inline ] [ H.text "123" ]
@@ -309,28 +595,108 @@ viewFeedback =
         ]
 
 
+viewOverlays : Chapter msg
+viewOverlays =
+    chapter "Overlays"
+        [ ( "Tooltip"
+          , [ H.div
+                []
+                [ H.button
+                    [ HA.class "relative"
+                    , HA.attribute "popovertarget" "popover"
+                    ]
+                    [ H.text "Toggle that shit"
+                    , H.div
+                        [ HA.id "popover"
+                        , HA.class "absolute top-0 right-0"
+                        , HA.attribute "popover" "auto"
+                        ]
+                        [ H.text "hello!" ]
+                    ]
+                ]
+            ]
+          )
+        ]
+
+
 
 -- View Helpers
 
 
-viewCategory : String -> List ( String, List (H.Html msg) ) -> H.Html msg
-viewCategory name widgets =
-    H.details
-        [ HA.attribute "open" "" ]
-        [ H.summary [] [ H.text name ]
-        , H.ul
-            [ HA.class "w--list-none w--space-y-2xl" ]
-            (widgets
+chapter : String -> List ( String, List (H.Html msg) ) -> Chapter msg
+chapter name sections =
+    Chapter name
+        (List.map (\( sectionName, sectionContent ) -> Section sectionName sectionContent) sections)
+
+
+viewNavigation : List (Chapter msg) -> H.Html msg
+viewNavigation chapters =
+    H.nav
+        (HA.class "w--sticky w--top-0 w--border-0 w--border-solid w--border-r"
+            :: W.Box.asAttrs
+                [ W.Box.widthCustom (W.Sizing.toCSS W.Sizing.xs)
+                , W.Box.heightScreen
+                , W.Box.borderSubtle
+                ]
+        )
+        [ H.div
+            [ HA.class "w--absolute w--inset-0 w--overflow-x-hidden w--overflow-y-auto" ]
+            (chapters
                 |> List.map
-                    (\( widgetName, widgetViews ) ->
+                    (\(Chapter name sections) ->
                         H.li
-                            []
-                            [ H.p [] [ H.text widgetName ]
-                            , H.ul [ HA.class "w--space-y-md w--list-none" ] (List.map (\v -> H.li [] [ v ]) widgetViews)
+                            [ HA.id name
+                            , HA.class "w--py-xl"
+                            ]
+                            [ H.details
+                                []
+                                [ H.summary [] [ H.text name ]
+                                , H.ul
+                                    []
+                                    (List.map
+                                        (\(Section sectionName _) ->
+                                            H.li
+                                                [ HA.class "w--py-xl" ]
+                                                [ H.a [ HA.href ("#" ++ sectionId name sectionName) ] [ H.text sectionName ]
+                                                ]
+                                        )
+                                        sections
+                                    )
+                                ]
                             ]
                     )
             )
         ]
+
+
+viewChapter : Chapter msg -> H.Html msg
+viewChapter (Chapter name sections) =
+    H.details
+        [ HA.attribute "open" ""
+        , HA.class "w--min-h-screen w--py-xl"
+        ]
+        [ H.summary [] [ H.text name ]
+        , H.section
+            []
+            [ H.ul
+                [ HA.class "w--list-none w--space-y-2xl w--p-0" ]
+                (List.map (viewSection name) sections)
+            ]
+        ]
+
+
+viewSection : String -> Section msg -> H.Html msg
+viewSection chapterName (Section name content) =
+    H.section
+        []
+        [ H.h2 [ HA.id (sectionId chapterName name) ] [ H.text name ]
+        , H.ul [ HA.class "w--space-y-md w--list-none w--p-0" ] (List.map (\v -> H.li [] [ v ]) content)
+        ]
+
+
+sectionId : String -> String -> String
+sectionId chapterName sectionName =
+    chapterName ++ "--" ++ sectionName
 
 
 viewHorizontal : List (H.Html msg) -> H.Html msg
@@ -357,6 +723,6 @@ placeholderSquare =
         [ W.Box.height 1
         , W.Box.width 1
         , W.Box.background W.Theme.color.text
-        , W.Box.roundedSmall
+        , W.Box.roundedExtraSmall
         ]
         []

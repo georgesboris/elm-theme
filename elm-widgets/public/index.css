@@ -278,8 +278,24 @@
   pointer-events: none;
 }
 
+.w--absolute {
+  position: absolute;
+}
+
 .w--relative {
   position: relative;
+}
+
+.w--sticky {
+  position: sticky;
+}
+
+.w--inset-0 {
+  inset: 0;
+}
+
+.w--top-0 {
+  top: 0;
 }
 
 .w--m-0 {
@@ -312,6 +328,10 @@
 
 .w--aspect-square {
   aspect-ratio: 1 / 1;
+}
+
+.w--min-h-screen {
+  min-height: 100vh;
 }
 
 .w--w-full {
@@ -354,10 +374,6 @@
 
 .w--list-none {
   list-style-type: none;
-}
-
-.w--grid-cols-12 {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
 .w--grid-cols-2 {
@@ -430,12 +446,6 @@
   margin-bottom: calc(var(--w-spacing-2xl) * var(--tw-space-y-reverse));
 }
 
-.w--space-y-3xl > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(var(--w-spacing-3xl) * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(var(--w-spacing-3xl) * var(--tw-space-y-reverse));
-}
-
 .w--space-y-md > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(var(--w-spacing-md) * calc(1 - var(--tw-space-y-reverse)));
@@ -452,6 +462,14 @@
   align-self: stretch;
 }
 
+.w--overflow-y-auto {
+  overflow-y: auto;
+}
+
+.w--overflow-x-hidden {
+  overflow-x: hidden;
+}
+
 .w--rounded-full {
   border-radius: 9999px;
 }
@@ -464,8 +482,32 @@
   border-width: 2px;
 }
 
+.w--border-\[1px\] {
+  border-width: 1px;
+}
+
+.w--border-\[2px\] {
+  border-width: 2px;
+}
+
+.w--border-\[3px\] {
+  border-width: 3px;
+}
+
+.w--border-l {
+  border-left-width: 1px;
+}
+
 .w--border-l-2 {
   border-left-width: 2px;
+}
+
+.w--border-r {
+  border-right-width: 1px;
+}
+
+.w--border-t {
+  border-top-width: 1px;
 }
 
 .w--border-t-2 {
@@ -496,6 +538,10 @@
 
 .w--bg-transparent {
   background-color: transparent;
+}
+
+.w--p-0 {
+  padding: 0;
 }
 
 .w--p-lg {
@@ -541,6 +587,11 @@
 .w--py-sm {
   padding-top: var(--w-spacing-sm);
   padding-bottom: var(--w-spacing-sm);
+}
+
+.w--py-xl {
+  padding-top: var(--w-spacing-xl);
+  padding-bottom: var(--w-spacing-xl);
 }
 
 .w--py-xs {
@@ -768,46 +819,146 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.w--shadow-shadow\/30 {
-  --tw-shadow-color: rgb(var(--w-shadow) / 0.3);
-  --tw-shadow: var(--tw-shadow-colored);
-}
-
 /* 
  * ======================================================
  * W.Box
+ *
+ * We define each variable default value inside the .w--box scope.
+ * This prevents inheritance between W.Box widgets.
+ * Each widget can then customize itself by inlining their css variables.
+ *
  * ======================================================
  */
 
 .w--box {
-  width: var(--width);
-  height: var(--height);
+  --w-width: auto;
+  --w-height: auto;
+  --w-radius: 0px;
+  --w-border-color: var(--w-accent);
+  --tw-shadow-color: var(--w-shadow);
+  --tw-shadow: var(--tw-shadow-colored);
+  width: var(--w-width);
+  height: var(--w-height);
+  border-radius: var(--w-radius);
+  border-color: var(--w-border-color);
+  box-sizing: border-box;
+}
+
+.w--box.w--box-padding {
+  padding: var(--w-padding);
+}
+
+.w--box.w--box-min-width {
+  min-width: var(--w-min-width);
+}
+
+.w--box.w--box-max-width {
+  max-width: var(--w-max-width);
 }
 
 .w--box.w--block>*+* {
-  margin-top: var(--gap);
+  margin-top: var(--w-gap);
+}
+
+.w--box.w--flex>*,
+.w--box.w--inline-flex>* {
+  flex-shrink: 0;
 }
 
 .w--box.w--flex,
 .w--box.w--inline-flex,
 .w--box.w--grid {
-  gap: var(--gap);
+  --w-gap: 0;
+  gap: var(--w-gap);
+}
+
+.w--box.w--grid {
+  --w-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: var(--w-columns);
+}
+
+.w--box.w--grid-span {
+  grid-column: var(--w-col-span);
+}
+
+.w--box.w--grid-start {
+  grid-column-start: var(--w-col-start);
+}
+
+.w--box.w--grid-end {
+  grid-column-end: var(--w-col-end);
 }
 
 @media (min-width: 1024px) {
   .w--box {
-    width: var(--lg-width, var(--width));
-    height: var(--lg-height, var(--height));
-  }
-
-  .w--box.w--block>*+* {
-    margin-top: var(--lg-gap, var(--gap));
+    width: var(--lg-w-width, var(--w-width));
+    height: var(--lg-w-height, var(--w-height));
+    border-radius: var(--lg-w-border-radius, var(--w-radius));
+    border-color: var(--lg-w-border-color, var(--w-border-color));
   }
 
   .w--box.w--flex,
   .w--box.w--inline-flex,
   .w--box.w--grid {
-    gap: var(--lg-gap, var(--gap));
+    gap: var(--lg-w-gap, var(--w-gap));
+  }
+
+  .w--box.w-box-padding {
+    padding: var(--lg-w-padding, var(--w-padding));
+  }
+
+  .w--box.w--box-min-width {
+    min-width: var(--lg-w-min-width, var(--w-min-width));
+  }
+
+  .w--box.w--box-max-width {
+    max-width: var(--lg-w-max-width, var(--w-max-width));
+  }
+
+  .w--box.w--block>*+* {
+    margin-top: var(--lg-w-gap, var(--w-gap));
+  }
+
+  .w--box.w--grid {
+    grid-template-columns: var(--w-columns);
+  }
+
+  .w--box.w--grid-span {
+    grid-column: var(--lg-w-col-span, var(--w-col-span));
+  }
+
+  .w--box.w--grid-start {
+    grid-column-start: var(--lg-w-col-start, var(--w-col-start));
+  }
+
+  .w--box.w--grid-end {
+    grid-column-end: var(--lg-w-col-end, var(--w-col-end));
+  }
+}
+
+/* 
+ * ======================================================
+ * W.Grid
+ * ======================================================
+ */
+
+.w--grid-wrapper {
+  grid-template-columns: var(--w-columns, repeat(12, minmax(0, 1fr)));
+  gap: var(--w-gap, 0);
+}
+
+.w--grid-column {
+  grid-column: var(--w-span, auto);
+}
+
+@media (min-width: 1024px) {
+  .w--grid-wrapper {
+    grid-template-columns: var(--lg-w-columns, var(--w-columns, repeat(12, minmax(0, 1fr))));
+    gap: var(--lg-w-gap, var(--w-gap, 0));
+  }
+
+  .w--grid-column {
+    grid-column: var(--lg-w-span, var(--w-span, auto));
   }
 }
 
@@ -926,9 +1077,19 @@
   display: block;
 }
 
+.before\:w--h-\[1px\]::before {
+  content: var(--tw-content);
+  height: 1px;
+}
+
 .before\:w--h-\[2px\]::before {
   content: var(--tw-content);
   height: 2px;
+}
+
+.before\:w--w-\[1px\]::before {
+  content: var(--tw-content);
+  width: 1px;
 }
 
 .before\:w--w-\[2px\]::before {
@@ -956,9 +1117,19 @@
   display: block;
 }
 
+.after\:w--h-\[1px\]::after {
+  content: var(--tw-content);
+  height: 1px;
+}
+
 .after\:w--h-\[2px\]::after {
   content: var(--tw-content);
   height: 2px;
+}
+
+.after\:w--w-\[1px\]::after {
+  content: var(--tw-content);
+  width: 1px;
 }
 
 .after\:w--w-\[2px\]::after {
@@ -1030,8 +1201,12 @@
     display: inline-flex;
   }
 
-  .lg\:w--grid {
-    display: grid;
+  .lg\:w--aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .lg\:w--min-h-screen {
+    min-height: 100vh;
   }
 
   .lg\:w--flex-row {
