@@ -9,10 +9,12 @@ module W.Theme exposing
     , withColorPalette, withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
     , toId, toFontFamilies, toSpacingScale, toRadiusScale, toColorPalette, toExtraVariables
     , styleList
-    , font, spacing, radius, color, base, primary, secondary, success, warning, danger, alpha
-    , ColorScaleValues, RadiusScaleValues, SpacingScaleValues
+    , font, spacing, radius
+    , ColorPalette, ColorVariant
+    , color, alpha, ColorScaleValues
+    , variant, base, primary, secondary, success, warning, danger
+    , baseScale, primaryScale, secondaryScale, successScale, warningScale, dangerScale
     , themeComponents
-    , ColorPalette
     )
 
 {-|
@@ -38,8 +40,15 @@ module W.Theme exposing
 ## Using Theme Values
 
 @docs styleList
-@docs font, spacing, radius, color, base, primary, secondary, success, warning, danger, alpha
-@docs ColorScaleValues, RadiusScaleValues, SpacingScaleValues
+@docs font, spacing, radius
+
+
+### Colors
+
+@docs ColorPalette, ColorVariant
+@docs color, alpha, ColorScaleValues
+@docs variant, base, primary, secondary, success, warning, danger
+@docs baseScale, primaryScale, secondaryScale, successScale, warningScale, dangerScale
 
 
 ## Theme Components
@@ -145,18 +154,6 @@ type alias SpacingScale =
 
 
 {-| -}
-type alias SpacingScaleValues =
-    { xs : String
-    , sm : String
-    , md : String
-    , lg : String
-    , xl : String
-    , xl2 : String
-    , xl3 : String
-    }
-
-
-{-| -}
 type alias RadiusScale =
     { xs : Float -- small ui elements
     , sm : Float -- regular ui elements and small cards
@@ -165,18 +162,6 @@ type alias RadiusScale =
     , xl : Float -- mostly unused
     , xl2 : Float -- mostly unused
     , xl3 : Float -- mostly unused
-    }
-
-
-{-| -}
-type alias RadiusScaleValues =
-    { xs : String
-    , sm : String
-    , md : String
-    , lg : String
-    , xl : String
-    , xl2 : String
-    , xl3 : String
     }
 
 
@@ -212,6 +197,79 @@ colorScaleColors =
     , "text"
     , "text-subtle"
     ]
+
+
+
+-- Color Variants
+
+
+{-| -}
+type ColorVariant
+    = Base
+    | Primary
+    | Secondary
+    | Success
+    | Warning
+    | Danger
+
+
+{-| -}
+base : ColorVariant
+base =
+    Base
+
+
+{-| -}
+primary : ColorVariant
+primary =
+    Primary
+
+
+{-| -}
+secondary : ColorVariant
+secondary =
+    Secondary
+
+
+{-| -}
+success : ColorVariant
+success =
+    Success
+
+
+{-| -}
+warning : ColorVariant
+warning =
+    Warning
+
+
+{-| -}
+danger : ColorVariant
+danger =
+    Danger
+
+
+{-| -}
+variant : ColorVariant -> H.Attribute msg
+variant v =
+    case v of
+        Base ->
+            HA.class "w/base"
+
+        Primary ->
+            HA.class "w/primary"
+
+        Secondary ->
+            HA.class "w/secondary"
+
+        Success ->
+            HA.class "w/success"
+
+        Warning ->
+            HA.class "w/warning"
+
+        Danger ->
+            HA.class "w/danger"
 
 
 
@@ -376,7 +434,15 @@ font =
 
 
 {-| -}
-spacing : SpacingScaleValues
+spacing :
+    { xs : String
+    , sm : String
+    , md : String
+    , lg : String
+    , xl : String
+    , xl2 : String
+    , xl3 : String
+    }
 spacing =
     { xs = cssValue "spacing-xs"
     , sm = cssValue "spacing-sm"
@@ -389,7 +455,15 @@ spacing =
 
 
 {-| -}
-radius : RadiusScaleValues
+radius :
+    { xs : String
+    , sm : String
+    , md : String
+    , lg : String
+    , xl : String
+    , xl2 : String
+    , xl3 : String
+    }
 radius =
     { xs = cssValue "radius-xs"
     , sm = cssValue "radius-sm"
@@ -423,38 +497,38 @@ color =
 
 
 {-| -}
-base : ColorScaleValues
-base =
+baseScale : ColorScaleValues
+baseScale =
     toColorValues "base"
 
 
 {-| -}
-primary : ColorScaleValues
-primary =
+primaryScale : ColorScaleValues
+primaryScale =
     toColorValues "primary"
 
 
 {-| -}
-secondary : ColorScaleValues
-secondary =
+secondaryScale : ColorScaleValues
+secondaryScale =
     toColorValues "secondary"
 
 
 {-| -}
-success : ColorScaleValues
-success =
+successScale : ColorScaleValues
+successScale =
     toColorValues "success"
 
 
 {-| -}
-warning : ColorScaleValues
-warning =
+warningScale : ColorScaleValues
+warningScale =
     toColorValues "warning"
 
 
 {-| -}
-danger : ColorScaleValues
-danger =
+dangerScale : ColorScaleValues
+dangerScale =
     toColorValues "danger"
 
 
@@ -604,19 +678,19 @@ variantComponents : String
 variantComponents =
     colorPaletteColors
         |> List.map
-            (\variant ->
+            (\variant_ ->
                 let
                     variantColors : String
                     variantColors =
                         colorScaleColors
                             |> List.map
                                 (\c ->
-                                    cssVar c (cssValue (variant ++ "-" ++ c))
+                                    cssVar c (cssValue (variant_ ++ "-" ++ c))
                                 )
                             |> String.join "; "
                 in
-                wClass variant ++ """ {
-  """ ++ cssVar "color" variant ++ """;
+                wClass variant_ ++ """ {
+  """ ++ cssVar "color" variant_ ++ """;
   """ ++ variantColors ++ """
   color: """ ++ cssValue "text" ++ """;
 }"""

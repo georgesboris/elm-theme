@@ -1,0 +1,389 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* 
+ * ======================================================
+ * Global
+ * ======================================================
+ */
+
+body {
+  background: rgb(var(--w-bg-subtle) / 1.0) !important;
+}
+
+/* 
+ * ======================================================
+ * W.Box
+ *
+ * We define each variable default value inside the .w--box scope.
+ * This prevents inheritance between W.Box widgets.
+ * Each widget can then customize itself by inlining their css variables.
+ *
+ * ======================================================
+ */
+
+.w--box {
+  --w-width: auto;
+  --w-height: auto;
+  --w-radius: 0px;
+  --w-border-color: var(--w-accent);
+  --tw-shadow-color: var(--w-shadow);
+  --tw-shadow: var(--tw-shadow-colored);
+  width: var(--w-width);
+  height: var(--w-height);
+  border-radius: var(--w-radius);
+  border-color: var(--w-border-color);
+  box-sizing: border-box;
+}
+
+.w--box.w--box-padding {
+  padding: var(--w-padding);
+}
+
+.w--box.w--box-min-width {
+  min-width: var(--w-min-width);
+}
+
+.w--box.w--box-max-width {
+  max-width: var(--w-max-width);
+}
+
+.w--box.w--block>*+* {
+  margin-top: var(--w-gap);
+}
+
+.w--box.w--flex>*,
+.w--box.w--inline-flex>* {
+  flex-shrink: 0;
+}
+
+.w--box.w--flex,
+.w--box.w--inline-flex,
+.w--box.w--grid {
+  --w-gap: 0;
+  gap: var(--w-gap);
+}
+
+.w--box.w--grid {
+  --w-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: var(--w-columns);
+}
+
+
+.w--box.w--grid-span {
+  grid-column: var(--w-col-span);
+}
+
+.w--box.w--grid-start {
+  grid-column-start: var(--w-col-start);
+}
+
+.w--box.w--grid-end {
+  grid-column-end: var(--w-col-end);
+}
+
+@media (min-width: 1024px) {
+  .w--box {
+    width: var(--lg-w-width, var(--w-width));
+    height: var(--lg-w-height, var(--w-height));
+    border-radius: var(--lg-w-border-radius, var(--w-radius));
+    border-color: var(--lg-w-border-color, var(--w-border-color));
+  }
+
+  .w--box.w--flex,
+  .w--box.w--inline-flex,
+  .w--box.w--grid {
+    gap: var(--lg-w-gap, var(--w-gap));
+  }
+
+  .w--box.w-box-padding {
+    padding: var(--lg-w-padding, var(--w-padding));
+  }
+
+  .w--box.w--box-min-width {
+    min-width: var(--lg-w-min-width, var(--w-min-width));
+  }
+
+  .w--box.w--box-max-width {
+    max-width: var(--lg-w-max-width, var(--w-max-width));
+  }
+
+  .w--box.w--block>*+* {
+    margin-top: var(--lg-w-gap, var(--w-gap));
+  }
+
+  .w--box.w--grid {
+    grid-template-columns: var(--w-columns);
+  }
+
+  .w--box.w--grid-span {
+    grid-column: var(--lg-w-col-span, var(--w-col-span));
+  }
+
+  .w--box.w--grid-start {
+    grid-column-start: var(--lg-w-col-start, var(--w-col-start));
+  }
+
+  .w--box.w--grid-end {
+    grid-column-end: var(--lg-w-col-end, var(--w-col-end));
+  }
+}
+
+/* 
+ * ======================================================
+ * W.Grid
+ * ======================================================
+ */
+
+.w--grid-wrapper {
+  grid-template-columns: var(--w-columns, repeat(12, minmax(0, 1fr)));
+  gap: var(--w-gap, 0);
+}
+
+.w--grid-column {
+  grid-column: var(--w-span, auto);
+}
+
+@media (min-width: 1024px) {
+  .w--grid-wrapper {
+    grid-template-columns: var(--lg-w-columns, var(--w-columns, repeat(12, minmax(0, 1fr))));
+    gap: var(--lg-w-gap, var(--w-gap, 0));
+  }
+
+  .w--grid-column {
+    grid-column: var(--lg-w-span, var(--w-span, auto));
+  }
+}
+
+/* 
+ * ======================================================
+ * W.Loading
+ * ======================================================
+ */
+
+.w--loading-dots {
+  display: inline-block;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+}
+
+.w--loading-dots div {
+  position: absolute;
+  top: calc(var(--size) * 0.4);
+  width: calc(var(--size) * 0.2);
+  height: calc(var(--size) * 0.2);
+  border-radius: calc(var(--size) * 0.2);
+  background: var(--color);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.w--loading-dots>div:nth-child(1) {
+  left: 0;
+  animation: w--loading-dots-1 0.6s infinite;
+}
+
+.w--loading-dots>div:nth-child(2) {
+  left: 0;
+  animation: w--loading-dots-2 0.6s infinite;
+}
+
+.w--loading-dots>div:nth-child(3) {
+  left: calc(var(--size) * 0.4);
+  animation: w--loading-dots-2 0.6s infinite;
+}
+
+.w--loading-dots>div:nth-child(4) {
+  left: calc(var(--size) * 0.8);
+  animation: w--loading-dots-3 0.6s infinite;
+}
+
+
+@keyframes w--loading-dots-1 {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes w--loading-dots-2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(calc(var(--size) * 0.4), 0);
+  }
+}
+
+@keyframes w--loading-dots-3 {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+.w--loading-ripples {
+  display: inline-block;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+}
+
+.w--loading-ripples>div {
+  position: absolute;
+  border: calc(var(--size) * 0.06) solid var(--color);
+  opacity: 1;
+  border-radius: 50%;
+  animation: w--loading-ripples 1.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.w--loading-ripples>div:nth-child(2) {
+  animation-delay: -0.6s;
+}
+
+@keyframes w--loading-ripples {
+  0% {
+    top: calc(var(--size) * 0.5);
+    left: calc(var(--size) * 0.5);
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  100% {
+    top: 0;
+    left: 0;
+    width: var(--size);
+    height: var(--size);
+    opacity: 0;
+  }
+}
+
+/* 
+ * ======================================================
+ * W.Menu
+ * ======================================================
+ */
+
+.w--menu-section:not(:first-child) {
+  padding-top: var(--w-menu-section-gap, var(--w-spacing-xl));
+}
+
+/* 
+ * ======================================================
+ * W.Modal
+ * ======================================================
+ */
+
+.w--modal.w--modal--is-open {
+  display: block;
+  opacity: 1;
+}
+
+.w--modal-toggle:checked+.w--modal {
+  display: block;
+  opacity: 1;
+}
+
+.w--modal.w--modal--is-open>.w--modal-content {
+  animation: 0.2s ease-out forwards w--animation-fade-slide-scale;
+}
+
+.w--modal-toggle:checked+.w--modal>.w--modal-content {
+  animation: 0.2s ease-out forwards w--animation-fade-slide-scale;
+}
+
+/* 
+ * ======================================================
+ * Popover
+ * ======================================================
+ */
+
+.w--popover-content {
+  display: none;
+}
+
+.w--popover-trigger:focus-within+.w--popover-content {
+  display: block;
+  animation: w--animation-fade 0.2s forwards;
+}
+
+.w--popover.w--is-open>.w--popover-content {
+  display: block;
+  animation: w--animation-fade 0.2s forwards;
+}
+
+.w--popover.w--is-closed .w--popover-trigger:focus-within+.w--popover-content {
+  display: none;
+}
+
+.w--popover.w--persistent:focus-within>.w--popover-content {
+  display: block;
+}
+
+.w--popover.w--show-on-hover .w--popover-trigger:hover+.w--popover-content {
+  display: block;
+  animation: w--animation-fade 0.2s forwards;
+}
+
+.w--popover.w--show-on-hover>.w--popover-content:hover {
+  display: block;
+}
+
+.w--popover-content:active {
+  display: block !important;
+}
+
+/* 
+ * ======================================================
+ * W.Tooltip
+ * ======================================================
+ */
+
+.w--tooltip::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-style: solid;
+}
+
+.w--tooltip.w--tooltip-top::after {
+  top: 100%;
+  left: 50%;
+  margin-left: -2px;
+  border-width: 4px 4px 0 4px;
+  border-color: var(--w-solid) transparent transparent transparent;
+}
+
+.w--tooltip.w--tooltip-bottom::after {
+  bottom: 100%;
+  left: 50%;
+  margin-left: -2px;
+  border-width: 0 4px 4px 4px;
+  border-color: transparent transparent var(--w-solid) transparent;
+}
+
+.w--tooltip.w--tooltip-left::after {
+  top: 50%;
+  left: 100%;
+  margin-top: -2px;
+  border-width: 4px 0 4px 4px;
+  border-color: transparent transparent transparent var(--w-solid);
+}
+
+.w--tooltip.w--tooltip-right::after {
+  top: 50%;
+  right: 100%;
+  margin-top: -2px;
+  border-width: 4px 4px 4px 0;
+  border-color: transparent var(--w-solid) transparent transparent;
+}
