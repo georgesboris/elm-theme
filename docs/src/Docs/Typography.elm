@@ -8,19 +8,19 @@ import W.Divider
 import W.Heading
 import W.Sizing
 import W.Spacing
-import W.TextBlock
+import W.Text
 import W.TextInline
 
 
 view : Book.Page msg
 view =
-    Book.page "Typography"
+    Book.pageWithExamples "Typography"
         [ ( ""
-          , [ ( W.Spacing.xl, W.Heading.extraLarge, W.TextBlock.extraLarge )
-            , ( W.Spacing.lg, W.Heading.large, W.TextBlock.large )
+          , [ ( W.Spacing.xl, W.Heading.extraLarge, W.Text.extraLarge )
+            , ( W.Spacing.lg, W.Heading.large, W.Text.large )
             , ( W.Spacing.md, Attr.none, Attr.none )
-            , ( W.Spacing.sm, W.Heading.small, W.TextBlock.small )
-            , ( W.Spacing.xs, W.Heading.extraSmall, W.TextBlock.extraSmall )
+            , ( W.Spacing.sm, W.Heading.small, W.Text.small )
+            , ( W.Spacing.xs, W.Heading.extraSmall, W.Text.extraSmall )
             ]
                 |> List.map
                     (\( spacing, headingSize, textSize ) ->
@@ -34,7 +34,7 @@ view =
                                 [ W.Heading.view
                                     [ headingSize ]
                                     [ H.text "The quick brown fox jumps over the lazy dog" ]
-                                , W.TextBlock.view
+                                , W.Text.view
                                     [ textSize ]
                                     [ H.text "Lorem ipsum dolor sit amet, "
                                     , W.TextInline.view

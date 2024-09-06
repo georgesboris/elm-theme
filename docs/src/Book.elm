@@ -18,25 +18,25 @@ module Book exposing
     , chapterSlug
     , logAction
     , page
+    , pageContent
     , pageName
-    , pageSections
     , pageSlug
-    , sectionContent
-    , sectionId
-    , sectionName
-    , sectionSlug
+    , pageWithExamples
     )
 
 import Browser
 import Dict
 import Html as H
+import Html.Attributes as HA
 import Url
+import W.Theme
 
 
 type Msg
     = OnUrlChange Url.Url
     | OnUrlRequest Browser.UrlRequest
     | LogAction String
+    | SetTheme W.Theme.Theme
     | DoNothing
 
 
@@ -79,7 +79,8 @@ type Page msg
         { name : String
         , slug : String
         , chapterSlug : Maybe String
-        , sections : List (PageSection msg)
+        , sections : List String
+        , content : List (H.Html msg)
         , excerpt : List (H.Html msg)
         }
 
@@ -208,8 +209,20 @@ chapterPages (Chapter p) =
     p.chapters
 
 
-page : String -> List ( String, List (H.Html msg) ) -> Page msg
-page name pages =
+page : String -> List (H.Html msg) -> Page msg
+page name content =
+    Page
+        { name = name
+        , slug = slugify name
+        , sections = []
+        , excerpt = []
+        , chapterSlug = Nothing
+        , content = content
+        }
+
+
+pageWithExamples : String -> List ( String, List (H.Html msg) ) -> Page msg
+pageWithExamples name sections =
     let
         slug : String
         slug =
@@ -218,18 +231,20 @@ page name pages =
     Page
         { name = name
         , slug = slug
+        , sections = List.map Tuple.first sections
         , excerpt = []
         , chapterSlug = Nothing
-        , sections = List.map section pages
-        }
-
-
-section : ( String, List (H.Html msg) ) -> PageSection msg
-section ( name, content ) =
-    PageSection
-        { name = name
-        , slug = slugify name
-        , content = content
+        , content =
+            sections
+                |> List.map
+                    (\( sectionName, sectionContent ) ->
+                        H.section
+                            []
+                            (H.h1 [ HA.id (slugify sectionName) ]
+                                [ H.text sectionName ]
+                                :: sectionContent
+                            )
+                    )
         }
 
 
@@ -243,29 +258,9 @@ pageSlug (Page c) =
     c.slug
 
 
-pageSections : Page msg -> List (PageSection msg)
-pageSections (Page c) =
-    c.sections
-
-
-sectionName : PageSection msg -> String
-sectionName (PageSection p) =
-    p.name
-
-
-sectionSlug : PageSection msg -> String
-sectionSlug (PageSection p) =
-    p.slug
-
-
-sectionContent : PageSection msg -> List (H.Html msg)
-sectionContent (PageSection p) =
-    p.content
-
-
-sectionId : Page msg -> PageSection msg -> String
-sectionId c p =
-    pageSlug c ++ "--" ++ sectionSlug p
+pageContent : Page msg -> List (H.Html msg)
+pageContent (Page c) =
+    c.content
 
 
 slugify : String -> String

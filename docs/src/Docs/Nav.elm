@@ -15,38 +15,47 @@ import W.Tag
 import W.Theme.Colors
 
 
-view : Url.Url -> Book.Book msg -> Book.Route.Route msg -> H.Html msg
-view url rootBook route =
+view :
+    { url : Url.Url
+    , rootBook : Book.Book msg
+    , route : Book.Route.Route msg
+    , right : List (H.Html msg)
+    }
+    -> H.Html msg
+view props =
     let
         currentHref : String
         currentHref =
-            url.path
+            props.url.path
     in
     H.div
         []
         [ W.Box.view
-            [ W.Box.padding W.Spacing.md ]
-            [ case Book.Route.parentBook route of
+            [ W.Box.padding W.Spacing.md
+            , W.Box.flex [ W.Box.xSpaceBetween ]
+            ]
+            [ case Book.Route.parentBook props.route of
                 Nothing ->
                     W.Heading.view
                         [ W.Heading.semibold
                         , W.Heading.color (Color.toCssString W.Theme.Colors.pink.solid)
                         ]
-                        [ H.text (Book.bookName rootBook) ]
+                        [ H.text (Book.bookName props.rootBook) ]
 
                 Just parentBook ->
                     H.div
                         []
                         [ H.a
-                            [ HA.href (Book.Route.parentBookHref route) ]
+                            [ HA.href (Book.Route.parentBookHref props.route) ]
                             [ H.text (Book.bookName parentBook) ]
                         , W.Heading.view
                             []
-                            [ H.text (Book.bookName (Book.Route.book route)) ]
+                            [ H.text (Book.bookName (Book.Route.book props.route)) ]
                         ]
+            , H.div [] props.right
             ]
         , W.Menu.view []
-            (Book.Route.book route
+            (Book.Route.book props.route
                 |> Book.bookItems
                 |> List.map
                     (\bookItem ->
@@ -60,7 +69,7 @@ view url rootBook route =
                                                 (\chapter ->
                                                     viewLink
                                                         { currentHref = currentHref
-                                                        , href = Book.Route.pageHref route chapter
+                                                        , href = Book.Route.pageHref props.route chapter
                                                         , label = Book.pageName chapter
                                                         , right = viewWIPTag chapter
                                                         }
@@ -70,7 +79,7 @@ view url rootBook route =
                             Book.BookPage chapter ->
                                 viewLink
                                     { currentHref = currentHref
-                                    , href = Book.Route.pageHref route chapter
+                                    , href = Book.Route.pageHref props.route chapter
                                     , label = Book.pageName chapter
                                     , right = viewWIPTag chapter
                                     }
@@ -78,7 +87,7 @@ view url rootBook route =
                             Book.BookRef label bookRef ->
                                 viewLink
                                     { currentHref = currentHref
-                                    , href = Book.Route.bookHref route bookRef
+                                    , href = Book.Route.bookHref props.route bookRef
                                     , label = label
                                     , right = viewBookTag
                                     }
@@ -92,7 +101,7 @@ view url rootBook route =
                                                 (\( bookName, bookRef ) ->
                                                     viewLink
                                                         { currentHref = currentHref
-                                                        , href = Book.Route.bookHref route bookRef
+                                                        , href = Book.Route.bookHref props.route bookRef
                                                         , label = bookName
                                                         , right = viewBookTag
                                                         }
@@ -137,8 +146,11 @@ viewLink props =
 
 viewWIPTag : Book.Page msg -> List (H.Html msg)
 viewWIPTag page =
-    if List.isEmpty (Book.pageSections page) then
-        [ W.Tag.view [ W.Tag.small ] [ H.text "WIP" ] ]
+    if List.isEmpty (Book.pageContent page) then
+        [ W.Tag.view
+            [ W.Tag.small ]
+            [ H.text "WIP" ]
+        ]
 
     else
         []

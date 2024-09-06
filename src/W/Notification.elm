@@ -166,7 +166,7 @@ view =
                 children : H.Html msg
                 children =
                     H.div
-                        [ HA.class "w--flex w--gap-6 w--items-center w--w-full w--relative w--z-10"
+                        [ HA.class "w--flex w--gap-md w--items-center w--w-full w--relative w--z-10"
                         ]
                         [ WH.maybeHtml (H.div [ HA.class "w--shrink-0 w--flex w--items-center" ]) attrs.icon
                         , H.div

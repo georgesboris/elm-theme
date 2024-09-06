@@ -47,8 +47,7 @@
 ## Typography
 
 - [x] W.Heading
-- [-] ~W.Text~
-- [x] ~ W.TextBlock
+- [x] ~ W.Text
 - [x] ~ W.TextInline
 - [ ] ~ W.Code
 

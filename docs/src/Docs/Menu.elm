@@ -41,7 +41,7 @@ view =
                 }
             ]
     in
-    Book.page "Menu"
+    Book.pageWithExamples "Menu"
         [ ( "Default", [ W.Menu.view [] items ] )
         , ( "Custom Padding", [ W.Menu.view [ W.Menu.paddingX 24 ] items ] )
         ]

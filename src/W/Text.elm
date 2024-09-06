@@ -1,4 +1,4 @@
-module W.TextBlock exposing
+module W.Text exposing
     ( view
     , extraLarge, large, small, extraSmall, fontSize
     , subtle, color

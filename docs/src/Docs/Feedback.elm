@@ -13,7 +13,7 @@ import W.Theme
 
 view : Book.Page msg
 view =
-    Book.page "Feedback"
+    Book.pageWithExamples "Feedback"
         [ ( "Badge"
           , [ Docs.UI.viewHorizontal
                 [ W.Badge.view [ W.Badge.inline ] [ H.text "123" ]
@@ -38,26 +38,6 @@ view =
                 , W.Skeleton.view [ W.Skeleton.radius 0.5, W.Skeleton.height 8 ]
                 , W.Skeleton.view [ W.Skeleton.relativeWidth 0.8 ]
                 , W.Skeleton.view [ W.Skeleton.relativeWidth 0.3 ]
-                ]
-            ]
-          )
-        , ( "Loading"
-          , [ Docs.UI.viewHorizontal
-                [ W.Loading.view
-                    [ W.Loading.size 40
-                    , W.Loading.color W.Theme.primary.accent
-                    ]
-                , W.Loading.view
-                    [ W.Loading.circles
-                    , W.Loading.size 40
-                    , W.Loading.color W.Theme.primary.accentStrong
-                    ]
-                , W.Loading.view
-                    [ W.Loading.ripples
-                    , W.Loading.size 40
-                    , W.Loading.color W.Theme.secondary.accentStrong
-                    ]
-                , W.Loading.view [ W.Loading.circles ]
                 ]
             ]
           )

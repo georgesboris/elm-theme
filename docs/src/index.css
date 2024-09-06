@@ -361,7 +361,7 @@ body {
   left: 50%;
   margin-left: -2px;
   border-width: 4px 4px 0 4px;
-  border-color: var(--w-solid) transparent transparent transparent;
+  border-color: rgb(var(--w-solid) / 1.0) transparent transparent transparent;
 }
 
 .w--tooltip.w--tooltip-bottom::after {
@@ -369,7 +369,7 @@ body {
   left: 50%;
   margin-left: -2px;
   border-width: 0 4px 4px 4px;
-  border-color: transparent transparent var(--w-solid) transparent;
+  border-color: transparent transparent rgb(var(--w-solid) / 1.0) transparent;
 }
 
 .w--tooltip.w--tooltip-left::after {
@@ -377,7 +377,7 @@ body {
   left: 100%;
   margin-top: -2px;
   border-width: 4px 0 4px 4px;
-  border-color: transparent transparent transparent var(--w-solid);
+  border-color: transparent transparent transparent rgb(var(--w-solid) / 1.0);
 }
 
 .w--tooltip.w--tooltip-right::after {
@@ -385,5 +385,5 @@ body {
   right: 100%;
   margin-top: -2px;
   border-width: 4px 4px 4px 0;
-  border-color: transparent var(--w-solid) transparent transparent;
+  border-color: transparent rgb(var(--w-solid) / 1.0) transparent transparent;
 }

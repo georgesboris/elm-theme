@@ -22,19 +22,7 @@ view book =
                             []
                             [ H.ul
                                 [ HA.class "w--list-none w--space-y-2xl w--p-0" ]
-                                (Book.pageSections chapter
-                                    |> List.map
-                                        (\page ->
-                                            H.section
-                                                []
-                                                [ H.h2 [ HA.id (Book.sectionSlug page) ] [ H.text (Book.sectionName page) ]
-                                                , H.ul [ HA.class "w--space-y-md w--list-none w--p-0" ]
-                                                    (List.map (\v -> H.li [] [ v ])
-                                                        (Book.sectionContent page)
-                                                    )
-                                                ]
-                                        )
-                                )
+                                (Book.pageContent chapter)
                             ]
                         ]
                 )

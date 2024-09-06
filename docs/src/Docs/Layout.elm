@@ -2,61 +2,15 @@ module Docs.Layout exposing (view)
 
 import Book
 import Html as H
-import Html.Attributes as HA
-import W.Avatar
 import W.Box
-import W.DataRow
-import W.Divider
 import W.Spacing
 import W.Theme
 
 
 view : Book.Page msg
 view =
-    Book.page "Layout"
-        [ ( "Divider"
-          , [ H.div
-                [ HA.class "w--grid w--grid-cols-2" ]
-                [ H.div []
-                    [ W.Divider.view [ W.Divider.margins 1 ] []
-                    , W.Divider.view [ W.Divider.margins 1, W.Divider.subtle ] [ H.text "Content" ]
-                    , W.Divider.view [ W.Divider.margins 1, W.Divider.color W.Theme.color.tint ] []
-                    ]
-                , H.div
-                    [ HA.class "w--flex w--justify-around"
-                    , HA.style "height" "68px"
-                    , HA.style "padding" "16px 0"
-                    ]
-                    [ W.Divider.view [ W.Divider.vertical ] []
-                    , W.Divider.view [ W.Divider.vertical, W.Divider.subtle ] [ H.text "Content" ]
-                    , W.Divider.view [ W.Divider.vertical, W.Divider.color W.Theme.color.tint ] []
-                    ]
-                ]
-            ]
-          )
-        , ( "DataRow"
-          , [ W.DataRow.viewExtra
-                [ W.DataRow.padding W.Spacing.md
-                ]
-                { header = [ H.text "Header" ]
-                , main = [ H.text "Main" ]
-                , footer = [ H.text "footer" ]
-                , left =
-                    [ W.Avatar.view
-                        [ W.Avatar.large
-                        , W.Avatar.names "Georges" "Boris"
-                        ]
-                    ]
-                , right =
-                    [ W.Avatar.view
-                        [ W.Avatar.large
-                        , W.Avatar.names "Georges" "Boris"
-                        ]
-                    ]
-                }
-            ]
-          )
-        , ( "Flex"
+    Book.pageWithExamples "Layout"
+        [ ( "Flex"
           , [ W.Box.view
                 [ W.Box.gap W.Spacing.xs
                 , W.Box.padding W.Spacing.lg

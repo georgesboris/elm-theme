@@ -8,7 +8,7 @@ import W.Theme
 
 view : Book.Page msg
 view =
-    Book.page "Themes"
+    Book.pageWithExamples "Themes"
         [ ( "Light Theme", [ H.div [ HA.class "light" ] [ demo ] ] )
         , ( "Dark Theme", [ H.div [ HA.class "dark" ] [ demo ] ] )
         ]

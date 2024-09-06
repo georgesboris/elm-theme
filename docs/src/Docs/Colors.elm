@@ -1,8 +1,8 @@
 module Docs.Colors exposing (view)
 
 import Book
-import Docs.Themes
 import Color
+import Docs.Themes
 import Html as H
 import SolidColor
 import W.Box
@@ -19,7 +19,7 @@ view theme =
         themeColors =
             W.Theme.toColorPalette theme
     in
-    Book.page "Colors & Themes"
+    Book.pageWithExamples "Colors & Themes"
         [ ( "Brand Colors"
           , [ W.Box.view
                 [ W.Box.gap W.Spacing.xs ]
@@ -39,7 +39,7 @@ view theme =
                 ]
             ]
           )
-        , ( "Data Visualization"
+        , ( "Data Visualization Colors"
           , [ W.Skeleton.view [ W.Skeleton.height 8 ] ]
           )
         ]
@@ -113,9 +113,9 @@ viewColor _ color =
             ]
             []
 
-        -- , W.TextBlock.view [ W.TextBlock.small ] [ H.text name ]
-        -- , W.TextBlock.view [ W.TextBlock.small ] [ H.text (toHex color) ]
-        -- , W.TextBlock.view [ W.TextBlock.small ] [ H.text (colorToRgbText color) ]
+        -- , W.Text.view [ W.Text.small ] [ H.text name ]
+        -- , W.Text.view [ W.Text.small ] [ H.text (toHex color) ]
+        -- , W.Text.view [ W.Text.small ] [ H.text (colorToRgbText color) ]
         ]
 
 

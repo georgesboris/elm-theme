@@ -6,12 +6,12 @@ import W.Box
 import W.Radius
 import W.Sizing
 import W.Spacing
-import W.TextBlock
+import W.Text
 
 
 view : Book.Page msg
 view =
-    Book.page "Radius, Spacing & Sizing"
+    Book.pageWithExamples "Radius, Spacing & Sizing"
         [ ( "Radius"
           , [ ( "xs", W.Spacing.xs, W.Radius.xs )
             , ( "sm", W.Spacing.sm, W.Radius.sm )
@@ -29,8 +29,8 @@ view =
                             ]
                             [ W.Box.view
                                 [ W.Box.width 2 ]
-                                [ W.TextBlock.view
-                                    [ W.TextBlock.subtle ]
+                                [ W.Text.view
+                                    [ W.Text.subtle ]
                                     [ H.text name ]
                                 ]
                             , W.Box.view
@@ -59,8 +59,8 @@ view =
                             ]
                             [ W.Box.view
                                 [ W.Box.width 2 ]
-                                [ W.TextBlock.view
-                                    [ W.TextBlock.subtle ]
+                                [ W.Text.view
+                                    [ W.Text.subtle ]
                                     [ H.text name ]
                                 ]
                             , W.Box.view
@@ -90,8 +90,8 @@ view =
                             ]
                             [ W.Box.view
                                 [ W.Box.width 2 ]
-                                [ W.TextBlock.view
-                                    [ W.TextBlock.subtle ]
+                                [ W.Text.view
+                                    [ W.Text.subtle ]
                                     [ H.text name ]
                                 ]
                             , W.Box.view

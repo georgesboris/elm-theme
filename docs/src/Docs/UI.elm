@@ -24,17 +24,8 @@ viewChapter c =
             []
             [ H.ul
                 [ HA.class "w--list-none w--space-y-2xl w--p-0" ]
-                (List.map (viewPage c) (Book.pageSections c))
+                (Book.pageContent c)
             ]
-        ]
-
-
-viewPage : Book.Page msg -> Book.PageSection msg -> H.Html msg
-viewPage c page =
-    H.section
-        [ HA.id (Book.sectionId c page) ]
-        [ H.h2 [] [ H.text (Book.sectionName page) ]
-        , H.ul [ HA.class "w--space-y-md w--list-none w--p-0" ] (List.map (\v -> H.li [] [ v ]) (Book.sectionContent page))
         ]
 
 
