@@ -37,6 +37,10 @@ import Url
 import W.Theme
 
 
+
+-- Actions
+
+
 type Msg
     = OnUrlChange Url.Url
     | OnUrlRequest Browser.UrlRequest
@@ -79,6 +83,10 @@ logActionWithInt label v =
     LogAction (label ++ ": \"" ++ String.fromInt v ++ "\"")
 
 
+
+-- Book
+
+
 type Book msg
     = Book (BookData msg)
 
@@ -113,9 +121,11 @@ type Page msg
         { name : String
         , slug : String
         , chapterSlug : Maybe String
-        , sections : List String
+        , anchors : List { id : String, label : String }
         , content : List (H.Html msg)
         , excerpt : List (H.Html msg)
+        , tags : List String
+        , meta : Dict.Dict String String
         }
 
 
@@ -248,10 +258,12 @@ page name content =
     Page
         { name = name
         , slug = slugify name
-        , sections = []
+        , anchors = []
         , excerpt = []
         , chapterSlug = Nothing
         , content = content
+        , tags = []
+        , meta = Dict.empty
         }
 
 
@@ -265,7 +277,7 @@ pageWithExamples name sections =
     Page
         { name = name
         , slug = slug
-        , sections = List.map Tuple.first sections
+        , anchors = List.map (\( s, _ ) -> { id = slugify s, label = s }) sections
         , excerpt = []
         , chapterSlug = Nothing
         , content =
@@ -279,6 +291,8 @@ pageWithExamples name sections =
                                 :: sectionContent
                             )
                     )
+        , tags = []
+        , meta = Dict.empty
         }
 
 

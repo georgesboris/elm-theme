@@ -60,7 +60,6 @@ main =
         theme =
             W.Theme.darkTheme
 
-        -- W.Theme.lightTheme
         book : Book.Book Book.Msg
         book =
             Book.book "elm-widgets"
