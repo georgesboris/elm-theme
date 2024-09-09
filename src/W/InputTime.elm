@@ -1,17 +1,17 @@
 module W.InputTime exposing
-    ( view
+    ( view, Attribute
     , init, toTime, toTimeZone, toString, Value
     , small, prefix, suffix
     , autofocus, disabled, readOnly
     , required, min, max, step
     , viewWithValidation, errorToString, Error(..)
     , onEnter, onFocus, onBlur
-    , htmlAttrs, noAttr, Attribute
+    , id
     )
 
 {-|
 
-@docs view
+@docs view, Attribute
 
 
 # Value
@@ -46,10 +46,11 @@ module W.InputTime exposing
 
 # Html
 
-@docs htmlAttrs, noAttr, Attribute
+@docs id
 
 -}
 
+import Attr
 import Html as H
 import Html.Attributes as HA
 import Html.Events as HE
@@ -137,12 +138,13 @@ errorToString error =
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
-    { disabled : Bool
+    { id : Maybe String
+    , disabled : Bool
     , readOnly : Bool
     , required : Bool
     , autofocus : Bool
@@ -155,18 +157,13 @@ type alias Attributes msg =
     , onFocus : Maybe msg
     , onBlur : Maybe msg
     , onEnter : Maybe msg
-    , htmlAttributes : List (H.Attribute msg)
     }
-
-
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
 
 
 defaultAttrs : Attributes msg
 defaultAttrs =
-    { disabled = False
+    { id = Nothing
+    , disabled = False
     , readOnly = False
     , required = False
     , autofocus = False
@@ -179,7 +176,6 @@ defaultAttrs =
     , onFocus = Nothing
     , onBlur = Nothing
     , onEnter = Nothing
-    , htmlAttributes = []
     }
 
 
@@ -188,93 +184,87 @@ defaultAttrs =
 
 
 {-| -}
-disabled : Bool -> Attribute msg
-disabled v =
-    Attribute <| \attrs -> { attrs | disabled = v }
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
 
 
 {-| -}
-readOnly : Bool -> Attribute msg
-readOnly v =
-    Attribute <| \attrs -> { attrs | readOnly = v }
+disabled : Attribute msg
+disabled =
+    Attr.attr (\attrs -> { attrs | disabled = True })
 
 
 {-| -}
-required : Bool -> Attribute msg
-required v =
-    Attribute <| \attrs -> { attrs | required = v }
+readOnly : Attribute msg
+readOnly =
+    Attr.attr (\attrs -> { attrs | readOnly = True })
+
+
+{-| -}
+required : Attribute msg
+required =
+    Attr.attr (\attrs -> { attrs | required = True })
 
 
 {-| -}
 autofocus : Attribute msg
 autofocus =
-    Attribute <| \attrs -> { attrs | autofocus = True }
+    Attr.attr (\attrs -> { attrs | autofocus = True })
 
 
 {-| -}
 small : Attribute msg
 small =
-    Attribute <| \attrs -> { attrs | small = True }
+    Attr.attr (\attrs -> { attrs | small = True })
 
 
 {-| -}
 min : Time.Posix -> Attribute msg
 min v =
-    Attribute <| \attrs -> { attrs | min = Just v }
+    Attr.attr (\attrs -> { attrs | min = Just v })
 
 
 {-| -}
 max : Time.Posix -> Attribute msg
 max v =
-    Attribute <| \attrs -> { attrs | max = Just v }
+    Attr.attr (\attrs -> { attrs | max = Just v })
 
 
 {-| -}
 step : Int -> Attribute msg
 step v =
-    Attribute <| \attrs -> { attrs | step = Just v }
+    Attr.attr (\attrs -> { attrs | step = Just v })
 
 
 {-| -}
 prefix : List (H.Html msg) -> Attribute msg
 prefix v =
-    Attribute <| \attrs -> { attrs | prefix = Just v }
+    Attr.attr (\attrs -> { attrs | prefix = Just v })
 
 
 {-| -}
 suffix : List (H.Html msg) -> Attribute msg
 suffix v =
-    Attribute <| \attrs -> { attrs | suffix = Just v }
+    Attr.attr (\attrs -> { attrs | suffix = Just v })
 
 
 {-| -}
 onBlur : msg -> Attribute msg
 onBlur v =
-    Attribute <| \attrs -> { attrs | onBlur = Just v }
+    Attr.attr (\attrs -> { attrs | onBlur = Just v })
 
 
 {-| -}
 onFocus : msg -> Attribute msg
 onFocus v =
-    Attribute <| \attrs -> { attrs | onFocus = Just v }
+    Attr.attr (\attrs -> { attrs | onFocus = Just v })
 
 
 {-| -}
 onEnter : msg -> Attribute msg
 onEnter v =
-    Attribute <| \attrs -> { attrs | onEnter = Just v }
-
-
-{-| -}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
-
-
-{-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+    Attr.attr (\attrs -> { attrs | onEnter = Just v })
 
 
 
@@ -283,23 +273,23 @@ noAttr =
 
 baseAttrs : Attributes msg -> Time.Zone -> String -> List (H.Attribute msg)
 baseAttrs attrs timeZone value =
-    attrs.htmlAttributes
-        ++ [ HA.type_ "time"
-           , HA.class (W.Internal.Input.baseClass attrs.small)
-           , HA.required attrs.required
-           , HA.disabled attrs.disabled
-           , HA.readonly attrs.readOnly
-           , HA.autofocus attrs.autofocus
-           , WH.attrIf attrs.readOnly (HA.attribute "aria-readonly") "true"
-           , WH.attrIf attrs.disabled (HA.attribute "aria-disabled") "true"
-           , WH.maybeAttr HA.min (Maybe.map (valueFromTime timeZone) attrs.min)
-           , WH.maybeAttr HA.max (Maybe.map (valueFromTime timeZone) attrs.max)
-           , WH.maybeAttr HA.step (Maybe.map String.fromInt attrs.step)
-           , WH.maybeAttr HE.onFocus attrs.onFocus
-           , WH.maybeAttr HE.onBlur attrs.onBlur
-           , WH.maybeAttr WH.onEnter attrs.onEnter
-           , HA.value value
-           ]
+    [ WH.maybeAttr HA.id attrs.id
+    , HA.type_ "time"
+    , HA.class (W.Internal.Input.baseClass attrs.small)
+    , HA.required attrs.required
+    , HA.disabled attrs.disabled
+    , HA.readonly attrs.readOnly
+    , HA.autofocus attrs.autofocus
+    , WH.attrIf attrs.readOnly (HA.attribute "aria-readonly") "true"
+    , WH.attrIf attrs.disabled (HA.attribute "aria-disabled") "true"
+    , WH.maybeAttr HA.min (Maybe.map (valueFromTime timeZone) attrs.min)
+    , WH.maybeAttr HA.max (Maybe.map (valueFromTime timeZone) attrs.max)
+    , WH.maybeAttr HA.step (Maybe.map String.fromInt attrs.step)
+    , WH.maybeAttr HE.onFocus attrs.onFocus
+    , WH.maybeAttr HE.onBlur attrs.onBlur
+    , WH.maybeAttr WH.onEnter attrs.onEnter
+    , HA.value value
+    ]
 
 
 {-| -}
@@ -310,27 +300,25 @@ view :
         , onInput : Value -> msg
         }
     -> H.Html msg
-view attrs_ props =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
-    in
-    H.input
-        (HE.onInput (props.onInput << timeFromValue props.value)
-            :: baseAttrs attrs (toTimeZone props.value) (toString props.value)
+view =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            H.input
+                (HE.onInput (props.onInput << timeFromValue props.value)
+                    :: baseAttrs attrs (toTimeZone props.value) (toString props.value)
+                )
+                []
+                |> W.Internal.Input.viewWithIcon
+                    { small = attrs.small
+                    , prefix = attrs.prefix
+                    , suffix = attrs.suffix
+                    , readOnly = attrs.readOnly
+                    , disabled = attrs.disabled
+                    , mask = Nothing
+                    , maskInput = toString props.value
+                    }
+                    (W.Internal.Icons.clock { size = 24 })
         )
-        []
-        |> W.Internal.Input.viewWithIcon
-            { small = attrs.small
-            , prefix = attrs.prefix
-            , suffix = attrs.suffix
-            , readOnly = attrs.readOnly
-            , disabled = attrs.disabled
-            , mask = Nothing
-            , maskInput = toString props.value
-            }
-            (W.Internal.Icons.clock { size = 24 })
 
 
 {-| -}
@@ -341,86 +329,84 @@ viewWithValidation :
         , onInput : Result (List Error) (Maybe Time.Posix) -> Value -> msg
         }
     -> H.Html msg
-viewWithValidation attrs_ props =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
-    in
-    H.input
-        (HE.on "input"
-            (D.map6
-                (\value valid rangeOverflow rangeUnderflow stepMismatch valueMissing ->
-                    let
-                        newValue : Value
-                        newValue =
-                            timeFromValue props.value value
-                    in
-                    if valid then
-                        props.onInput (Ok (toTime newValue)) newValue
+viewWithValidation =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            H.input
+                (HE.on "input"
+                    (D.map6
+                        (\value valid rangeOverflow rangeUnderflow stepMismatch valueMissing ->
+                            let
+                                newValue : Value
+                                newValue =
+                                    timeFromValue props.value value
+                            in
+                            if valid then
+                                props.onInput (Ok (toTime newValue)) newValue
 
-                    else
-                        [ Just (ValueMissing "Please fill out this field.")
-                            |> WH.keepIf valueMissing
-                        , attrs.min
-                            |> WH.keepIf rangeUnderflow
-                            |> Maybe.map
-                                (\min_ ->
-                                    let
-                                        timeString : String
-                                        timeString =
-                                            valueFromTime (toTimeZone props.value) min_
-                                    in
-                                    TooLow min_ ("Value must be " ++ timeString ++ " or later.")
-                                )
-                        , attrs.max
-                            |> WH.keepIf rangeOverflow
-                            |> Maybe.map
-                                (\max_ ->
-                                    let
-                                        timeString : String
-                                        timeString =
-                                            valueFromTime (toTimeZone props.value) max_
-                                    in
-                                    TooHigh max_ ("Value must be " ++ timeString ++ " or later.")
-                                )
-                        , attrs.step
-                            |> WH.keepIf stepMismatch
-                            |> Maybe.map2
-                                (\time step_ ->
-                                    let
-                                        ( f, c ) =
-                                            nearestTimes (toTimeZone props.value) time step_
-                                    in
-                                    StepMismatch
-                                        step_
-                                        ("Please enter a valid value. The two nearest valid values are " ++ f ++ " and " ++ c ++ ".")
-                                )
-                                (toTime props.value)
-                        ]
-                            |> List.filterMap identity
-                            |> (\xs -> props.onInput (Err xs) newValue)
+                            else
+                                [ Just (ValueMissing "Please fill out this field.")
+                                    |> WH.keepIf valueMissing
+                                , attrs.min
+                                    |> WH.keepIf rangeUnderflow
+                                    |> Maybe.map
+                                        (\min_ ->
+                                            let
+                                                timeString : String
+                                                timeString =
+                                                    valueFromTime (toTimeZone props.value) min_
+                                            in
+                                            TooLow min_ ("Value must be " ++ timeString ++ " or later.")
+                                        )
+                                , attrs.max
+                                    |> WH.keepIf rangeOverflow
+                                    |> Maybe.map
+                                        (\max_ ->
+                                            let
+                                                timeString : String
+                                                timeString =
+                                                    valueFromTime (toTimeZone props.value) max_
+                                            in
+                                            TooHigh max_ ("Value must be " ++ timeString ++ " or later.")
+                                        )
+                                , attrs.step
+                                    |> WH.keepIf stepMismatch
+                                    |> Maybe.map2
+                                        (\time step_ ->
+                                            let
+                                                ( f, c ) =
+                                                    nearestTimes (toTimeZone props.value) time step_
+                                            in
+                                            StepMismatch
+                                                step_
+                                                ("Please enter a valid value. The two nearest valid values are " ++ f ++ " and " ++ c ++ ".")
+                                        )
+                                        (toTime props.value)
+                                ]
+                                    |> List.filterMap identity
+                                    |> (\xs -> props.onInput (Err xs) newValue)
+                        )
+                        (D.at [ "target", "value" ] D.string)
+                        (D.at [ "target", "validity", "valid" ] D.bool)
+                        (D.at [ "target", "validity", "rangeOverflow" ] D.bool)
+                        (D.at [ "target", "validity", "rangeUnderflow" ] D.bool)
+                        (D.at [ "target", "validity", "stepMismatch" ] D.bool)
+                        (D.at [ "target", "validity", "valueMissing" ] D.bool)
+                    )
+                    :: baseAttrs attrs (toTimeZone props.value) (toString props.value)
                 )
-                (D.at [ "target", "value" ] D.string)
-                (D.at [ "target", "validity", "valid" ] D.bool)
-                (D.at [ "target", "validity", "rangeOverflow" ] D.bool)
-                (D.at [ "target", "validity", "rangeUnderflow" ] D.bool)
-                (D.at [ "target", "validity", "stepMismatch" ] D.bool)
-                (D.at [ "target", "validity", "valueMissing" ] D.bool)
-            )
-            :: baseAttrs attrs (toTimeZone props.value) (toString props.value)
+                []
+                |> W.Internal.Input.viewWithIcon
+                    { small = attrs.small
+                    , prefix = attrs.prefix
+                    , suffix = attrs.suffix
+                    , readOnly = attrs.readOnly
+                    , disabled = attrs.disabled
+                    , mask = Nothing
+                    , maskInput = toString props.value
+                    }
+                    (W.Internal.Icons.clock { size = 24 })
         )
-        []
-        |> W.Internal.Input.viewWithIcon
-            { small = attrs.small
-            , prefix = attrs.prefix
-            , suffix = attrs.suffix
-            , readOnly = attrs.readOnly
-            , disabled = attrs.disabled
-            , mask = Nothing
-            , maskInput = toString props.value
-            }
-            (W.Internal.Icons.clock { size = 24 })
 
 
 

@@ -15,7 +15,7 @@
 
 - [x] Minimal steps for single page per section
 - [x] Finish all overlay widgets
-- [ ] Finish data display widgets
+- [x] Finish data display widgets
 - [ ] Finish all form widgets
 
 - [ ] Review modal (check for dialog)
@@ -82,7 +82,7 @@
     - Gap
 
 - [x] W.Divider
-- [ ] W.DataRow [Review]
+- [x] W.DataRow [Review]
 - [ ] W.Modal
 
 
@@ -91,7 +91,7 @@
 - [x] W.Avatar
 - [x] W.Message [Review]
 - [x] W.Notification [Review]
-- [ ] W.Table
+- [x] W.Table [Review]
 - [x] W.Tag [Review]
 - [x] W.Popover
 - [x] W.Tooltip
@@ -100,26 +100,24 @@
 
 ## Navigation
 
-- [ ] W.Menu
+- [x] W.Menu [Review]
 - [ ] ~ W.Breadcrumbs
-- [ ] W.Pagination
+- [x] W.Pagination
 
 ## Forms & Inputs
 
 - [ ] W.InputField -> W.FormField
 - [ ] W.InputAutocomplete
-- [ ] W.InputCheckbox
-- [ ] W.InputCode
+- [x] W.InputCheckbox
+- [x] W.InputCode
 - [ ] W.InputColor
 - [ ] W.InputDate
 - [ ] W.InputInt
 - [ ] W.InputFloat
-- [ ] W.InputRadio
+- [x] W.InputRadio
 - [ ] W.InputSelect
-- [ ] W.InputSlider
+- [x] W.InputSlider
 - [ ] W.InputText
 - [ ] W.InputTextArea
 - [ ] W.InputTime
-
-
 

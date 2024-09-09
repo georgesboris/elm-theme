@@ -17,6 +17,11 @@ module Book exposing
     , chapterPages
     , chapterSlug
     , logAction
+    , logActionWith
+    , logActionWithBool
+    , logActionWithFloat
+    , logActionWithInt
+    , logActionWithString
     , page
     , pageContent
     , pageName
@@ -43,6 +48,35 @@ type Msg
 logAction : String -> Msg
 logAction =
     LogAction
+
+
+logActionWith : (a -> String) -> String -> a -> Msg
+logActionWith fn label v =
+    LogAction (label ++ ": " ++ fn v)
+
+
+logActionWithBool : String -> Bool -> Msg
+logActionWithBool label v =
+    if v then
+        LogAction (label ++ ": True")
+
+    else
+        LogAction (label ++ ": False")
+
+
+logActionWithString : String -> String -> Msg
+logActionWithString label v =
+    LogAction (label ++ ": \"" ++ v ++ "\"")
+
+
+logActionWithFloat : String -> Float -> Msg
+logActionWithFloat label v =
+    LogAction (label ++ ": \"" ++ String.fromFloat v ++ "\"")
+
+
+logActionWithInt : String -> Int -> Msg
+logActionWithInt label v =
+    LogAction (label ++ ": \"" ++ String.fromInt v ++ "\"")
 
 
 type Book msg

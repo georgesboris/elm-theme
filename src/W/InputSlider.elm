@@ -1,13 +1,12 @@
 module W.InputSlider exposing
-    ( view
+    ( view, Attribute
     , disabled, readOnly
     , color
-    , htmlAttrs, noAttr, Attribute
     )
 
 {-|
 
-@docs view
+@docs view, Attribute
 
 
 # States
@@ -19,18 +18,15 @@ module W.InputSlider exposing
 
 @docs color
 
-
-# Html
-
-@docs htmlAttrs, noAttr, Attribute
-
 -}
 
+import Attr
 import Html as H
 import Html.Attributes as HA
 import Html.Events as HE
 import Json.Decode as D
-import Theme
+import W.Internal.Helpers as WH
+import W.Theme
 
 
 
@@ -38,8 +34,8 @@ import Theme
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
@@ -47,22 +43,17 @@ type alias Attributes msg =
     , readOnly : Bool
     , color : String
     , format : Float -> String
-    , htmlAttributes : List (H.Attribute msg)
+    , msg : Maybe msg
     }
-
-
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
 
 
 defaultAttrs : Attributes msg
 defaultAttrs =
     { disabled = False
     , readOnly = False
-    , color = Theme.primaryBackground
+    , color = W.Theme.primaryScale.solid
     , format = String.fromFloat
-    , htmlAttributes = []
+    , msg = Nothing
     }
 
 
@@ -73,32 +64,19 @@ defaultAttrs =
 {-| -}
 color : String -> Attribute msg
 color v =
-    Attribute <| \attrs -> { attrs | color = v }
+    Attr.attr (\attrs -> { attrs | color = v })
 
 
 {-| -}
-disabled : Bool -> Attribute msg
-disabled v =
-    Attribute <| \attrs -> { attrs | disabled = v }
+disabled : Attribute msg
+disabled =
+    Attr.attr (\attrs -> { attrs | disabled = True })
 
 
 {-| -}
-readOnly : Bool -> Attribute msg
-readOnly v =
-    Attribute <| \attrs -> { attrs | readOnly = v }
-
-
-{-| Attributes applied to the `input[type="range"]` element.
--}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
-
-
-{-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+readOnly : Attribute msg
+readOnly =
+    Attr.attr (\attrs -> { attrs | readOnly = True })
 
 
 
@@ -116,82 +94,77 @@ view :
         , onInput : Float -> msg
         }
     -> H.Html msg
-view attrs_ props =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
+view =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            let
+                valueString : String
+                valueString =
+                    (props.value - props.min)
+                        / (props.max - props.min)
+                        |> WH.pct
 
-        valueString : String
-        valueString =
-            (props.value - props.min)
-                / (props.max - props.min)
-                |> (*) 100
-                |> String.fromFloat
-                |> (\s -> s ++ "%")
+                colorAttr : H.Attribute msg
+                colorAttr =
+                    if attrs.disabled then
+                        HA.class "w--text-base-aux"
 
-        colorAttr : H.Attribute msg
-        colorAttr =
-            if attrs.disabled then
-                HA.class "ew-text-base-aux"
-
-            else
-                HA.style "color" attrs.color
-    in
-    H.div
-        [ HA.class "ew-group ew-relative ew-full"
-        , colorAttr
-        ]
-        [ H.div [ HA.class "ew-absolute ew-inset-y-0 ew-inset-x-[12px]" ]
-            [ -- Track
-              H.div
-                [ HA.class "ew-absolute ew-rounded"
-                , HA.class "ew-inset-x-0 ew-top-1/2"
-                , HA.class "ew-bg-base-aux/30"
-                , HA.class "ew-h-1 -ew-mt-0.5"
+                    else
+                        HA.style "color" attrs.color
+            in
+            H.div
+                [ HA.class "w--group w--relative w--full"
+                , colorAttr
                 ]
-                []
-            , -- Value Track Background
-              H.div
-                [ HA.class "ew-absolute ew-z-1 ew-rounded"
-                , HA.class "ew-left-0 ew-top-1/2"
-                , HA.class "ew-bg-base-bg"
-                , HA.class "ew-h-[6px] -ew-mt-[3px]"
-                , HA.style "width" valueString
-                ]
-                []
-            , -- Value Track
-              H.div
-                [ HA.class "ew-absolute ew-z-0 ew-rounded"
-                , HA.class "ew-left-0 ew-top-1/2"
-                , HA.class "ew-bg-current"
-                , HA.class "ew-opacity-[0.60]"
-                , HA.class "ew-h-[6px] -ew-mt-[3px]"
-                , HA.style "width" valueString
-                ]
-                []
-            ]
-        , -- Thumb
-          H.input
-            (attrs.htmlAttributes
-                ++ [ HA.class "ew-relative"
-                   , HA.class "ew-slider ew-appearance-none"
-                   , HA.class "ew-bg-transparent"
-                   , HA.class "ew-m-0"
-                   , HA.class "focus-visible:ew-outline-0"
-                   , HA.type_ "range"
-                   , colorAttr
+                [ H.div [ HA.class "w--absolute w--inset-y-0 w--inset-x-[12px]" ]
+                    [ -- Track
+                      H.div
+                        [ HA.class "w--absolute w--rounded"
+                        , HA.class "w--inset-x-0 w--top-1/2"
+                        , HA.class "w--bg-tint"
+                        , HA.class "w--h-[0.25rem] -w--mt-[0.125rem]"
+                        ]
+                        []
+                    , -- Value Track Background
+                      H.div
+                        [ HA.class "w--absolute w--z-1 w--rounded"
+                        , HA.class "w--left-0 w--top-1/2"
+                        , HA.class "w--bg-default"
+                        , HA.class "w--h-[6px] -w--mt-[3px]"
+                        , HA.style "width" valueString
+                        ]
+                        []
+                    , -- Value Track
+                      H.div
+                        [ HA.class "w--absolute w--z-0 w--rounded"
+                        , HA.class "w--left-0 w--top-1/2"
+                        , HA.class "w--bg-current"
+                        , HA.class "w--opacity-[0.60]"
+                        , HA.class "w--h-[6px] -w--mt-[3px]"
+                        , HA.style "width" valueString
+                        ]
+                        []
+                    ]
+                , -- Thumb
+                  H.input
+                    [ HA.class "w--relative"
+                    , HA.class "w--slider w--appearance-none"
+                    , HA.class "w--bg-transparent"
+                    , HA.class "w--m-0"
+                    , HA.class "focus-visible:w--outline-0"
+                    , HA.type_ "range"
+                    , colorAttr
 
-                   -- This is a fallback since range elements will not respect read only attributes
-                   , HA.disabled (attrs.disabled || attrs.readOnly)
-                   , HA.readonly attrs.readOnly
+                    -- This is a fallback since range elements will not respect read only attributes
+                    , HA.disabled (attrs.disabled || attrs.readOnly)
+                    , HA.readonly attrs.readOnly
 
-                   --
-                   , HA.value <| String.fromFloat props.value
-                   , HA.min <| String.fromFloat props.min
-                   , HA.max <| String.fromFloat props.max
-                   , HA.step <| String.fromFloat props.step
-                   , HE.on "input"
+                    --
+                    , HA.value <| String.fromFloat props.value
+                    , HA.min <| String.fromFloat props.min
+                    , HA.max <| String.fromFloat props.max
+                    , HA.step <| String.fromFloat props.step
+                    , HE.on "input"
                         (D.at [ "target", "value" ] D.string
                             |> D.andThen
                                 (\v ->
@@ -204,7 +177,7 @@ view attrs_ props =
                                 )
                             |> D.map props.onInput
                         )
-                   ]
-            )
-            []
-        ]
+                    ]
+                    []
+                ]
+        )

@@ -1,17 +1,17 @@
 module W.InputFloat exposing
-    ( view
+    ( view, Attribute
     , init, toFloat, toString, Value
     , small, placeholder, mask, prefix, suffix
     , autofocus, disabled, readOnly
     , required, min, max, step, validation
     , viewWithValidation, errorToString, Error(..)
     , onEnter, onFocus, onBlur
-    , htmlAttrs, noAttr, Attribute
+    , id
     )
 
 {-|
 
-@docs view
+@docs view, Attribute
 
 
 # Value
@@ -46,10 +46,11 @@ module W.InputFloat exposing
 
 # Html
 
-@docs htmlAttrs, noAttr, Attribute
+@docs id
 
 -}
 
+import Attr
 import Html as H
 import Html.Attributes as HA
 import Html.Events as HE
@@ -136,12 +137,13 @@ errorToString error =
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
-    { disabled : Bool
+    { id : Maybe String
+    , disabled : Bool
     , readOnly : Bool
     , required : Bool
     , autofocus : Bool
@@ -157,18 +159,13 @@ type alias Attributes msg =
     , onFocus : Maybe msg
     , onBlur : Maybe msg
     , onEnter : Maybe msg
-    , htmlAttributes : List (H.Attribute msg)
     }
-
-
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
 
 
 defaultAttrs : Attributes msg
 defaultAttrs =
-    { disabled = False
+    { id = Nothing
+    , disabled = False
     , readOnly = False
     , required = False
     , autofocus = False
@@ -184,7 +181,6 @@ defaultAttrs =
     , onFocus = Nothing
     , onBlur = Nothing
     , onEnter = Nothing
-    , htmlAttributes = []
     }
 
 
@@ -193,111 +189,105 @@ defaultAttrs =
 
 
 {-| -}
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
+
+
+{-| -}
 placeholder : String -> Attribute msg
 placeholder v =
-    Attribute <| \attrs -> { attrs | placeholder = Just v }
+    Attr.attr (\attrs -> { attrs | placeholder = Just v })
 
 
 {-| -}
 mask : (String -> String) -> Attribute msg
 mask v =
-    Attribute <| \attrs -> { attrs | mask = Just v }
+    Attr.attr (\attrs -> { attrs | mask = Just v })
 
 
 {-| -}
 small : Attribute msg
 small =
-    Attribute <| \attrs -> { attrs | small = True }
+    Attr.attr (\attrs -> { attrs | small = True })
 
 
 {-| -}
 disabled : Bool -> Attribute msg
 disabled v =
-    Attribute <| \attrs -> { attrs | disabled = v }
+    Attr.attr (\attrs -> { attrs | disabled = v })
 
 
 {-| -}
 readOnly : Bool -> Attribute msg
 readOnly v =
-    Attribute <| \attrs -> { attrs | readOnly = v }
+    Attr.attr (\attrs -> { attrs | readOnly = v })
 
 
 {-| -}
 required : Bool -> Attribute msg
 required v =
-    Attribute <| \attrs -> { attrs | required = v }
+    Attr.attr (\attrs -> { attrs | required = v })
 
 
 {-| -}
 autofocus : Attribute msg
 autofocus =
-    Attribute <| \attrs -> { attrs | autofocus = True }
+    Attr.attr (\attrs -> { attrs | autofocus = True })
 
 
 {-| -}
 min : Float -> Attribute msg
 min v =
-    Attribute <| \attrs -> { attrs | min = Just v }
+    Attr.attr (\attrs -> { attrs | min = Just v })
 
 
 {-| -}
 max : Float -> Attribute msg
 max v =
-    Attribute <| \attrs -> { attrs | max = Just v }
+    Attr.attr (\attrs -> { attrs | max = Just v })
 
 
 {-| -}
 validation : (Maybe Float -> String -> Maybe String) -> Attribute msg
 validation v =
-    Attribute <| \attrs -> { attrs | validation = Just v }
+    Attr.attr (\attrs -> { attrs | validation = Just v })
 
 
 {-| -}
 step : Float -> Attribute msg
 step v =
-    Attribute <| \attrs -> { attrs | step = v }
+    Attr.attr (\attrs -> { attrs | step = v })
 
 
 {-| -}
 prefix : List (H.Html msg) -> Attribute msg
 prefix v =
-    Attribute <| \attrs -> { attrs | prefix = Just v }
+    Attr.attr (\attrs -> { attrs | prefix = Just v })
 
 
 {-| -}
 suffix : List (H.Html msg) -> Attribute msg
 suffix v =
-    Attribute <| \attrs -> { attrs | suffix = Just v }
+    Attr.attr (\attrs -> { attrs | suffix = Just v })
 
 
 {-| -}
 onBlur : msg -> Attribute msg
 onBlur v =
-    Attribute <| \attrs -> { attrs | onBlur = Just v }
+    Attr.attr (\attrs -> { attrs | onBlur = Just v })
 
 
 {-| -}
 onFocus : msg -> Attribute msg
 onFocus v =
-    Attribute <| \attrs -> { attrs | onFocus = Just v }
+    Attr.attr (\attrs -> { attrs | onFocus = Just v })
 
 
 {-| -}
 onEnter : msg -> Attribute msg
 onEnter v =
-    Attribute <| \attrs -> { attrs | onEnter = Just v }
-
-
-{-| -}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
-
-
-{-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+    Attr.attr (\attrs -> { attrs | onEnter = Just v })
 
 
 
@@ -307,23 +297,23 @@ noAttr =
 {-| -}
 baseAttrs : Attributes msg -> List (H.Attribute msg)
 baseAttrs attrs =
-    attrs.htmlAttributes
-        ++ [ HA.type_ "number"
-           , HA.class (W.Internal.Input.baseClass attrs.small)
-           , HA.required attrs.required
-           , HA.disabled attrs.disabled
-           , HA.readonly attrs.readOnly
-           , HA.autofocus attrs.autofocus
-           , WH.attrIf attrs.readOnly (HA.attribute "aria-readonly") "true"
-           , WH.attrIf attrs.disabled (HA.attribute "aria-disabled") "true"
-           , WH.maybeAttr HA.min (Maybe.map String.fromFloat attrs.min)
-           , WH.maybeAttr HA.max (Maybe.map String.fromFloat attrs.max)
-           , HA.step (String.fromFloat attrs.step)
-           , WH.maybeAttr HA.placeholder attrs.placeholder
-           , WH.maybeAttr HE.onFocus attrs.onFocus
-           , WH.maybeAttr HE.onBlur attrs.onBlur
-           , WH.maybeAttr WH.onEnter attrs.onEnter
-           ]
+    [ WH.maybeAttr HA.id attrs.id
+    , HA.type_ "number"
+    , HA.class (W.Internal.Input.baseClass attrs.small)
+    , HA.required attrs.required
+    , HA.disabled attrs.disabled
+    , HA.readonly attrs.readOnly
+    , HA.autofocus attrs.autofocus
+    , WH.attrIf attrs.readOnly (HA.attribute "aria-readonly") "true"
+    , WH.attrIf attrs.disabled (HA.attribute "aria-disabled") "true"
+    , WH.maybeAttr HA.min (Maybe.map String.fromFloat attrs.min)
+    , WH.maybeAttr HA.max (Maybe.map String.fromFloat attrs.max)
+    , HA.step (String.fromFloat attrs.step)
+    , WH.maybeAttr HA.placeholder attrs.placeholder
+    , WH.maybeAttr HE.onFocus attrs.onFocus
+    , WH.maybeAttr HE.onBlur attrs.onBlur
+    , WH.maybeAttr WH.onEnter attrs.onEnter
+    ]
 
 
 {-| -}
@@ -334,35 +324,34 @@ view :
         , onInput : Value -> msg
         }
     -> H.Html msg
-view attrs_ props =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
-
-        value : String
-        value =
-            toString props.value
-    in
-    W.Internal.Input.view
-        { small = attrs.small
-        , disabled = attrs.disabled
-        , readOnly = attrs.readOnly
-        , prefix = attrs.prefix
-        , suffix = attrs.suffix
-        , mask = attrs.mask
-        , maskInput = value
-        }
-        (H.input
-            (baseAttrs attrs
-                ++ [ HA.value value
-                   , HE.on "input"
-                        (D.at [ "target", "value" ] D.string
-                            |> D.map (props.onInput << toValue props.value)
-                        )
-                   ]
-            )
-            []
+view =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            let
+                value : String
+                value =
+                    toString props.value
+            in
+            W.Internal.Input.view
+                { small = attrs.small
+                , disabled = attrs.disabled
+                , readOnly = attrs.readOnly
+                , prefix = attrs.prefix
+                , suffix = attrs.suffix
+                , mask = attrs.mask
+                , maskInput = value
+                }
+                (H.input
+                    (baseAttrs attrs
+                        ++ [ HA.value value
+                           , HE.on "input"
+                                (D.at [ "target", "value" ] D.string
+                                    |> D.map (props.onInput << toValue props.value)
+                                )
+                           ]
+                    )
+                    []
+                )
         )
 
 
@@ -374,94 +363,93 @@ viewWithValidation :
         , onInput : Result (List Error) (Maybe Float) -> Value -> msg
         }
     -> H.Html msg
-viewWithValidation attrs_ props =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
+viewWithValidation =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            let
+                value : String
+                value =
+                    toString props.value
+            in
+            W.Internal.Input.view
+                { small = attrs.small
+                , disabled = attrs.disabled
+                , readOnly = attrs.readOnly
+                , prefix = attrs.prefix
+                , suffix = attrs.suffix
+                , mask = attrs.mask
+                , maskInput = value
+                }
+                (H.input
+                    (baseAttrs attrs
+                        ++ [ HA.value value
+                           , HE.on "input"
+                                (D.map5
+                                    (\( value_, valid ) rangeOverflow rangeUnderflow stepMismatch valueMissing ->
+                                        let
+                                            value__ : Value
+                                            value__ =
+                                                toValue props.value value_
 
-        value : String
-        value =
-            toString props.value
-    in
-    W.Internal.Input.view
-        { small = attrs.small
-        , disabled = attrs.disabled
-        , readOnly = attrs.readOnly
-        , prefix = attrs.prefix
-        , suffix = attrs.suffix
-        , mask = attrs.mask
-        , maskInput = value
-        }
-        (H.input
-            (baseAttrs attrs
-                ++ [ HA.value value
-                   , HE.on "input"
-                        (D.map5
-                            (\( value_, valid ) rangeOverflow rangeUnderflow stepMismatch valueMissing ->
-                                let
-                                    value__ : Value
-                                    value__ =
-                                        toValue props.value value_
+                                            customError : Maybe Error
+                                            customError =
+                                                attrs.validation
+                                                    |> Maybe.andThen (\fn -> fn (toFloat value__) value_)
+                                                    |> Maybe.map Custom
 
-                                    customError : Maybe Error
-                                    customError =
-                                        attrs.validation
-                                            |> Maybe.andThen (\fn -> fn (toFloat value__) value_)
-                                            |> Maybe.map Custom
+                                            result : Result (List Error) (Maybe Float)
+                                            result =
+                                                if valid && customError == Nothing then
+                                                    Ok (toFloat value__)
 
-                                    result : Result (List Error) (Maybe Float)
-                                    result =
-                                        if valid && customError == Nothing then
-                                            Ok (toFloat value__)
-
-                                        else
-                                            [ Just (ValueMissing "Please fill out this field.")
-                                                |> WH.keepIf valueMissing
-                                            , attrs.min
-                                                |> WH.keepIf rangeOverflow
-                                                |> Maybe.map
-                                                    (\min_ ->
-                                                        TooLow min_ ("Value must be greater than or equal to " ++ String.fromFloat min_)
-                                                    )
-                                            , attrs.max
-                                                |> WH.keepIf rangeUnderflow
-                                                |> Maybe.map
-                                                    (\max_ ->
-                                                        TooHigh max_ ("Value must be less than or equal to " ++ String.fromFloat max_)
-                                                    )
-                                            , Just attrs.step
-                                                |> WH.keepIf stepMismatch
-                                                |> Maybe.map2
-                                                    (\value___ step_ ->
-                                                        let
-                                                            ( f, c ) =
-                                                                WH.nearestFloats value___ attrs.step
-                                                                    |> Tuple.mapBoth (WH.formatFloat attrs.step) (WH.formatFloat attrs.step)
-                                                        in
-                                                        StepMismatch step_
-                                                            ("Please enter a valid value. The two nearest valid values are " ++ f ++ " and " ++ c)
-                                                    )
-                                                    (toFloat value__)
-                                            , customError
-                                            ]
-                                                |> List.filterMap identity
-                                                |> Err
-                                in
-                                props.onInput result value__
-                            )
-                            (D.map2 Tuple.pair
-                                (D.at [ "target", "value" ] D.string)
-                                (D.at [ "target", "validity", "valid" ] D.bool)
-                            )
-                            (D.at [ "target", "validity", "rangeOverflow" ] D.bool)
-                            (D.at [ "target", "validity", "rangeUnderflow" ] D.bool)
-                            (D.at [ "target", "validity", "stepMismatch" ] D.bool)
-                            (D.at [ "target", "validity", "valueMissing" ] D.bool)
-                        )
-                   ]
-            )
-            []
+                                                else
+                                                    [ Just (ValueMissing "Please fill out this field.")
+                                                        |> WH.keepIf valueMissing
+                                                    , attrs.min
+                                                        |> WH.keepIf rangeOverflow
+                                                        |> Maybe.map
+                                                            (\min_ ->
+                                                                TooLow min_ ("Value must be greater than or equal to " ++ String.fromFloat min_)
+                                                            )
+                                                    , attrs.max
+                                                        |> WH.keepIf rangeUnderflow
+                                                        |> Maybe.map
+                                                            (\max_ ->
+                                                                TooHigh max_ ("Value must be less than or equal to " ++ String.fromFloat max_)
+                                                            )
+                                                    , Just attrs.step
+                                                        |> WH.keepIf stepMismatch
+                                                        |> Maybe.map2
+                                                            (\value___ step_ ->
+                                                                let
+                                                                    ( f, c ) =
+                                                                        WH.nearestFloats value___ attrs.step
+                                                                            |> Tuple.mapBoth (WH.formatFloat attrs.step) (WH.formatFloat attrs.step)
+                                                                in
+                                                                StepMismatch step_
+                                                                    ("Please enter a valid value. The two nearest valid values are " ++ f ++ " and " ++ c)
+                                                            )
+                                                            (toFloat value__)
+                                                    , customError
+                                                    ]
+                                                        |> List.filterMap identity
+                                                        |> Err
+                                        in
+                                        props.onInput result value__
+                                    )
+                                    (D.map2 Tuple.pair
+                                        (D.at [ "target", "value" ] D.string)
+                                        (D.at [ "target", "validity", "valid" ] D.bool)
+                                    )
+                                    (D.at [ "target", "validity", "rangeOverflow" ] D.bool)
+                                    (D.at [ "target", "validity", "rangeUnderflow" ] D.bool)
+                                    (D.at [ "target", "validity", "stepMismatch" ] D.bool)
+                                    (D.at [ "target", "validity", "valueMissing" ] D.bool)
+                                )
+                           ]
+                    )
+                    []
+                )
         )
 
 

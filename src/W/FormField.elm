@@ -1,13 +1,12 @@
 module W.FormField exposing
-    ( view, hint
+    ( view, hint, Attribute
     , alignRight
     , padding, paddingX, paddingY, noPadding
-    , htmlAttrs, noAttr, Attribute
     )
 
 {-|
 
-@docs view, hint
+@docs view, hint, Attribute
 
 
 # Styles
@@ -19,13 +18,9 @@ module W.FormField exposing
 
 @docs padding, paddingX, paddingY, noPadding
 
-
-# Html
-
-@docs htmlAttrs, noAttr, Attribute
-
 -}
 
+import Attr
 import Html as H
 import Html.Attributes as HA
 import W.Internal.Helpers as WH
@@ -36,28 +31,21 @@ import W.Internal.Helpers as WH
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
     { alignRight : Bool
     , hint : Maybe (List (H.Html msg))
-    , htmlAttributes : List (H.Attribute msg)
     , padding : Maybe { x : Int, y : Int }
     }
-
-
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
 
 
 defaultAttrs : Attributes msg
 defaultAttrs =
     { alignRight = False
     , hint = Nothing
-    , htmlAttributes = []
     , padding = Just { x = 16, y = 16 }
     }
 
@@ -69,50 +57,38 @@ defaultAttrs =
 {-| -}
 alignRight : Bool -> Attribute msg
 alignRight v =
-    Attribute <| \attrs -> { attrs | alignRight = v }
+    Attr.attr (\attrs -> { attrs | alignRight = v })
 
 
 {-| Appears underneath the label.
 -}
 hint : List (H.Html msg) -> Attribute msg
 hint v =
-    Attribute <| \attrs -> { attrs | hint = Just v }
-
-
-{-| -}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
+    Attr.attr (\attrs -> { attrs | hint = Just v })
 
 
 {-| -}
 noPadding : Attribute msg
 noPadding =
-    Attribute <| \attrs -> { attrs | padding = Nothing }
+    Attr.attr (\attrs -> { attrs | padding = Nothing })
 
 
 {-| -}
 padding : Int -> Attribute msg
 padding v =
-    Attribute <| \attrs -> { attrs | padding = Just { x = v, y = v } }
+    Attr.attr (\attrs -> { attrs | padding = Just { x = v, y = v } })
 
 
 {-| -}
 paddingX : Int -> Attribute msg
 paddingX v =
-    Attribute <| \attrs -> { attrs | padding = Maybe.map (\p -> { p | x = v }) attrs.padding }
+    Attr.attr (\attrs -> { attrs | padding = Maybe.map (\p -> { p | x = v }) attrs.padding })
 
 
 {-| -}
 paddingY : Int -> Attribute msg
 paddingY v =
-    Attribute <| \attrs -> { attrs | padding = Maybe.map (\p -> { p | y = v }) attrs.padding }
-
-
-{-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+    Attr.attr (\attrs -> { attrs | padding = Maybe.map (\p -> { p | y = v }) attrs.padding })
 
 
 
@@ -127,47 +103,44 @@ view :
         , input : List (H.Html msg)
         }
     -> H.Html msg
-view attrs_ props =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
-    in
-    H.section
-        (HA.class "ew-bg-base-bg ew-font-base"
-            :: WH.maybeAttr (HA.style "padding" << WH.paddingXY) attrs.padding
-            :: attrs.htmlAttributes
-        )
-        (if attrs.alignRight then
-            [ H.div
-                [ HA.class "ew-flex ew-items-start" ]
-                [ H.div
-                    [ HA.class "ew-flex ew-flex-col ew-justify-center"
-                    , HA.class "ew-w-[40%]"
-                    , HA.class "ew-box-border ew-pr-4 ew-min-h-[50px]"
-                    ]
-                    [ H.h1 [ HA.class "ew-m-0 ew-font-normal ew-text-base ew-font-base ew-text-base-fg" ]
-                        props.label
-                    , attrs.hint
-                        |> Maybe.map (\f -> H.p [ HA.class "ew-m-0 ew-text-base-aux ew-text-sm ew-font-base ew-text-aux" ] f)
-                        |> Maybe.withDefault (H.text "")
-                    ]
-                , H.div
-                    [ HA.class "ew-w-[60%]" ]
-                    props.input
+view =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            H.section
+                [ HA.class "w--bg-base-bg w--font-base"
+                , WH.maybeAttr (HA.style "padding" << WH.paddingXY) attrs.padding
                 ]
-            ]
+                (if attrs.alignRight then
+                    [ H.div
+                        [ HA.class "w--flex w--items-start" ]
+                        [ H.div
+                            [ HA.class "w--flex w--flex-col w--justify-center"
+                            , HA.class "w--w-[40%]"
+                            , HA.class "w--box-border w--pr-md w--min-h-[50px]"
+                            ]
+                            [ H.h1 [ HA.class "w--m-0 w--font-normal w--text-base w--font-base w--text-default" ]
+                                props.label
+                            , attrs.hint
+                                |> Maybe.map (\f -> H.p [ HA.class "w--m-0 w--text-sm w--font-base w--text-subtle" ] f)
+                                |> Maybe.withDefault (H.text "")
+                            ]
+                        , H.div
+                            [ HA.class "w--w-[60%]" ]
+                            props.input
+                        ]
+                    ]
 
-         else
-            [ H.div
-                [ HA.class "ew-pb-2" ]
-                [ H.h1 [ HA.class "ew-m-0 ew-font-normal ew-text-sm ew-font-base ew-text-base-fg" ]
-                    props.label
-                , attrs.hint
-                    |> Maybe.map (\f -> H.p [ HA.class "ew-m-0 ew-text-base-aux ew-text-xs ew-font-base ew-text-aux" ] f)
-                    |> Maybe.withDefault (H.text "")
-                ]
-            , H.div []
-                props.input
-            ]
+                 else
+                    [ H.div
+                        [ HA.class "w--pb-ms" ]
+                        [ H.h1 [ HA.class "w--m-0 w--font-normal w--text-sm w--font-base w--text-default" ]
+                            props.label
+                        , attrs.hint
+                            |> Maybe.map (\f -> H.p [ HA.class "w--m-0 w--text-xs w--font-base w--text-subtle" ] f)
+                            |> Maybe.withDefault (H.text "")
+                        ]
+                    , H.div []
+                        props.input
+                    ]
+                )
         )

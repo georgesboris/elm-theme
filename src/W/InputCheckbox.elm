@@ -1,13 +1,12 @@
 module W.InputCheckbox exposing
-    ( view, viewReadOnly
+    ( view, viewReadOnly, Attribute
     , color, colorful, small, toggle
     , disabled, readOnly
-    , htmlAttrs, noAttr, Attribute
     )
 
 {-|
 
-@docs view, viewReadOnly
+@docs view, viewReadOnly, Attribute
 
 
 # Styles
@@ -19,17 +18,13 @@ module W.InputCheckbox exposing
 
 @docs disabled, readOnly
 
-
-# Html
-
-@docs htmlAttrs, noAttr, Attribute
-
 -}
 
+import Attr
 import Html as H
 import Html.Attributes as HA
 import Html.Events as HE
-import Theme
+import W.Theme
 
 
 
@@ -37,8 +32,8 @@ import Theme
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
@@ -48,7 +43,7 @@ type alias Attributes msg =
     , disabled : Bool
     , readOnly : Bool
     , style : Style
-    , htmlAttributes : List (H.Attribute msg)
+    , msg : Maybe msg
     }
 
 
@@ -57,20 +52,15 @@ type Style
     | Toggle
 
 
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
-
-
 defaultAttrs : Attributes msg
 defaultAttrs =
-    { color = Theme.primaryBackground
+    { color = W.Theme.primaryScale.solid
     , small = False
     , colorful = False
     , disabled = False
     , readOnly = False
     , style = Checkbox
-    , htmlAttributes = []
+    , msg = Nothing
     }
 
 
@@ -81,49 +71,37 @@ defaultAttrs =
 {-| -}
 color : String -> Attribute msg
 color v =
-    Attribute <| \attrs -> { attrs | color = v }
+    Attr.attr (\attrs -> { attrs | color = v })
 
 
 {-| -}
 small : Attribute msg
 small =
-    Attribute <| \attrs -> { attrs | small = True }
+    Attr.attr (\attrs -> { attrs | small = True })
 
 
 {-| -}
 colorful : Attribute msg
 colorful =
-    Attribute <| \attrs -> { attrs | colorful = True }
+    Attr.attr (\attrs -> { attrs | colorful = True })
 
 
 {-| -}
-disabled : Bool -> Attribute msg
-disabled v =
-    Attribute <| \attrs -> { attrs | disabled = v }
+disabled : Attribute msg
+disabled =
+    Attr.attr (\attrs -> { attrs | readOnly = True })
 
 
 {-| -}
-readOnly : Bool -> Attribute msg
-readOnly v =
-    Attribute <| \attrs -> { attrs | readOnly = v }
+readOnly : Attribute msg
+readOnly =
+    Attr.attr (\attrs -> { attrs | readOnly = True })
 
 
 {-| -}
 toggle : Attribute msg
 toggle =
-    Attribute <| \attrs -> { attrs | style = Toggle }
-
-
-{-| -}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
-
-
-{-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+    Attr.attr (\attrs -> { attrs | style = Toggle })
 
 
 
@@ -135,28 +113,34 @@ baseAttrs attrs_ value =
     let
         attrs : Attributes msg
         attrs =
-            applyAttrs attrs_
+            Attr.toAttrs defaultAttrs attrs_
     in
-    attrs.htmlAttributes
-        ++ [ HA.classList
-                [ ( "ew-toggle", attrs.style == Toggle )
-                , ( "ew-checkbox ew-rounded before:ew-rounded-sm", attrs.style == Checkbox )
-                , ( "ew-small", attrs.small )
-                , ( "ew-colorful", attrs.colorful )
-                ]
-           , Theme.stylesIf
-                [ ( "color", attrs.color, not attrs.disabled )
-                , ( "color", Theme.baseAux, attrs.disabled )
-                , ( "--fg-color", Theme.baseBackground, True )
-                ]
-           , HA.type_ "checkbox"
-           , HA.checked value
+    [ HA.class "w/focus"
+    , HA.classList
+        [ ( "w--toggle", attrs.style == Toggle )
+        , ( "w--checkbox w--rounded before:w--rounded", attrs.style == Checkbox )
+        , ( "w--small", attrs.small )
+        , ( "w--colorful", attrs.colorful )
+        , ( "w--pointer-events-none", attrs.readOnly )
+        ]
+    , W.Theme.styleList
+        [ ( "--bg", W.Theme.color.bg )
+        , ( "--fg"
+          , if attrs.disabled then
+                W.Theme.color.textSubtle
 
-           -- We also disable the checkbox plugin when it is readonly
-           -- Since this property is not currently respected for checkboxes
-           , HA.disabled (attrs.disabled || attrs.readOnly)
-           , HA.readonly attrs.readOnly
-           ]
+            else
+                attrs.color
+          )
+        ]
+    , HA.type_ "checkbox"
+    , HA.checked value
+
+    -- We also disable the checkbox plugin when it is readonly
+    -- Since this property is not currently respected for checkboxes
+    , HA.disabled (attrs.disabled || attrs.readOnly)
+    , HA.readonly attrs.readOnly
+    ]
 
 
 {-| -}
@@ -177,5 +161,5 @@ viewReadOnly :
     -> H.Html msg
 viewReadOnly attrs_ value =
     H.input
-        (baseAttrs (readOnly True :: attrs_) value)
+        (baseAttrs (readOnly :: attrs_) value)
         []

@@ -11,6 +11,7 @@ import Html.Attributes as HA
 import W.Box
 import W.Heading
 import W.Spacing
+import W.Theme
 
 
 viewChapter : Book.Page msg -> H.Html msg
@@ -31,8 +32,7 @@ viewChapter c =
 
 viewExample : ( String, List (H.Html msg) ) -> H.Html msg
 viewExample ( label, content ) =
-    W.Box.view
-        []
+    W.Box.view []
         [ W.Heading.view
             [ W.Heading.extraSmall ]
             [ H.text label ]
@@ -42,6 +42,7 @@ viewExample ( label, content ) =
             , W.Box.borderSubtle
             , W.Box.shadow
             , W.Box.padding W.Spacing.sm
+            , W.Box.background W.Theme.color.bg
             ]
             content
         ]

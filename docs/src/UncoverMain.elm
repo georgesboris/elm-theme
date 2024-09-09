@@ -7,7 +7,6 @@ import Browser.Dom
 import Browser.Navigation
 import Docs.Avatar
 import Docs.Badge
-import Docs.Box
 import Docs.Button
 import Docs.Colors
 import Docs.DataRow
@@ -16,19 +15,13 @@ import Docs.FormField
 import Docs.InputCheckbox
 import Docs.InputCode
 import Docs.InputColor
-import Docs.InputDate
-import Docs.InputFloat
-import Docs.InputInt
 import Docs.InputRadio
 import Docs.InputSelect
 import Docs.InputSlider
-import Docs.InputText
 import Docs.InputTextArea
-import Docs.InputTime
 import Docs.Loading
 import Docs.Menu
 import Docs.Message
-import Docs.Modal
 import Docs.Nav
 import Docs.Notification
 import Docs.Pagination
@@ -43,6 +36,7 @@ import Docs.Typography
 import Html as H
 import Html.Attributes as HA
 import Task
+import UncoverTheme
 import Url
 import W.Box
 import W.Button
@@ -58,60 +52,117 @@ main =
     let
         theme : W.Theme.Theme
         theme =
+            -- UncoverTheme.darkTheme
             W.Theme.darkTheme
 
-        -- W.Theme.lightTheme
         book : Book.Book Book.Msg
         book =
-            Book.book "elm-widgets"
-                [ Book.chapter "Core"
-                    [ Docs.Typography.view
+            Book.book "Fractal"
+                [ Book.chapter "Foundation"
+                    [ Book.pageWithExamples "Brand" []
                     , Docs.Colors.view theme
+                    , Docs.Typography.view
                     , Docs.Spacing.view
+                    ]
+                , Book.chapter "Core"
+                    [ Book.pageWithExamples "Heading" []
+                    , Book.pageWithExamples "Label" []
+                    , Book.pageWithExamples "Text" []
                     , Docs.Button.view
                     ]
-                , Book.chapter "Layout"
-                    [ Docs.Box.view
-                    , Docs.DataRow.view
-                    , Docs.Menu.view
-                    , Docs.Divider.view
-                    ]
-                , Book.chapter "Tables & Lists"
-                    [ Book.pageWithExamples "Breadcrumbs" []
-                    , Book.pageWithExamples "DataList" []
+                , Book.chapter "Data Visualization"
+                    [ Book.pageWithExamples "TimeSeries" []
+                    , Book.pageWithExamples "Big Numbers" []
+                    , Book.pageWithExamples "Deltas" []
                     , Docs.Table.view
-                    , Docs.Pagination.view
                     ]
-                , Book.chapter "Info & Feedback"
-                    [ Docs.Avatar.view
-                    , Docs.Badge.view
+                , Book.chapter "Feedback"
+                    [ Docs.Badge.view
                     , Docs.Loading.view
                     , Docs.Skeleton.view
                     , Docs.Message.view
                     , Docs.Notification.view
-                    , Docs.Tag.view
                     ]
-                , Book.chapter "Overlays"
-                    [ Docs.Modal.view
+                , Book.chapter "Layout"
+                    [ Book.pageWithExamples "Box" []
+                    , Book.pageWithExamples "Modal" []
+                    , Docs.Divider.view
+                    ]
+                , Book.chapter "Navigation"
+                    [ Docs.Menu.view
                     , Docs.Popover.view
+                    , Docs.Pagination.view
+                    , Book.pageWithExamples "Breadcrumbs" []
+                    ]
+                , Book.chapter "Information"
+                    [ Docs.Avatar.view
+                    , Docs.DataRow.view
+                    , Book.pageWithExamples "DataList" []
+                    , Book.pageWithExamples "Icon" []
+                    , Docs.Tag.view
+                    , Book.pageWithExamples "Tag - Delta" []
                     , Docs.Tooltip.view
                     ]
-                , Book.chapter "Forms & Inputs"
+                , Book.chapter "Forms"
                     [ Book.pageWithExamples "Form" []
                     , Docs.FormField.view
-                    , Docs.InputText.view
-                    , Docs.InputTextArea.view
-                    , Docs.InputInt.view
-                    , Docs.InputFloat.view
-                    , Docs.InputDate.view
-                    , Docs.InputTime.view
+                    , Book.pageWithExamples "Dynamic Form" []
+                    ]
+                , Book.chapter "Form Inputs"
+                    [ Book.pageWithExamples "Input Autocomplete" []
                     , Docs.InputCheckbox.view
+                    , Docs.InputCode.view
+                    , Docs.InputColor.view
+                    , Book.pageWithExamples "Input Date" []
+                    , Book.pageWithExamples "Input Int" []
+                    , Book.pageWithExamples "Input Float" []
                     , Docs.InputRadio.view
                     , Docs.InputSelect.view
                     , Docs.InputSlider.view
-                    , Docs.InputCode.view
-                    , Docs.InputColor.view
+                    , Book.pageWithExamples "Input Text" []
+                    , Docs.InputTextArea.view
+                    , Book.pageWithExamples "Input Time" []
                     ]
+                , Book.chapter "Guided Journeys"
+                    [ Book.pageWithExamples "Wizard" []
+                    , Book.pageWithExamples "WizardSteps" []
+                    , Book.pageWithExamples "StepByStep" []
+                    ]
+                , Book.bookRefGroup "User Journeys"
+                    [ ( "Hub & Pages", hubBook )
+                    , ( "Reports & Blocks", reportsBook )
+                    , ( "Genesis", genesisBook )
+                    , ( "Harmonization", harmonizationBook )
+                    ]
+                ]
+
+        hubBook : Book.Book Book.Msg
+        hubBook =
+            Book.book "Hub & Pages"
+                [ Book.bookChapter (Book.pageWithExamples "Page Header" [])
+                , Book.bookChapter (Book.pageWithExamples "Hub Navigation" [])
+                ]
+
+        reportsBook : Book.Book Book.Msg
+        reportsBook =
+            Book.book "Reports & Blocks"
+                [ Book.bookChapter (Book.pageWithExamples "Block Header" [])
+                , Book.bookChapter (Book.pageWithExamples "BlockList Actions" [])
+                , Book.bookChapter (Book.pageWithExamples "Report Navigation" [])
+                ]
+
+        genesisBook : Book.Book Book.Msg
+        genesisBook =
+            Book.book "Genesis"
+                [ Book.bookChapter (Book.pageWithExamples "Dynamic Form" [])
+                , Book.bookChapter (Book.pageWithExamples "ConnectionList" [])
+                ]
+
+        harmonizationBook : Book.Book Book.Msg
+        harmonizationBook =
+            Book.book "Harmonization"
+                [ Book.bookChapter (Book.pageWithExamples "Qualifier Parser" [])
+                , Book.bookChapter (Book.pageWithExamples "Value Parser" [])
                 ]
     in
     Browser.application
@@ -222,6 +273,12 @@ subscriptions _ =
 view : Book.Book Msg -> Model -> Browser.Document Msg
 view book model =
     let
+        themes : List ( String, W.Theme.Theme )
+        themes =
+            [ ( "light", UncoverTheme.lightTheme )
+            , ( "dark", UncoverTheme.darkTheme )
+            ]
+
         route : Book.Route.Route Msg
         route =
             case Book.Route.fromUrl model.url book of
@@ -242,6 +299,20 @@ view book model =
             , darkMode = Nothing
             }
 
+        -- Class Themes
+        , H.div
+            []
+            (themes
+                |> List.map
+                    (\( themeClass, themeDef ) ->
+                        W.Theme.classTheme
+                            { theme = themeDef
+                            , class = themeClass
+                            , darkMode = Nothing
+                            }
+                    )
+            )
+
         -- Main Layout
         , W.Box.view
             [ W.Box.flex [ W.Box.yTop ]
@@ -249,14 +320,11 @@ view book model =
             [ W.Box.view
                 [ W.Box.sticky
                 , W.Box.heightScreen
-                , W.Box.widthCustom (W.Sizing.toCSS W.Sizing.full)
-                , W.Box.maxWidth W.Sizing.sm
+                , W.Box.widthCustom (W.Sizing.toCSS W.Sizing.sm)
                 , W.Box.background W.Theme.color.bg
                 ]
                 [ H.nav
-                    [ HA.class "w--absolute w--inset-0 w--overflow-x-hidden w--overflow-y-auto w--border-0 w--border-solid w--border-r w--border-accent"
-                    , HA.class "w--flex w--items-stretch w--justify-stretch"
-                    ]
+                    [ HA.class "w--absolute w--inset-0 w--overflow-x-hidden w--overflow-y-auto w--border-0 w--border-solid w--border-r w--border-accent" ]
                     [ Docs.Nav.view
                         { url = model.url
                         , rootBook = book
@@ -268,11 +336,11 @@ view book model =
                                 ]
                                 { label = [ H.text "T" ]
                                 , onClick =
-                                    if model.theme == W.Theme.lightTheme then
-                                        SetTheme W.Theme.darkTheme
+                                    if model.theme == UncoverTheme.lightTheme then
+                                        SetTheme UncoverTheme.darkTheme
 
                                     else
-                                        SetTheme W.Theme.lightTheme
+                                        SetTheme UncoverTheme.lightTheme
                                 }
                             ]
                         }
@@ -281,29 +349,24 @@ view book model =
             , W.Box.view
                 [ W.Box.grow
                 , W.Box.relative
-                , W.Box.flex [ W.Box.xCenter ]
+                , W.Box.background W.Theme.color.bgSubtle
                 ]
-                [ W.Box.view
-                    [ W.Box.widthFull
-                    , W.Box.maxWidth W.Sizing.xl2
-                    ]
-                    [ case Book.Route.page route of
-                        Just c ->
-                            H.div
-                                []
-                                [ W.Box.view
-                                    [ W.Box.padding W.Spacing.md ]
-                                    [ W.Heading.view [] [ H.text (Book.pageName c) ] ]
-                                , W.Box.view
-                                    [ W.Box.padding W.Spacing.md
-                                    , W.Box.gap W.Spacing.xl
-                                    ]
-                                    (Book.pageContent c)
+                [ case Book.Route.page route of
+                    Just c ->
+                        H.div
+                            []
+                            [ W.Box.view
+                                [ W.Box.padding W.Spacing.md ]
+                                [ W.Heading.view [] [ H.text (Book.pageName c) ] ]
+                            , W.Box.view
+                                [ W.Box.padding W.Spacing.md
+                                , W.Box.gap W.Spacing.xl
                                 ]
+                                (Book.pageContent c)
+                            ]
 
-                        Nothing ->
-                            Docs.Showcase.view book
-                    ]
+                    Nothing ->
+                        Docs.Showcase.view book
                 ]
             ]
         ]

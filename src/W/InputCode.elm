@@ -1,12 +1,12 @@
 module W.InputCode exposing
-    ( view
+    ( view, Attribute
     , hiddenCharacters, uppercase
-    , htmlAttrs, noAttr, Attribute
+    , id
     )
 
 {-|
 
-@docs view
+@docs view, Attribute
 
 
 # Styles
@@ -16,11 +16,12 @@ module W.InputCode exposing
 
 # Html
 
-@docs htmlAttrs, noAttr, Attribute
+@docs id
 
 -}
 
 import Array exposing (Array)
+import Attr
 import Html as H
 import Html.Attributes as HA
 import Html.Events as HE
@@ -31,28 +32,25 @@ import Html.Events as HE
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
-    { uppercase : Bool
+    { id : Maybe String
+    , uppercase : Bool
     , hiddenCharacters : Bool
-    , htmlAttributes : List (H.Attribute msg)
+    , msg : Maybe msg
     }
 
 
 defaultAttrs : Attributes msg
 defaultAttrs =
-    { uppercase = False
+    { id = Nothing
+    , uppercase = False
     , hiddenCharacters = False
-    , htmlAttributes = []
+    , msg = Nothing
     }
-
-
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
 
 
 
@@ -60,28 +58,21 @@ applyAttrs attrs =
 
 
 {-| -}
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
+
+
+{-| -}
 uppercase : Attribute msg
 uppercase =
-    Attribute (\attrs -> { attrs | uppercase = True })
+    Attr.attr (\attrs -> { attrs | uppercase = True })
 
 
 {-| -}
 hiddenCharacters : Attribute msg
 hiddenCharacters =
-    Attribute (\attrs -> { attrs | hiddenCharacters = True })
-
-
-{-| Applied to the hidden input field.
--}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
-
-
-{-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+    Attr.attr (\attrs -> { attrs | hiddenCharacters = True })
 
 
 
@@ -97,35 +88,32 @@ view :
         , onInput : String -> msg
         }
     -> H.Html msg
-view attrs_ props =
-    if props.length <= 0 then
-        H.div [] []
+view =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            if props.length <= 0 then
+                H.div [] []
 
-    else
-        let
-            attrs : Attributes msg
-            attrs =
-                applyAttrs attrs_
+            else
+                let
+                    valueLetters : Array String
+                    valueLetters =
+                        props.value
+                            |> String.split ""
+                            |> List.take props.length
+                            |> Array.fromList
 
-            valueLetters : Array String
-            valueLetters =
-                props.value
-                    |> String.split ""
-                    |> List.take props.length
-                    |> Array.fromList
-
-            activeIndex : Int
-            activeIndex =
-                Array.length valueLetters
-        in
-        H.label
-            [ HA.class "ew-group/ew" ]
-            [ H.input
-                (attrs.htmlAttributes
-                    ++ [ HA.class "ew-h-0 ew-p-0 ew-m-0 ew-border-0 ew-opacity-0"
-                       , HA.value props.value
-                       , HE.onFocus (props.onInput "")
-                       , HE.onInput
+                    activeIndex : Int
+                    activeIndex =
+                        Array.length valueLetters
+                in
+                H.label
+                    [ HA.class "w--group/w" ]
+                    [ H.input
+                        [ HA.class "w--h-0 w--p-0 w--m-0 w--border-0 w--opacity-0"
+                        , HA.value props.value
+                        , HE.onFocus (props.onInput "")
+                        , HE.onInput
                             (\v ->
                                 let
                                     value : String
@@ -141,38 +129,38 @@ view attrs_ props =
                                     value
                                         |> props.onInput
                             )
-                       ]
-                )
-                []
-            , H.div
-                [ HA.class "ew-flex ew-gap-2" ]
-                ((props.length - 1)
-                    |> List.range 0
-                    |> List.map
-                        (\index ->
-                            H.div
-                                [ HA.class "ew-border-solid ew-border-base-aux/30 ew-border-2"
-                                , HA.class "ew-w-10 ew-h-14 ew-rounded-md"
-                                , HA.class "ew-flex ew-items-center ew-justify-center"
-                                , HA.class "ew-font-heading ew-text-3xl ew-text-base-fg"
-                                , HA.classList
-                                    [ ( "group-focus-within/ew:ew-border-base-fg"
-                                      , index == activeIndex
-                                      )
-                                    ]
-                                ]
-                                [ Array.get index valueLetters
-                                    |> Maybe.map
-                                        (\c ->
-                                            if attrs.hiddenCharacters then
-                                                "*"
+                        ]
+                        []
+                    , H.div
+                        [ HA.class "w--flex w--gap-md" ]
+                        ((props.length - 1)
+                            |> List.range 0
+                            |> List.map
+                                (\index ->
+                                    H.div
+                                        [ HA.class "w--border-solid w--border-accent w--border-2"
+                                        , HA.class "w--w-[2.5rem] w--h-[3.5rem] w--rounded-md"
+                                        , HA.class "w--flex w--items-center w--justify-center"
+                                        , HA.class "w--font-heading w--text-3xl w--text-default"
+                                        , HA.classList
+                                            [ ( "group-focus-within/w:w--border-accent-strong"
+                                              , index == activeIndex
+                                              )
+                                            ]
+                                        ]
+                                        [ Array.get index valueLetters
+                                            |> Maybe.map
+                                                (\c ->
+                                                    if attrs.hiddenCharacters then
+                                                        "*"
 
-                                            else
-                                                c
-                                        )
-                                    |> Maybe.withDefault ""
-                                    |> H.text
-                                ]
+                                                    else
+                                                        c
+                                                )
+                                            |> Maybe.withDefault ""
+                                            |> H.text
+                                        ]
+                                )
                         )
-                )
-            ]
+                    ]
+        )

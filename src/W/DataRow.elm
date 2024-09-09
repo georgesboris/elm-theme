@@ -1,4 +1,10 @@
-module W.DataRow exposing (Attribute, gap, padding, view, viewExtra)
+module W.DataRow exposing
+    ( Attribute
+    , gap
+    , padding
+    , view
+    , viewExtra
+    )
 
 import Attr
 import Html as H
@@ -88,8 +94,7 @@ viewExtra =
     Attr.withAttrs defaultAttrs
         (\attrs props ->
             W.Box.view
-                [ W.Box.background W.Theme.color.bgSubtle
-                , W.Box.flex []
+                [ W.Box.flex []
                 , W.Box.styles
                     [ ( "padding", W.Spacing.toCSS attrs.padding )
                     , ( "gap", W.Spacing.toCSS attrs.gap )

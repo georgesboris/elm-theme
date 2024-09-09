@@ -1,12 +1,13 @@
 module W.InputColor exposing
-    ( view, viewReadOnly
+    ( view, viewReadOnly, Attribute
     , disabled, readOnly
-    , htmlAttrs, noAttr, Attribute
+    , small, rounded
+    , id
     )
 
 {-|
 
-@docs view, viewReadOnly
+@docs view, viewReadOnly, Attribute
 
 
 # States
@@ -14,17 +15,24 @@ module W.InputColor exposing
 @docs disabled, readOnly
 
 
+# Styles
+
+@docs small, size, rounded
+
+
 # Html
 
-@docs htmlAttrs, noAttr, Attribute
+@docs id
 
 -}
 
+import Attr
 import Color
 import Html as H
 import Html.Attributes as HA
 import Html.Events as HE
 import W.Internal.Color
+import W.Internal.Helpers as WH
 
 
 
@@ -32,27 +40,28 @@ import W.Internal.Color
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
-    { disabled : Bool
+    { id : Maybe String
+    , small : Bool
+    , rounded : Bool
+    , disabled : Bool
     , readOnly : Bool
-    , htmlAttributes : List (H.Attribute msg)
+    , msg : Maybe msg
     }
-
-
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
 
 
 defaultAttrs : Attributes msg
 defaultAttrs =
-    { disabled = False
+    { id = Nothing
+    , small = False
+    , rounded = False
+    , disabled = False
     , readOnly = False
-    , htmlAttributes = []
+    , msg = Nothing
     }
 
 
@@ -61,57 +70,37 @@ defaultAttrs =
 
 
 {-| -}
-disabled : Bool -> Attribute msg
-disabled v =
-    Attribute <| \attrs -> { attrs | disabled = v }
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
 
 
 {-| -}
-readOnly : Bool -> Attribute msg
-readOnly v =
-    Attribute <| \attrs -> { attrs | readOnly = v }
+disabled : Attribute msg
+disabled =
+    Attr.attr (\attrs -> { attrs | disabled = True })
 
 
 {-| -}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
+readOnly : Attribute msg
+readOnly =
+    Attr.attr (\attrs -> { attrs | readOnly = True })
 
 
 {-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+small : Attribute msg
+small =
+    Attr.attr (\attrs -> { attrs | small = True })
+
+
+{-| -}
+rounded : Attribute msg
+rounded =
+    Attr.attr (\attrs -> { attrs | rounded = True })
 
 
 
 -- Main
-
-
-baseAttrs : List (Attribute msg) -> Color.Color -> List (H.Attribute msg)
-baseAttrs attrs_ value =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
-
-        hexColor : String
-        hexColor =
-            W.Internal.Color.toHex value
-    in
-    attrs.htmlAttributes
-        ++ [ HA.class "ew-input-color ew-appearance-none"
-           , HA.class "ew-shadow"
-           , HA.class "ew-rounded-full ew-h-8 ew-w-8 ew-bg-white ew-border-0"
-           , HA.class "before:ew-content-[''] before:ew-block"
-           , HA.class "before:ew-bg-current before:ew-rounded-full"
-           , HA.class "ew-relative before:ew-absolute before:ew-inset-1"
-           , HA.style "color" hexColor
-           , HA.type_ "color"
-           , HA.value hexColor
-           , HA.disabled (attrs.disabled || attrs.readOnly)
-           , HA.readonly attrs.readOnly
-           ]
 
 
 {-| -}
@@ -119,10 +108,10 @@ view :
     List (Attribute msg)
     -> { value : Color.Color, onInput : Color.Color -> msg }
     -> H.Html msg
-view attrs_ props =
-    H.input
-        (HE.onInput (props.onInput << W.Internal.Color.fromHex) :: baseAttrs attrs_ props.value)
-        []
+view attrs props =
+    view_ [ HE.onInput (props.onInput << W.Internal.Color.fromHex) ]
+        attrs
+        props.value
 
 
 {-| -}
@@ -130,7 +119,37 @@ viewReadOnly :
     List (Attribute msg)
     -> Color.Color
     -> H.Html msg
-viewReadOnly attrs_ value =
-    H.input
-        (baseAttrs (readOnly True :: attrs_) value)
-        []
+viewReadOnly attrs value =
+    view_ [] (readOnly :: attrs) value
+
+
+view_ : List (H.Attribute msg) -> List (Attribute msg) -> Color.Color -> H.Html msg
+view_ htmlAttrs =
+    Attr.withAttrs defaultAttrs
+        (\attrs value ->
+            let
+                hexColor : String
+                hexColor =
+                    W.Internal.Color.toHex value
+            in
+            H.div
+                [ HA.class "w--inline-flex w--input-color"
+                , HA.classList
+                    [ ( "w--is-small", attrs.small )
+                    , ( "w--is-rounded", attrs.rounded )
+                    ]
+                , HA.style "color" hexColor
+                ]
+                [ H.input
+                    (htmlAttrs
+                        ++ [ WH.maybeAttr HA.id attrs.id
+                           , HA.class "w/focus w--input"
+                           , HA.type_ "color"
+                           , HA.value hexColor
+                           , HA.disabled (attrs.disabled || attrs.readOnly)
+                           , HA.readonly attrs.readOnly
+                           ]
+                    )
+                    []
+                ]
+        )

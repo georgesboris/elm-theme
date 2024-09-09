@@ -7,6 +7,7 @@ module W.Internal.Input exposing
 
 import Html as H
 import Html.Attributes as HA
+import W.Internal.Helpers as WH
 
 
 view :
@@ -22,15 +23,13 @@ view :
     -> H.Html msg
 view attrs input =
     H.label
-        [ HA.class "w--input w--bg-base-bg"
+        [ HA.class "w--input w--bg-bg-color"
         , HA.class "w--flex w--items-stretch"
-        , HA.class "w--box-border w--border w--border-solid w--border-base-aux/30 w--rounded"
-        , HA.class "w--font-base w--text-base-fg"
+        , HA.class "w--box-border w--rounded"
+        , HA.class "w--font-base w--text-default"
         , HA.class "w--transition"
-        , HA.class "w--ring-offset-0 w--ring-primary-fg/50"
         , HA.classList
-            [ ( "focus-within:w--ring focus-within:w--border-primary-fg", not attrs.readOnly )
-            , ( "w--text-base", not attrs.small )
+            [ ( "w--text-base", not attrs.small )
             , ( "w--text-sm", attrs.small )
             ]
         ]
@@ -47,40 +46,40 @@ view attrs input =
         , H.div
             [ HA.class "w--grow w--relative"
             , HA.class "w--flex w--items-stretch w--group"
-            , HA.class "w--rounded"
             , HA.classList
-                [ ( "w--text-transparent focus-within:w--text-base-fg", attrs.mask /= Nothing )
-                , ( "w--text-base-fg", attrs.mask == Nothing )
+                [ ( "w--text-transparent focus-within:w--text-default", attrs.mask /= Nothing )
+                , ( "w--text-default", attrs.mask == Nothing )
                 , ( "w--min-h-[32px]", attrs.small )
                 , ( "w--min-h-[48px]", not attrs.small )
                 ]
             , if attrs.readOnly then
-                HA.class "w--bg-base-aux/[0.07] focus-within:w--bg-base-aux/10"
+                HA.class "w--bg-tint-subtle focus-within:w--bg-tint-subtle"
 
               else if attrs.disabled then
-                HA.class "w--bg-base-aux/30"
+                HA.class "w--bg-tint"
 
               else
-                HA.class "w--bg-base-aux/[0.07] focus-within:w--bg-base-bg"
+                HA.class "w--bg-tint-subtle focus-within:w--bg-bg-color"
             ]
             [ input
             , attrs.mask
+                |> WH.maybeFilter (\_ -> attrs.maskInput /= "")
                 |> Maybe.map
-                    (\f ->
+                    (\maskFn ->
                         H.div
-                            [ HA.class "w--absolute w--z-10 w--inset-x-3 w--inset-y-0"
+                            [ HA.class "w--absolute w--z-10 w--inset-x-md w--inset-y-0"
                             , HA.class "w--flex w--items-center"
                             , HA.class "w--pointer-events-none"
                             ]
                             [ H.div
-                                [ HA.class "w--text-base-fg"
+                                [ HA.class "w--text-default"
                                 , HA.class "group-focus-within:w--relative w--top-[28px]"
                                 , HA.class "group-focus-within:w--text-sm"
-                                , HA.class "group-focus-within:w--px-2 group-focus-within:w--leading-relaxed group-focus-within:w--rounded"
-                                , HA.class "group-focus-within:w--bg-neutral-bg group-focus-within:w--text-neutral-aux"
+                                , HA.class "group-focus-within:w--px-sm group-focus-within:w--leading-relaxed group-focus-within:w--rounded"
+                                , HA.class "group-focus-within:w--bg-tint-subtle group-focus-within:w--text-subtle"
                                 , HA.attribute "aria-label" "formatted input"
                                 ]
-                                [ H.text (f attrs.maskInput) ]
+                                [ H.text (maskFn attrs.maskInput) ]
                             ]
                     )
                 |> Maybe.withDefault (H.text "")
@@ -123,8 +122,8 @@ prefixSuffixClass : H.Attribute msg
 prefixSuffixClass =
     HA.class <|
         "w--flex w--items-center w--justify-center w--box-border"
-            ++ " w--border-0 w--border-solid w--border-base-aux/30"
-            ++ " w--p-2 w--min-w-[48px] w--self-stretch"
+            ++ " w--border-0 w--border-solid w--border-accent"
+            ++ " w--p-sm w--min-w-[48px] w--self-stretch"
             ++ " w--text-base-aux"
 
 
@@ -137,10 +136,10 @@ baseClassNoColor : Bool -> String
 baseClassNoColor small =
     "w--appearance-none"
         ++ " w--w-full"
-        ++ " w--py-2 w--px-3 w--box-border"
+        ++ " w--py-sm w--px-md w--box-border"
         ++ " w--border-0 w--outline-0"
         ++ " w--font-base w--leading-none"
-        ++ " w--placeholder-base-aux/80"
+        ++ " w--placeholder-subtle"
         ++ " w--bg-transparent"
         ++ " focus:w--outline-none focus:w--shadow-none"
         ++ (if small then
@@ -154,9 +153,9 @@ baseClassNoColor small =
 iconWrapper : String -> H.Html msg -> H.Html msg
 iconWrapper class child =
     H.div
-        [ HA.class "w--input-icon w--absolute w--w-10 w--inset-y-1 w--right-1"
+        [ HA.class "w--input-icon w--absolute w--w-10 w--top-1/2 w--right-[0.75rem] -w--translate-y-1/2"
         , HA.class "w--pointer-events-none w--flex w--items-center w--justify-center"
-        , HA.class "w--bg-base-bg"
+        , HA.class "w--bg-base-bg w--text-subtle"
         , HA.class "before:w--block before:w--content-['']"
         , HA.class "before:w--inset-0 before:w--absolute"
         , HA.class class

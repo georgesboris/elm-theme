@@ -1,4 +1,4 @@
-module Docs.Layout exposing (view)
+module Docs.Box exposing (view)
 
 import Book
 import Html as H
@@ -9,7 +9,7 @@ import W.Theme
 
 view : Book.Page msg
 view =
-    Book.pageWithExamples "Layout"
+    Book.pageWithExamples "Box"
         [ ( "Flex"
           , [ W.Box.view
                 [ W.Box.gap W.Spacing.xs

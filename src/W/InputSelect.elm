@@ -1,13 +1,13 @@
 module W.InputSelect exposing
-    ( view, viewGroups, viewOptional, viewGroupsOptional
+    ( view, viewGroups, viewOptional, viewGroupsOptional, Attribute
     , autofocus, disabled, readOnly
     , small, prefix, suffix
-    , htmlAttrs, noAttr, Attribute
+    , id
     )
 
 {-|
 
-@docs view, viewGroups, viewOptional, viewGroupsOptional
+@docs view, viewGroups, viewOptional, viewGroupsOptional, Attribute
 
 
 # States
@@ -22,10 +22,11 @@ module W.InputSelect exposing
 
 # Html
 
-@docs htmlAttrs, noAttr, Attribute
+@docs id
 
 -}
 
+import Attr
 import Dict exposing (Dict)
 import Html as H
 import Html.Attributes as HA
@@ -40,35 +41,30 @@ import W.Internal.Input
 
 
 {-| -}
-type Attribute msg
-    = Attribute (Attributes msg -> Attributes msg)
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
 type alias Attributes msg =
-    { disabled : Bool
+    { id : Maybe String
+    , disabled : Bool
     , readOnly : Bool
     , small : Bool
     , autofocus : Bool
     , prefix : Maybe (List (H.Html msg))
     , suffix : Maybe (List (H.Html msg))
-    , htmlAttributes : List (H.Attribute msg)
     }
-
-
-applyAttrs : List (Attribute msg) -> Attributes msg
-applyAttrs attrs =
-    List.foldl (\(Attribute fn) a -> fn a) defaultAttrs attrs
 
 
 defaultAttrs : Attributes msg
 defaultAttrs =
-    { disabled = False
+    { id = Nothing
+    , disabled = False
     , readOnly = False
     , autofocus = False
     , small = False
     , prefix = Nothing
     , suffix = Nothing
-    , htmlAttributes = []
     }
 
 
@@ -77,52 +73,45 @@ defaultAttrs =
 
 
 {-| -}
-disabled : Bool -> Attribute msg
-disabled v =
-    Attribute <| \attrs -> { attrs | disabled = v }
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
 
 
 {-| -}
-readOnly : Bool -> Attribute msg
-readOnly v =
-    Attribute <| \attrs -> { attrs | readOnly = v }
+disabled : Attribute msg
+disabled =
+    Attr.attr (\attrs -> { attrs | disabled = True })
+
+
+{-| -}
+readOnly : Attribute msg
+readOnly =
+    Attr.attr (\attrs -> { attrs | readOnly = True })
 
 
 {-| -}
 autofocus : Attribute msg
 autofocus =
-    Attribute <| \attrs -> { attrs | autofocus = True }
+    Attr.attr (\attrs -> { attrs | autofocus = True })
 
 
 {-| -}
 small : Attribute msg
 small =
-    Attribute <| \attrs -> { attrs | small = True }
+    Attr.attr (\attrs -> { attrs | small = True })
 
 
 {-| -}
 prefix : List (H.Html msg) -> Attribute msg
 prefix v =
-    Attribute <| \attrs -> { attrs | prefix = Just v }
+    Attr.attr (\attrs -> { attrs | prefix = Just v })
 
 
 {-| -}
 suffix : List (H.Html msg) -> Attribute msg
 suffix v =
-    Attribute <| \attrs -> { attrs | suffix = Just v }
-
-
-{-| Attributes applied to the `select` element.
--}
-htmlAttrs : List (H.Attribute msg) -> Attribute msg
-htmlAttrs v =
-    Attribute <| \attrs -> { attrs | htmlAttributes = v }
-
-
-{-| -}
-noAttr : Attribute msg
-noAttr =
-    Attribute identity
+    Attr.attr (\attrs -> { attrs | suffix = Just v })
 
 
 
@@ -140,74 +129,72 @@ viewGroups :
         , onInput : a -> msg
         }
     -> H.Html msg
-viewGroups attrs_ props =
-    let
-        attrs : Attributes msg
-        attrs =
-            applyAttrs attrs_
-
-        values : Dict String a
-        values =
-            props.optionGroups
-                |> List.concatMap Tuple.second
-                |> List.append props.options
-                |> List.map (\a -> ( props.toLabel a, a ))
-                |> Dict.fromList
-    in
-    W.Internal.Input.viewWithIcon
-        { small = attrs.small
-        , prefix = attrs.prefix
-        , suffix = attrs.suffix
-        , disabled = attrs.disabled
-        , readOnly = attrs.readOnly
-        , mask = Nothing
-        , maskInput = ""
-        }
-        W.Internal.Icons.chevronDown
-        (H.select
-            (attrs.htmlAttributes
-                ++ [ HA.class (W.Internal.Input.baseClass attrs.small)
-                   , HA.disabled attrs.disabled
-                   , HA.readonly attrs.readOnly
-                   , HA.autofocus attrs.autofocus
-                   , WH.attrIf attrs.readOnly (HA.attribute "aria-readonly") "true"
-                   , WH.attrIf attrs.disabled (HA.attribute "aria-disabled") "true"
-                   , HA.placeholder "Select"
-                   , HE.onInput
+viewGroups =
+    Attr.withAttrs defaultAttrs
+        (\attrs props ->
+            let
+                values : Dict String a
+                values =
+                    props.optionGroups
+                        |> List.concatMap Tuple.second
+                        |> List.append props.options
+                        |> List.map (\a -> ( props.toLabel a, a ))
+                        |> Dict.fromList
+            in
+            W.Internal.Input.viewWithIcon
+                { small = attrs.small
+                , prefix = attrs.prefix
+                , suffix = attrs.suffix
+                , disabled = attrs.disabled
+                , readOnly = attrs.readOnly
+                , mask = Nothing
+                , maskInput = ""
+                }
+                W.Internal.Icons.chevronDown
+                (H.select
+                    [ WH.maybeAttr HA.id attrs.id
+                    , HA.class (W.Internal.Input.baseClass attrs.small)
+                    , HA.disabled attrs.disabled
+                    , HA.readonly attrs.readOnly
+                    , HA.autofocus attrs.autofocus
+                    , WH.attrIf attrs.readOnly (HA.attribute "aria-readonly") "true"
+                    , WH.attrIf attrs.disabled (HA.attribute "aria-disabled") "true"
+                    , HA.placeholder "Select"
+                    , HE.onInput
                         (\s ->
                             Dict.get s values
                                 |> Maybe.withDefault props.value
                                 |> props.onInput
                         )
-                   ]
-            )
-            (List.concat
-                [ props.options
-                    |> List.map
-                        (\a ->
-                            H.option
-                                [ HA.selected (a == props.value)
-                                , HA.value (props.toLabel a)
-                                ]
-                                [ H.text (props.toLabel a) ]
-                        )
-                , props.optionGroups
-                    |> List.map
-                        (\( l, options_ ) ->
-                            H.optgroup [ HA.attribute "label" l ]
-                                (options_
-                                    |> List.map
-                                        (\a ->
-                                            H.option
-                                                [ HA.selected (a == props.value)
-                                                , HA.value (props.toLabel a)
-                                                ]
-                                                [ H.text (props.toLabel a) ]
+                    ]
+                    (List.concat
+                        [ props.options
+                            |> List.map
+                                (\a ->
+                                    H.option
+                                        [ HA.selected (a == props.value)
+                                        , HA.value (props.toLabel a)
+                                        ]
+                                        [ H.text (props.toLabel a) ]
+                                )
+                        , props.optionGroups
+                            |> List.map
+                                (\( l, options_ ) ->
+                                    H.optgroup [ HA.attribute "label" l ]
+                                        (options_
+                                            |> List.map
+                                                (\a ->
+                                                    H.option
+                                                        [ HA.selected (a == props.value)
+                                                        , HA.value (props.toLabel a)
+                                                        ]
+                                                        [ H.text (props.toLabel a) ]
+                                                )
                                         )
                                 )
-                        )
-                ]
-            )
+                        ]
+                    )
+                )
         )
 
 

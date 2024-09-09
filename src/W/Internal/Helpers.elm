@@ -5,6 +5,7 @@ module W.Internal.Helpers exposing
     , keepIf
     , limitString
     , maybeAttr
+    , maybeFilter
     , maybeHtml
     , nearestFloats
     , nearestInts
@@ -65,6 +66,19 @@ maybeHtml fn a =
     a
         |> Maybe.map fn
         |> Maybe.withDefault (H.text "")
+
+
+maybeFilter : (a -> Bool) -> Maybe a -> Maybe a
+maybeFilter fn ma =
+    ma
+        |> Maybe.andThen
+            (\a ->
+                if fn a then
+                    Just a
+
+                else
+                    Nothing
+            )
 
 
 

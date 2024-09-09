@@ -9,7 +9,7 @@ import W.Button
 
 view : Book.Page msg
 view =
-    Book.page "Button"
+    Book.page "Buttons"
         (List.concat
             [ [ Attr.none, W.Button.outline, W.Button.tint, W.Button.invisible ]
                 |> List.map

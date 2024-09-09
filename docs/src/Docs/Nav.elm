@@ -3,16 +3,15 @@ module Docs.Nav exposing (view)
 import Attr
 import Book
 import Book.Route
-import Color
 import Html as H
 import Html.Attributes as HA
 import Url
 import W.Box
+import W.DataRow
+import W.Divider
 import W.Heading
 import W.Menu
-import W.Spacing
 import W.Tag
-import W.Theme.Colors
 
 
 view :
@@ -27,96 +26,119 @@ view props =
         currentHref : String
         currentHref =
             props.url.path
-    in
-    H.div
-        []
-        [ W.Box.view
-            [ W.Box.padding W.Spacing.md
-            , W.Box.flex [ W.Box.xSpaceBetween ]
-            ]
-            [ case Book.Route.parentBook props.route of
-                Nothing ->
-                    W.Heading.view
-                        [ W.Heading.semibold
-                        , W.Heading.color (Color.toCssString W.Theme.Colors.pink.solid)
-                        ]
-                        [ H.text (Book.bookName props.rootBook) ]
 
-                Just parentBook ->
-                    H.div
-                        []
+        parentBook : Maybe (Book.Book msg)
+        parentBook =
+            Book.Route.parentBook props.route
+
+        bookName : String
+        bookName =
+            case parentBook of
+                Just parentBook_ ->
+                    Book.bookName parentBook_
+
+                Nothing ->
+                    Book.bookName props.rootBook
+    in
+    W.Box.view
+        [ W.Box.widthFull
+        , W.Box.flex
+            [ W.Box.vertical
+            , W.Box.xStretch
+            ]
+        ]
+        [ W.DataRow.viewExtra
+            []
+            { left = []
+            , right = []
+            , header =
+                case parentBook of
+                    Just parentBook_ ->
                         [ H.a
                             [ HA.href (Book.Route.parentBookHref props.route) ]
-                            [ H.text (Book.bookName parentBook) ]
-                        , W.Heading.view
-                            []
-                            [ H.text (Book.bookName (Book.Route.book props.route)) ]
+                            [ H.text (Book.bookName parentBook_) ]
                         ]
-            , H.div [] props.right
+
+                    Nothing ->
+                        []
+            , footer = []
+            , main =
+                [ W.Heading.view
+                    [ W.Heading.semibold
+                    , W.Heading.small
+                    ]
+                    [ H.text bookName ]
+                ]
+            }
+        , W.Divider.view [ W.Divider.thin, W.Divider.subtle ] []
+        , W.Box.view
+            [ W.Box.grow
+            , W.Box.yScroll
             ]
-        , W.Menu.view []
-            (Book.Route.book props.route
-                |> Book.bookItems
-                |> List.map
-                    (\bookItem ->
-                        case bookItem of
-                            Book.BookChapter part ->
-                                W.Menu.viewSection []
-                                    { heading = [ H.text (Book.chapterName part) ]
-                                    , content =
-                                        Book.chapterPages part
-                                            |> List.map
-                                                (\chapter ->
-                                                    viewLink
-                                                        { currentHref = currentHref
-                                                        , href = Book.Route.pageHref props.route chapter
-                                                        , label = Book.pageName chapter
-                                                        , right = viewWIPTag chapter
-                                                        }
-                                                )
-                                    }
+            [ W.Menu.view []
+                (Book.Route.book props.route
+                    |> Book.bookItems
+                    |> List.map
+                        (\bookItem ->
+                            case bookItem of
+                                Book.BookChapter part ->
+                                    W.Menu.viewSection []
+                                        { heading = [ H.text (Book.chapterName part) ]
+                                        , content =
+                                            Book.chapterPages part
+                                                |> List.map
+                                                    (\chapter ->
+                                                        viewLink
+                                                            { currentHref = currentHref
+                                                            , href = Book.Route.pageHref props.route chapter
+                                                            , label = Book.pageName chapter
+                                                            , right = viewWIPTag chapter
+                                                            }
+                                                    )
+                                        }
 
-                            Book.BookPage chapter ->
-                                viewLink
-                                    { currentHref = currentHref
-                                    , href = Book.Route.pageHref props.route chapter
-                                    , label = Book.pageName chapter
-                                    , right = viewWIPTag chapter
-                                    }
+                                Book.BookPage chapter ->
+                                    viewLink
+                                        { currentHref = currentHref
+                                        , href = Book.Route.pageHref props.route chapter
+                                        , label = Book.pageName chapter
+                                        , right = viewWIPTag chapter
+                                        }
 
-                            Book.BookRef label bookRef ->
-                                viewLink
-                                    { currentHref = currentHref
-                                    , href = Book.Route.bookHref props.route bookRef
-                                    , label = label
-                                    , right = viewBookTag
-                                    }
+                                Book.BookRef label bookRef ->
+                                    viewLink
+                                        { currentHref = currentHref
+                                        , href = Book.Route.bookHref props.route bookRef
+                                        , label = label
+                                        , right = viewBookTag
+                                        }
 
-                            Book.BookRefGroup groupLabel bookRefs ->
-                                W.Menu.viewSection []
-                                    { heading = [ H.text groupLabel ]
-                                    , content =
-                                        bookRefs
-                                            |> List.map
-                                                (\( bookName, bookRef ) ->
-                                                    viewLink
-                                                        { currentHref = currentHref
-                                                        , href = Book.Route.bookHref props.route bookRef
-                                                        , label = bookName
-                                                        , right = viewBookTag
-                                                        }
-                                                )
-                                    }
+                                Book.BookRefGroup groupLabel bookRefs ->
+                                    W.Menu.viewSection []
+                                        { heading = [ H.text groupLabel ]
+                                        , content =
+                                            bookRefs
+                                                |> List.map
+                                                    (\( bookRefName, bookRef ) ->
+                                                        viewLink
+                                                            { currentHref = currentHref
+                                                            , href = Book.Route.bookHref props.route bookRef
+                                                            , label = bookRefName
+                                                            , right = viewBookTag
+                                                            }
+                                                    )
+                                        }
 
-                            Book.BookLink { label, href } ->
-                                viewLink
-                                    { currentHref = currentHref
-                                    , href = href
-                                    , label = label
-                                    , right = []
-                                    }
-                    )
-            )
+                                Book.BookLink { label, href } ->
+                                    viewLink
+                                        { currentHref = currentHref
+                                        , href = href
+                                        , label = label
+                                        , right = []
+                                        }
+                        )
+                )
+            ]
         ]
 
 
