@@ -1,6 +1,6 @@
 module Main exposing (main)
 
-import Book exposing (Msg(..))
+import Book
 import Book.Route
 import Browser
 import Browser.Dom
@@ -60,7 +60,7 @@ main =
         theme =
             W.Theme.darkTheme
 
-        book : Book.Book Book.Msg
+        book : Book.Book Model Book.Msg
         book =
             Book.book "elm-widgets"
                 [ Book.chapter "Core"
@@ -118,13 +118,17 @@ main =
         , view = view book
         , update = update book
         , subscriptions = subscriptions
-        , onUrlChange = OnUrlChange
-        , onUrlRequest = OnUrlRequest
+        , onUrlChange = Book.OnUrlChange
+        , onUrlRequest = Book.OnUrlRequest
         }
 
 
 
 -- Types
+
+
+type alias Msg =
+    Book.Msg
 
 
 type alias Model =
@@ -148,13 +152,13 @@ init theme _ url navKey =
     )
 
 
-update : Book.Book Msg -> Msg -> Model -> ( Model, Cmd Msg )
+update : Book.Book Model Msg -> Msg -> Model -> ( Model, Cmd Msg )
 update book msg model =
     case msg of
-        DoNothing ->
+        Book.DoNothing ->
             ( model, Cmd.none )
 
-        OnUrlRequest urlRequest ->
+        Book.OnUrlRequest urlRequest ->
             case urlRequest of
                 Browser.External url ->
                     ( model, Browser.Navigation.load url )
@@ -175,14 +179,14 @@ update book msg model =
                         , Browser.Navigation.pushUrl model.navKey urlString
                         )
 
-        OnUrlChange url ->
+        Book.OnUrlChange url ->
             case Book.Route.fromUrl url book of
                 Just _ ->
                     ( { model | url = url }
                     , case url.fragment of
                         Just target ->
                             scrollTo target
-                                |> Task.attempt (\_ -> DoNothing)
+                                |> Task.attempt (\_ -> Book.DoNothing)
 
                         Nothing ->
                             Cmd.none
@@ -193,12 +197,12 @@ update book msg model =
                     , Browser.Navigation.replaceUrl model.navKey "/"
                     )
 
-        LogAction message ->
+        Book.LogAction message ->
             ( { model | actions = message :: model.actions }
             , Cmd.none
             )
 
-        SetTheme theme ->
+        Book.SetTheme theme ->
             ( { model | theme = theme }
             , Cmd.none
             )
@@ -218,10 +222,10 @@ subscriptions _ =
     Sub.none
 
 
-view : Book.Book Msg -> Model -> Browser.Document Msg
+view : Book.Book Model Msg -> Model -> Browser.Document Msg
 view book model =
     let
-        route : Book.Route.Route Msg
+        route : Book.Route.Route Model Msg
         route =
             case Book.Route.fromUrl model.url book of
                 Just r ->
@@ -268,10 +272,10 @@ view book model =
                                 { label = [ H.text "T" ]
                                 , onClick =
                                     if model.theme == W.Theme.lightTheme then
-                                        SetTheme W.Theme.darkTheme
+                                        Book.SetTheme W.Theme.darkTheme
 
                                     else
-                                        SetTheme W.Theme.lightTheme
+                                        Book.SetTheme W.Theme.lightTheme
                                 }
                             ]
                         }

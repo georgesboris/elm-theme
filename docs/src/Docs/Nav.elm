@@ -16,8 +16,8 @@ import W.Tag
 
 view :
     { url : Url.Url
-    , rootBook : Book.Book msg
-    , route : Book.Route.Route msg
+    , rootBook : Book.Book model msg
+    , route : Book.Route.Route model msg
     , right : List (H.Html msg)
     }
     -> H.Html msg
@@ -27,7 +27,7 @@ view props =
         currentHref =
             props.url.path
 
-        parentBook : Maybe (Book.Book msg)
+        parentBook : Maybe (Book.Book model msg)
         parentBook =
             Book.Route.parentBook props.route
 

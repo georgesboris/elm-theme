@@ -23,41 +23,41 @@ import Url
 -- Route
 
 
-type Route msg
+type Route model msg
     = Route
-        { book : Book.Book msg
+        { book : Book.Book model msg
         , bookPath : List String
-        , parentBooks : List (Book.Book msg)
+        , parentBooks : List (Book.Book model msg)
         , page : Maybe (Book.Page msg)
         }
 
 
-book : Route msg -> Book.Book msg
+book : Route model msg -> Book.Book model msg
 book (Route r) =
     r.book
 
 
-bookPath : Route msg -> List String
+bookPath : Route model msg -> List String
 bookPath (Route r) =
     r.bookPath
 
 
-isRootUrl : Route msg -> Url.Url -> Bool
+isRootUrl : Route model msg -> Url.Url -> Bool
 isRootUrl (Route r) url =
     r.bookPath == toUrlPath url
 
 
-parentBook : Route msg -> Maybe (Book.Book msg)
+parentBook : Route model msg -> Maybe (Book.Book model msg)
 parentBook (Route r) =
     List.head r.parentBooks
 
 
-parentBooks : Route msg -> List (Book.Book msg)
+parentBooks : Route model msg -> List (Book.Book model msg)
 parentBooks (Route r) =
     r.parentBooks
 
 
-parentBookHref : Route msg -> String
+parentBookHref : Route model msg -> String
 parentBookHref (Route r) =
     r.bookPath
         |> List.reverse
@@ -67,12 +67,12 @@ parentBookHref (Route r) =
         |> (++) "/"
 
 
-page : Route msg -> Maybe (Book.Page msg)
+page : Route model msg -> Maybe (Book.Page msg)
 page (Route r) =
     r.page
 
 
-title : Route msg -> String
+title : Route model msg -> String
 title (Route r) =
     let
         bookTitle : String
@@ -93,7 +93,7 @@ title (Route r) =
 -- Route
 
 
-bookHref : Route msg -> Book.Book msg -> String
+bookHref : Route model msg -> Book.Book model msg -> String
 bookHref (Route route) (Book.Book b) =
     case route.bookPath of
         [] ->
@@ -103,7 +103,7 @@ bookHref (Route route) (Book.Book b) =
             "/" ++ String.join "/" route.bookPath ++ "/_/" ++ b.slug
 
 
-pageHref : Route msg -> Book.Page msg -> String
+pageHref : Route model msg -> Book.Page msg -> String
 pageHref (Route route) p =
     case route.bookPath of
         [] ->
@@ -127,13 +127,13 @@ pagePath (Book.Page c) =
 -- Generating Routes
 
 
-fromUrl : Url.Url -> Book.Book msg -> Maybe (Route msg)
+fromUrl : Url.Url -> Book.Book model msg -> Maybe (Route model msg)
 fromUrl url b =
     fromUrlHelper [] (toUrlPath url) b
         |> Maybe.map Route
 
 
-fromBook : Book.Book msg -> Route msg
+fromBook : Book.Book model msg -> Route model msg
 fromBook b =
     Route
         { book = b
@@ -144,14 +144,14 @@ fromBook b =
 
 
 fromUrlHelper :
-    List (Book.Book msg)
+    List (Book.Book model msg)
     -> List String
-    -> Book.Book msg
+    -> Book.Book model msg
     ->
         Maybe
-            { book : Book.Book msg
+            { book : Book.Book model msg
             , bookPath : List String
-            , parentBooks : List (Book.Book msg)
+            , parentBooks : List (Book.Book model msg)
             , page : Maybe (Book.Page msg)
             }
 fromUrlHelper parentBooks_ path ((Book.Book b) as book_) =
@@ -197,7 +197,7 @@ fromUrlHelper parentBooks_ path ((Book.Book b) as book_) =
             Nothing
 
 
-toBookPath : Book.Book msg -> List (Book.Book msg) -> List String
+toBookPath : Book.Book model msg -> List (Book.Book model msg) -> List String
 toBookPath book_ parentBooks_ =
     case parentBooks_ of
         [] ->

@@ -5,7 +5,7 @@ import Html as H
 import Html.Attributes as HA
 
 
-view : Book.Book msg -> H.Html msg
+view : Book.Book model msg -> H.Html msg
 view book =
     H.div
         []

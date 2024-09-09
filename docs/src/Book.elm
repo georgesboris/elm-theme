@@ -87,36 +87,36 @@ logActionWithInt label v =
 -- Book
 
 
-type Book msg
-    = Book (BookData msg)
+type Book model msg
+    = Book (BookData model msg)
 
 
-type alias BookData msg =
+type alias BookData model msg =
     { name : String
     , slug : String
-    , items : List (BookItem msg)
-    , books : Dict.Dict String (Book msg)
-    , pages : Dict.Dict ( String, String ) (Page msg)
+    , items : List (BookItem model msg)
+    , books : Dict.Dict String (Book model msg)
+    , pages : Dict.Dict ( String, String ) (Page model msg)
     }
 
 
-type BookItem msg
-    = BookChapter (Chapter msg)
-    | BookPage (Page msg)
-    | BookRef String (Book msg)
-    | BookRefGroup String (List ( String, Book msg ))
+type BookItem model msg
+    = BookChapter (Chapter model msg)
+    | BookPage (Page model msg)
+    | BookRef String (Book model msg)
+    | BookRefGroup String (List ( String, Book model msg ))
     | BookLink { label : String, href : String }
 
 
-type Chapter msg
+type Chapter model msg
     = Chapter
         { name : String
         , slug : String
-        , chapters : List (Page msg)
+        , chapters : List (Page model msg)
         }
 
 
-type Page msg
+type Page model msg
     = Page
         { name : String
         , slug : String
@@ -137,7 +137,7 @@ type PageSection msg
         }
 
 
-book : String -> List (BookItem msg) -> Book msg
+book : String -> List (BookItem model msg) -> Book model msg
 book name items =
     let
         slug : String
@@ -153,7 +153,7 @@ book name items =
         }
 
 
-toBooks : List (BookItem msg) -> Dict.Dict String (Book msg)
+toBooks : List (BookItem model msg) -> Dict.Dict String (Book model msg)
 toBooks items =
     items
         |> List.concatMap
@@ -171,7 +171,7 @@ toBooks items =
         |> Dict.fromList
 
 
-toChapters : List (BookItem msg) -> Dict.Dict ( String, String ) (Page msg)
+toChapters : List (BookItem model msg) -> Dict.Dict ( String, String ) (Page model msg)
 toChapters items =
     items
         |> List.concatMap
@@ -198,37 +198,37 @@ toChapters items =
         |> Dict.fromList
 
 
-bookRef : String -> Book msg -> BookItem msg
+bookRef : String -> Book model msg -> BookItem model msg
 bookRef =
     BookRef
 
 
-bookRefGroup : String -> List ( String, Book msg ) -> BookItem msg
+bookRefGroup : String -> List ( String, Book model msg ) -> BookItem model msg
 bookRefGroup =
     BookRefGroup
 
 
-bookChapter : Page msg -> BookItem msg
+bookChapter : Page model msg -> BookItem model msg
 bookChapter =
     BookPage
 
 
-bookName : Book msg -> String
+bookName : Book model msg -> String
 bookName (Book b) =
     b.name
 
 
-bookSlug : Book msg -> String
+bookSlug : Book model msg -> String
 bookSlug (Book b) =
     b.slug
 
 
-bookItems : Book msg -> List (BookItem msg)
+bookItems : Book model msg -> List (BookItem model msg)
 bookItems (Book b) =
     b.items
 
 
-chapter : String -> List (Page msg) -> BookItem msg
+chapter : String -> List (Page model msg) -> BookItem model msg
 chapter name chapters =
     let
         slug : String
@@ -238,22 +238,22 @@ chapter name chapters =
     BookChapter (Chapter { name = name, slug = slug, chapters = List.map (\(Page c) -> Page { c | chapterSlug = Just slug }) chapters })
 
 
-chapterName : Chapter msg -> String
+chapterName : Chapter model msg -> String
 chapterName (Chapter p) =
     p.name
 
 
-chapterSlug : Chapter msg -> String
+chapterSlug : Chapter model msg -> String
 chapterSlug (Chapter p) =
     p.slug
 
 
-chapterPages : Chapter msg -> List (Page msg)
+chapterPages : Chapter model msg -> List (Page model msg)
 chapterPages (Chapter p) =
     p.chapters
 
 
-page : String -> List (H.Html msg) -> Page msg
+page : String -> List (H.Html msg) -> Page model msg
 page name content =
     Page
         { name = name
@@ -267,7 +267,7 @@ page name content =
         }
 
 
-pageWithExamples : String -> List ( String, List (H.Html msg) ) -> Page msg
+pageWithExamples : String -> List ( String, List (H.Html msg) ) -> Page model msg
 pageWithExamples name sections =
     let
         slug : String
@@ -296,17 +296,17 @@ pageWithExamples name sections =
         }
 
 
-pageName : Page msg -> String
+pageName : Page model msg -> String
 pageName (Page c) =
     c.name
 
 
-pageSlug : Page msg -> String
+pageSlug : Page model msg -> String
 pageSlug (Page c) =
     c.slug
 
 
-pageContent : Page msg -> List (H.Html msg)
+pageContent : Page model msg -> List (H.Html msg)
 pageContent (Page c) =
     c.content
 
