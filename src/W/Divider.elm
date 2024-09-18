@@ -1,4 +1,17 @@
-module W.Divider exposing (color, margins, subtle, thin, vertical, view)
+module W.Divider exposing
+    ( view, Attribute
+    , subtle, thin, vertical
+    , color, margins
+    )
+
+{-|
+
+@docs view, Attribute
+
+@docs subtle, thin, vertical
+@docs color, margins
+
+-}
 
 import Attr
 import Html as H

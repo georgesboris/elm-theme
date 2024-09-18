@@ -129,7 +129,7 @@ view =
                       H.div
                         [ HA.class "w--absolute w--z-1 w--rounded"
                         , HA.class "w--left-0 w--top-1/2"
-                        , HA.class "w--bg-default"
+                        , HA.class "w--bg"
                         , HA.class "w--h-[6px] -w--mt-[3px]"
                         , HA.style "width" valueString
                         ]

@@ -166,9 +166,9 @@ viewLink props =
         }
 
 
-viewWIPTag : Book.Page msg -> List (H.Html msg)
+viewWIPTag : Book.Page model msg -> List (H.Html msg)
 viewWIPTag page =
-    if List.isEmpty (Book.pageContent page) then
+    if Book.pageHasTag "wip" page then
         [ W.Tag.view
             [ W.Tag.small ]
             [ H.text "WIP" ]

@@ -28,7 +28,7 @@ type Route model msg
         { book : Book.Book model msg
         , bookPath : List String
         , parentBooks : List (Book.Book model msg)
-        , page : Maybe (Book.Page msg)
+        , page : Maybe (Book.Page model msg)
         }
 
 
@@ -67,7 +67,7 @@ parentBookHref (Route r) =
         |> (++) "/"
 
 
-page : Route model msg -> Maybe (Book.Page msg)
+page : Route model msg -> Maybe (Book.Page model msg)
 page (Route r) =
     r.page
 
@@ -103,7 +103,7 @@ bookHref (Route route) (Book.Book b) =
             "/" ++ String.join "/" route.bookPath ++ "/_/" ++ b.slug
 
 
-pageHref : Route model msg -> Book.Page msg -> String
+pageHref : Route model msg -> Book.Page model msg -> String
 pageHref (Route route) p =
     case route.bookPath of
         [] ->
@@ -113,7 +113,7 @@ pageHref (Route route) p =
             "/" ++ String.join "/" route.bookPath ++ "/" ++ String.join "/" (pagePath p)
 
 
-pagePath : Book.Page msg -> List String
+pagePath : Book.Page model msg -> List String
 pagePath (Book.Page c) =
     case c.chapterSlug of
         Just pSlug ->
@@ -152,7 +152,7 @@ fromUrlHelper :
             { book : Book.Book model msg
             , bookPath : List String
             , parentBooks : List (Book.Book model msg)
-            , page : Maybe (Book.Page msg)
+            , page : Maybe (Book.Page model msg)
             }
 fromUrlHelper parentBooks_ path ((Book.Book b) as book_) =
     case path of

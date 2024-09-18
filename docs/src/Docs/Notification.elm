@@ -9,7 +9,7 @@ import W.Spacing
 import W.Theme
 
 
-view : Book.Page Book.Msg
+view : Book.Page model Book.Msg
 view =
     Book.page "Notification"
         ([ ( [], "Neutral" )

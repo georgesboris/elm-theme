@@ -1,20 +1,19 @@
 module W.Menu exposing
     ( view, Attribute
-    , viewButton, viewLink, viewDummy, viewHeading, ItemAttribute
-    , id, disabled, selected, left, right, noPadding
+    , viewButton, viewLink, viewDummy, viewHeading, viewSection, ItemAttribute
+    , id, disabled, selected, faded, left, right, noPadding
     , padding, paddingX, paddingY, titlePadding, titlePaddingX, titlePaddingY
-    , faded, viewSection
     )
 
 {-|
 
 @docs view, Attribute
-@docs viewButton, viewLink, viewDummy, viewHeading, ItemAttribute
+@docs viewButton, viewLink, viewDummy, viewHeading, viewSection, ItemAttribute
 
 
 # Styles
 
-@docs id, disabled, selected, left, right, noPadding
+@docs id, disabled, selected, faded, left, right, noPadding
 
 
 # Container Styles
@@ -199,6 +198,7 @@ paddingString { x, y } =
     String.fromInt y ++ "px " ++ String.fromInt x ++ "px"
 
 
+{-| -}
 viewSection :
     List (ItemAttribute msg)
     ->

@@ -6,7 +6,7 @@ import W.Avatar
 import W.Box
 
 
-view : Book.Page msg
+view : Book.Page model msg
 view =
     Book.page "Avatar"
         [ Docs.UI.viewHorizontal

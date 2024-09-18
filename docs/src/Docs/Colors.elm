@@ -2,7 +2,7 @@ module Docs.Colors exposing (view)
 
 import Book
 import Color
-import Docs.Themes
+import Docs.UI
 import Html as H
 import SolidColor
 import W.Box
@@ -12,37 +12,39 @@ import W.Spacing
 import W.Theme
 
 
-view : W.Theme.Theme -> Book.Page msg
+view : W.Theme.Theme -> Book.Page model msg
 view theme =
     let
         themeColors : W.Theme.ColorPalette
         themeColors =
             W.Theme.toColorPalette theme
     in
-    Book.pageWithExamples "Colors & Themes"
-        [ ( "Brand Colors"
-          , [ W.Box.view
-                [ W.Box.gap W.Spacing.xs ]
-                [ viewColorScale "Base" W.Box.base themeColors.base
-                , viewColorScale "Primary" W.Box.primary themeColors.primary
+    Book.page "Colors & Themes"
+        (List.map Docs.UI.viewExample
+            [ ( "Brand Colors"
+              , [ W.Box.view
+                    [ W.Box.gap W.Spacing.xs ]
+                    [ viewColorScale "Base" W.Box.base themeColors.base
+                    , viewColorScale "Primary" W.Box.primary themeColors.primary
 
-                -- , viewColorScale "Secondary" W.Box.secondary themeColors.secondary
+                    -- , viewColorScale "Secondary" W.Box.secondary themeColors.secondary
+                    ]
                 ]
-            ]
-          )
-        , ( "Semantic Colors"
-          , [ W.Box.view
-                [ W.Box.gap W.Spacing.xs ]
-                [ viewColorScale "Success" W.Box.success themeColors.success
-                , viewColorScale "Warning" W.Box.warning themeColors.warning
-                , viewColorScale "Danger" W.Box.danger themeColors.danger
+              )
+            , ( "Semantic Colors"
+              , [ W.Box.view
+                    [ W.Box.gap W.Spacing.xs ]
+                    [ viewColorScale "Success" W.Box.success themeColors.success
+                    , viewColorScale "Warning" W.Box.warning themeColors.warning
+                    , viewColorScale "Danger" W.Box.danger themeColors.danger
+                    ]
                 ]
+              )
+            , ( "Data Visualization Colors"
+              , [ W.Skeleton.view [ W.Skeleton.height 8 ] ]
+              )
             ]
-          )
-        , ( "Data Visualization Colors"
-          , [ W.Skeleton.view [ W.Skeleton.height 8 ] ]
-          )
-        ]
+        )
 
 
 viewColorScale : String -> W.Box.Attribute msg -> W.Theme.ColorScale -> H.Html msg

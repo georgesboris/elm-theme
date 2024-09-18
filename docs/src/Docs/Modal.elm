@@ -11,7 +11,7 @@ import W.Spacing
 import W.Text
 
 
-view : Book.Page Book.Msg
+view : Book.Page model Book.Msg
 view =
     Book.page "Modal"
         (List.map Docs.UI.viewExample

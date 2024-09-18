@@ -4,6 +4,7 @@ module W.InputTextArea exposing
     , autofocus, disabled, readOnly
     , required
     , onBlur, onEnter, onFocus
+    , id
     )
 
 {-|
@@ -84,6 +85,12 @@ defaultAttrs =
 
 
 -- Attributes : Setters
+
+
+{-| -}
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
 
 
 {-| -}

@@ -1,18 +1,17 @@
 module W.InputDate exposing
-    ( view
+    ( view, Attribute
     , init, toDate, toTimeZone, toString, Value
     , autofocus, disabled, readOnly
     , small, prefix, suffix
     , min, max, required
     , viewWithValidation, errorToString, Error(..)
     , onEnter, onFocus, onBlur
-    , Attribute
     , id
     )
 
 {-|
 
-@docs view
+@docs view, Attribute
 
 
 # Value
@@ -47,7 +46,7 @@ module W.InputDate exposing
 
 # Html
 
-@docs htmlAttrs, noAttr, Attribute
+@docs id
 
 -}
 

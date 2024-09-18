@@ -97,6 +97,7 @@ color v =
 -- Main
 
 
+{-| -}
 view : List Attribute -> H.Html msg
 view =
     Attr.withAttrs defaultAttrs

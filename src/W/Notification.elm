@@ -3,6 +3,7 @@ module W.Notification exposing
     , icon, footer
     , primary, secondary, success, warning, danger
     , href, onClick, onClose
+    , id
     )
 
 {-|
@@ -17,7 +18,7 @@ module W.Notification exposing
 
 # Styles
 
-@docs primary, secondary, success, warning, danger, color
+@docs primary, secondary, success, warning, danger
 
 
 # Actions
@@ -37,7 +38,6 @@ import Html.Attributes as HA
 import Html.Events as HE
 import W.Button
 import W.Internal.Helpers as WH
-import W.Theme
 
 
 
@@ -74,6 +74,12 @@ defaultAttrs =
 
 
 -- Attributes : Setters
+
+
+{-| -}
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
 
 
 {-| -}

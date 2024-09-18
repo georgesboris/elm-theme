@@ -24,11 +24,6 @@ module W.Popover exposing
 
 @docs over, offset, full, width, minWidth
 
-
-# Html
-
-@docs htmlAttrs, noAttr, Attribute
-
 -}
 
 import Attr

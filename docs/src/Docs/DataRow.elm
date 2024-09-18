@@ -7,7 +7,7 @@ import W.DataRow
 import W.Spacing
 
 
-view : Book.Page msg
+view : Book.Page model msg
 view =
     Book.page "DataRow"
         [ W.DataRow.viewExtra

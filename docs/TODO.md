@@ -1,16 +1,5 @@
 
 
-# Fractal Design System
-
-- Função de um Design System (rápido)
-- Apresentar o escopo do Fractal
-- Apresentar nosso framework de temas + layout
-- Demo construção de uma interface utilizando:
-  W.Box
-  W.Heading / W.Text
-  W.Button
-
-
 # Next Steps
 
 - [x] Minimal steps for single page per section
@@ -24,8 +13,6 @@
 
 - [ ] Review theme colors (tint is too strong)
 - [ ] Review theme shadow (W.Box shadow is not appearing?)
-
-- [ ] Uncover Demo - Figma + Budget Planner Layout
 
 
 

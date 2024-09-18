@@ -2,7 +2,7 @@ module W.Tag exposing
     ( view, viewButton, viewLink, Attribute
     , large, small
     , primary, secondary, success, warning, danger
-    , onClick
+    , id
     )
 
 {-|
@@ -17,7 +17,7 @@ module W.Tag exposing
 
 # Colors
 
-@docs primary, secondary, success, warning, danger, color
+@docs primary, secondary, success, warning, danger
 
 
 # Html
@@ -72,6 +72,12 @@ defaultAttrs =
 
 
 {-| -}
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
+
+
+{-| -}
 small : Attribute msg
 small =
     Attr.attr (\attrs -> { attrs | size = Small })
@@ -83,7 +89,6 @@ large =
     Attr.attr (\attrs -> { attrs | size = Large })
 
 
-{-| -}
 onClick : msg -> Attribute msg
 onClick v =
     Attr.attr (\attrs -> { attrs | onClick = Just v })

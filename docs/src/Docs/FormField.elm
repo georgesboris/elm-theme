@@ -10,7 +10,7 @@ import W.InputRadio
 import W.InputSlider
 
 
-view : Book.Page Book.Msg
+view : Book.Page model Book.Msg
 view =
     let
         props :

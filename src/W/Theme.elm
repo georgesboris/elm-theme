@@ -1,10 +1,10 @@
 module W.Theme exposing
     ( lightTheme, darkTheme
     , globalTheme, classTheme
-    , darkModeFromClass, darkModeFromSystemPreferences, DarkMode
+    , noDarkMode, darkModeFromClass, darkModeFromSystemPreferences, DarkMode
     , Theme, ColorScale, FontFamilies, RadiusScale, SpacingScale
     , withId
-    , withHeadingFont, withBaseFont, withCodeFont
+    , withHeadingFont, withTextFont, withCodeFont
     , withSpacing, withRadius
     , withColorPalette, withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
     , toId, toFontFamilies, toSpacingScale, toRadiusScale, toColorPalette, toExtraVariables
@@ -24,14 +24,14 @@ module W.Theme exposing
 
 @docs lightTheme, darkTheme
 @docs globalTheme, classTheme
-@docs darkModeFromClass, darkModeFromSystemPreferences, DarkMode
+@docs noDarkMode, darkModeFromClass, darkModeFromSystemPreferences, DarkMode
 
 
 ## Creating Custom Themes
 
 @docs Theme, ColorScale, FontFamilies, RadiusScale, SpacingScale
 @docs withId
-@docs withHeadingFont, withBaseFont, withCodeFont
+@docs withHeadingFont, withTextFont, withCodeFont
 @docs withSpacing, withRadius
 @docs withColorPalette, withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
 @docs toId, toFontFamilies, toSpacingScale, toRadiusScale, toColorPalette, toExtraVariables
@@ -136,7 +136,7 @@ type alias ColorScaleValues =
 {-| -}
 type alias FontFamilies =
     { heading : String
-    , base : String
+    , text : String
     , code : String
     }
 
@@ -369,7 +369,7 @@ defaultCode =
 defaultFonts : FontFamilies
 defaultFonts =
     { heading = defaultSans
-    , base = defaultSans
+    , text = defaultSans
     , code = defaultCode
     }
 
@@ -406,6 +406,13 @@ defaultRadiusScale =
 type DarkMode
     = DarkModeFromSystemPreferences Theme
     | DarkModeFromClass String Theme
+    | DarkModeDisabled
+
+
+{-| -}
+noDarkMode : DarkMode
+noDarkMode =
+    DarkModeDisabled
 
 
 {-| -}
@@ -428,7 +435,7 @@ darkModeFromClass =
 font : FontFamilies
 font =
     { heading = cssValue "font-heading"
-    , base = cssValue "font-base"
+    , text = cssValue "font-text"
     , code = cssValue "font-code"
     }
 
@@ -580,14 +587,14 @@ withHeadingFont value (Theme theme) =
 
 
 {-| -}
-withBaseFont : String -> Theme -> Theme
-withBaseFont value (Theme theme) =
+withTextFont : String -> Theme -> Theme
+withTextFont value (Theme theme) =
     let
         themeFonts : FontFamilies
         themeFonts =
             theme.font
     in
-    Theme { theme | font = { themeFonts | base = value } }
+    Theme { theme | font = { themeFonts | text = value } }
 
 
 {-| -}
@@ -732,7 +739,7 @@ styleComponents =
 {-| -}
 globalTheme :
     { theme : Theme
-    , darkMode : Maybe DarkMode
+    , darkMode : DarkMode
     }
     -> H.Html msg
 globalTheme config =
@@ -747,13 +754,13 @@ globalTheme config =
         darkStyles : String
         darkStyles =
             case config.darkMode of
-                Nothing ->
+                DarkModeDisabled ->
                     ""
 
-                Just (DarkModeFromSystemPreferences (Theme darkTheme_)) ->
+                DarkModeFromSystemPreferences (Theme darkTheme_) ->
                     "@media (prefers-color-scheme: dark) { body { " ++ themeColorStyles darkTheme_ ++ " } }"
 
-                Just (DarkModeFromClass class (Theme darkTheme_)) ->
+                DarkModeFromClass class (Theme darkTheme_) ->
                     "body." ++ class ++ ", ." ++ class ++ " { " ++ themeColorStyles darkTheme_ ++ " }"
     in
     H.node "style"
@@ -765,7 +772,7 @@ globalTheme config =
 classTheme :
     { theme : Theme
     , class : String
-    , darkMode : Maybe DarkMode
+    , darkMode : DarkMode
     }
     -> H.Html msg
 classTheme config =
@@ -780,13 +787,13 @@ classTheme config =
         darkStyles : String
         darkStyles =
             case config.darkMode of
-                Nothing ->
+                DarkModeDisabled ->
                     ""
 
-                Just (DarkModeFromSystemPreferences (Theme darkTheme_)) ->
+                DarkModeFromSystemPreferences (Theme darkTheme_) ->
                     "@media (prefers-color-scheme: dark) { ." ++ config.class ++ " { " ++ themeColorStyles darkTheme_ ++ " }"
 
-                Just (DarkModeFromClass darkClass (Theme darkTheme_)) ->
+                DarkModeFromClass darkClass (Theme darkTheme_) ->
                     "." ++ config.class ++ "." ++ darkClass ++ " , ." ++ darkClass ++ " ." ++ config.class ++ " { " ++ themeColorStyles darkTheme_ ++ " }"
     in
     H.node "style"
@@ -810,7 +817,7 @@ themeRootStyles themeClass =
     prefix ++ """ {
   background-color: """ ++ color.bg ++ """;
   color: """ ++ color.text ++ """;
-  font-family: """ ++ font.base ++ """;
+  font-family: """ ++ font.text ++ """;
 }
 """ ++ prefix ++ """ h1,
 """ ++ prefix ++ """ h2,
@@ -837,7 +844,7 @@ themeBaseStyles : Theme -> String
 themeBaseStyles (Theme theme) =
     [ cssVar "id" theme.id
     , cssVar "font-heading" theme.font.heading
-    , cssVar "font-base" theme.font.base
+    , cssVar "font-text" theme.font.text
     , cssVar "font-code" theme.font.code
     , cssVar "spacing-xs" (rem theme.spacing.xs)
     , cssVar "spacing-sm" (rem theme.spacing.sm)

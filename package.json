@@ -20,9 +20,12 @@
   },
   "scripts": {
     "postinstall": "elm-tooling install",
-    "test": "elm-test-rs"
+    "test": "elm-test-rs",
+    "start": "elm-doc-preview ./"
   },
   "devDependencies": {
-    "elm-tooling": "^1.14.1"
+    "elm-doc-preview": "^5.0.5",
+    "elm-tooling": "^1.14.1",
+    "w-theme": "github:georgesboris/w-theme#main"
   }
 }

@@ -9,7 +9,7 @@ import W.Button
 import W.Spacing
 
 
-view : Book.Page msg
+view : Book.Page model msg
 view =
     Book.page "Badge"
         [ W.Box.view

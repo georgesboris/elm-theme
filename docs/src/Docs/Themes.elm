@@ -1,17 +1,20 @@
 module Docs.Themes exposing (demo, view)
 
 import Book
+import Docs.UI
 import Html as H
 import Html.Attributes as HA
 import W.Theme
 
 
-view : Book.Page msg
+view : Book.Page model msg
 view =
-    Book.pageWithExamples "Themes"
-        [ ( "Light Theme", [ H.div [ HA.class "light" ] [ demo ] ] )
-        , ( "Dark Theme", [ H.div [ HA.class "dark" ] [ demo ] ] )
-        ]
+    Book.page "Themes"
+        (List.map Docs.UI.viewExample
+            [ ( "Light Theme", [ H.div [ HA.class "light" ] [ demo ] ] )
+            , ( "Dark Theme", [ H.div [ HA.class "dark" ] [ demo ] ] )
+            ]
+        )
 
 
 demo : H.Html msg

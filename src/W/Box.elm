@@ -1,7 +1,7 @@
 module W.Box exposing
     ( view, viewButton, viewLink, Attribute
-    , width, widthRelative, widthFull, minWidth, maxWidth
-    , height, heightRelative, heightFull, heightScreen
+    , width, widthRelative, widthFull, minWidth, maxWidth, widthCustom
+    , height, heightRelative, heightFull, heightScreen, heightCustom
     , square
     , border, borderColor, borderLarge, borderSmall, borderStrong, borderSubtle
     , rounded, roundedExtraSmall, roundedSmall, roundedLarge, roundedExtraLarge, roundedFull, radius
@@ -23,9 +23,10 @@ module W.Box exposing
     , yCenter, yTop, yBottom, yStretch, ySpaceBetween, ySpaceAround, ySpaceEvenly
     , grow, growAttr
     , columns, columnEnd, columnSpan, columnStart
+    , relative, sticky
     , largeScreen
-    , asAttrs, class, styles
-    , classList, heightCustom, id, node, relative, sticky, widthCustom
+    , class, classList, styles
+    , id, node
     )
 
 {-|
@@ -50,8 +51,8 @@ module W.Box exposing
 
 ## Sizing
 
-@docs width, widthRelative, widthFull, minWidth, maxWidth
-@docs height, heightRelative, heightFull, heightScreen
+@docs width, widthRelative, widthFull, minWidth, maxWidth, widthCustom
+@docs height, heightRelative, heightFull, heightScreen, heightCustom
 @docs square
 
 
@@ -98,7 +99,6 @@ module W.Box exposing
 
 ## Flex
 
-@docs flex, FlexAttribute
 @docs vertical, horizontal
 @docs xyCenter
 @docs xCenter, xLeft, xRight, xStretch, xSpaceBetween, xSpaceAround, xSpaceEvenly
@@ -111,6 +111,11 @@ module W.Box exposing
 @docs columns, columnEnd, columnSpan, columnStart
 
 
+## Position
+
+@docs relative, sticky
+
+
 ## Responsiveness
 
 @docs largeScreen
@@ -118,7 +123,12 @@ module W.Box exposing
 
 ## Customizing
 
-@docs asAttrs, class, styles
+@docs class, classList, styles
+
+
+## Html
+
+@docs id, node
 
 -}
 
@@ -142,7 +152,7 @@ type alias Attributes msg =
     { node : List (H.Attribute msg) -> List (H.Html msg) -> H.Html msg
     , htmlAttrs : List (H.Attribute msg)
     , interactive : Bool
-    , gap : String
+    , gap : Bool
     , radius : String
     , width : String
     , height : String
@@ -172,7 +182,7 @@ defaultAttrs =
     { node = H.div
     , htmlAttrs = []
     , interactive = False
-    , gap = ""
+    , gap = False
     , radius = ""
     , width = ""
     , height = ""
@@ -630,7 +640,14 @@ roundedFull =
 -}
 gap : W.Spacing.Spacing -> Attribute msg
 gap v =
-    Attr.attr (\attrs -> { attrs | variables = ( "--w-gap", W.Spacing.toCSS v ) :: attrs.variables })
+    Attr.attr
+        (\attrs ->
+            { attrs
+                | gap = True
+                , staticClasses = "w--box-gap" :: attrs.staticClasses
+                , variables = ( "--w-gap", W.Spacing.toCSS v ) :: attrs.variables
+            }
+        )
 
 
 {-| -}
@@ -756,6 +773,7 @@ gridDefaultAttrs =
     }
 
 
+{-| -}
 grid : List GridAttribute -> Attribute msg
 grid =
     Attr.withAttrs gridDefaultAttrs
@@ -767,11 +785,13 @@ grid =
         )
 
 
+{-| -}
 columns : Int -> GridAttribute
 columns v =
     Attr.attr (\attrs -> { attrs | columns = "repeat(" ++ String.fromInt v ++ ", minmax(0, 1fr))" })
 
 
+{-| -}
 columnSpan : Int -> Attribute msg
 columnSpan v =
     Attr.attr
@@ -787,6 +807,7 @@ columnSpan v =
         )
 
 
+{-| -}
 columnStart : Int -> Attribute msg
 columnStart v =
     Attr.attr
@@ -798,6 +819,7 @@ columnStart v =
         )
 
 
+{-| -}
 columnEnd : Int -> Attribute msg
 columnEnd v =
     Attr.attr
@@ -1059,11 +1081,13 @@ crossAxisAlignment v =
 -- Attrs : Position ------------------------------------------------------------
 
 
+{-| -}
 relative : Attribute msg
 relative =
     Attr.attr (\attrs -> { attrs | staticClasses = "w--relative" :: attrs.staticClasses })
 
 
+{-| -}
 sticky : Attribute msg
 sticky =
     Attr.attr (\attrs -> { attrs | staticClasses = "w--sticky w--top-0" :: attrs.staticClasses })
@@ -1093,17 +1117,12 @@ largeScreen =
                                         |> List.append attrs.staticClasses
                                         |> String.join " "
                                 , styles =
-                                    [ styleList largeAttrs
-                                        [ ( "--lg-w-gap", .gap )
-                                        ]
-                                    , [ largeAttrs.variables
-                                      , layoutVariables largeAttrs
-                                      , paddingVariables attrs
-                                      ]
-                                        |> List.concat
-                                        |> List.map (Tuple.mapFirst (\s -> "--lg-" ++ String.dropLeft 2 s))
+                                    [ largeAttrs.variables
+                                    , layoutVariables largeAttrs
+                                    , paddingVariables attrs
                                     ]
                                         |> List.concat
+                                        |> List.map (Tuple.mapFirst (\s -> "--lg-" ++ String.dropLeft 2 s))
                                 }
                     }
                 )
@@ -1114,42 +1133,50 @@ largeScreen =
 -- Views
 
 
+{-| -}
 view : List (Attribute msg) -> List (H.Html msg) -> H.Html msg
 view =
     Attr.withAttrs defaultAttrs
         (\attrs children ->
-            attrs.node (baseAttrs attrs) children
+            attrs.node
+                (baseAttrs attrs)
+                (toChildren attrs children)
         )
 
 
+{-| -}
 viewButton : List (Attribute msg) -> { onClick : msg, content : List (H.Html msg) } -> H.Html msg
 viewButton =
     Attr.withAttrs defaultInteractiveAttrs
         (\attrs props ->
             H.button
                 (HE.onClick props.onClick :: baseAttrs attrs)
-                props.content
+                (toChildren attrs props.content)
         )
 
 
+{-| -}
 viewLink : List (Attribute msg) -> { href : String, content : List (H.Html msg) } -> H.Html msg
 viewLink =
     Attr.withAttrs defaultInteractiveAttrs
         (\attrs props ->
             H.a
                 (HA.href props.href :: HA.class "w--no-underline" :: baseAttrs attrs)
-                props.content
+                (toChildren attrs props.content)
         )
 
 
-{-| Use `W.Box` as an utility for any element.
+toChildren : Attributes msg -> List (H.Html msg) -> List (H.Html msg)
+toChildren attrs children =
+    case ( attrs.layout, attrs.gap ) of
+        ( Default, True ) ->
+            List.map (\c -> H.div [] [ c ]) children
 
-Use carefully. Don't mix it with `Html.Attribute.style` otherwise the default styles won't be applied.
+        ( Block, True ) ->
+            List.map (\c -> H.div [] [ c ]) children
 
--}
-asAttrs : List (Attribute msg) -> List (H.Attribute msg)
-asAttrs =
-    Attr.withAttrs defaultAttrs baseAttrs
+        _ ->
+            children
 
 
 baseAttrs : Attributes msg -> List (H.Attribute msg)

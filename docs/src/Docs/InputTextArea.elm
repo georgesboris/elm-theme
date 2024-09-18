@@ -5,7 +5,7 @@ import Docs.UI
 import W.InputTextArea
 
 
-view : Book.Page Book.Msg
+view : Book.Page model Book.Msg
 view =
     Book.page "Input TextArea"
         (List.map Docs.UI.viewExample

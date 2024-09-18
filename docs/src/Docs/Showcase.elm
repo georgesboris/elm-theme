@@ -5,8 +5,8 @@ import Html as H
 import Html.Attributes as HA
 
 
-view : Book.Book model msg -> H.Html msg
-view book =
+view : Book.Book model msg -> model -> H.Html msg
+view book model =
     H.div
         []
         -- (chapters
@@ -22,7 +22,7 @@ view book =
                             []
                             [ H.ul
                                 [ HA.class "w--list-none w--space-y-2xl w--p-0" ]
-                                (Book.pageContent chapter)
+                                (Book.pageContent chapter model)
                             ]
                         ]
                 )

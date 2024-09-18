@@ -6,7 +6,7 @@ import W.Loading
 import W.Theme
 
 
-view : Book.Page msg
+view : Book.Page model msg
 view =
     Book.page "Loading"
         [ Docs.UI.viewHorizontal

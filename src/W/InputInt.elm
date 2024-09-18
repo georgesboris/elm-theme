@@ -6,6 +6,7 @@ module W.InputInt exposing
     , required, min, max, step, validation
     , viewWithValidation, errorToString, Error(..)
     , onEnter, onFocus, onBlur
+    , id
     )
 
 {-|

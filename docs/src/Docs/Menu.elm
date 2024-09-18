@@ -1,11 +1,12 @@
 module Docs.Menu exposing (view)
 
 import Book
+import Docs.UI
 import Html as H
 import W.Menu
 
 
-view : Book.Page Book.Msg
+view : Book.Page model Book.Msg
 view =
     let
         items : List (H.Html Book.Msg)
@@ -41,7 +42,9 @@ view =
                 }
             ]
     in
-    Book.pageWithExamples "Menu"
-        [ ( "Default", [ W.Menu.view [] items ] )
-        , ( "Custom Padding", [ W.Menu.view [ W.Menu.paddingX 24 ] items ] )
-        ]
+    Book.page "Menu"
+        (List.map Docs.UI.viewExample
+            [ ( "Default", [ W.Menu.view [] items ] )
+            , ( "Custom Padding", [ W.Menu.view [ W.Menu.paddingX 24 ] items ] )
+            ]
+        )

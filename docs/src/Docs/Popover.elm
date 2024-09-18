@@ -9,7 +9,7 @@ import W.Divider
 import W.Popover
 
 
-view : Book.Page Book.Msg
+view : Book.Page model Book.Msg
 view =
     Book.page "Popover"
         (List.map Docs.UI.viewExample

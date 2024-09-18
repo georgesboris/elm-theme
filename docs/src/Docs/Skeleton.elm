@@ -5,7 +5,7 @@ import Docs.UI
 import W.Skeleton
 
 
-view : Book.Page msg
+view : Book.Page model msg
 view =
     Book.page "Skeleton"
         [ Docs.UI.viewVertical

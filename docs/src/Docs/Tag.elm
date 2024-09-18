@@ -8,7 +8,7 @@ import W.Spacing
 import W.Tag
 
 
-view : Book.Page Book.Msg
+view : Book.Page model Book.Msg
 view =
     Book.page "Tag"
         ([ ( [], "Neutral" )

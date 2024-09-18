@@ -108,9 +108,9 @@ view =
                         Array.length valueLetters
                 in
                 H.label
-                    [ HA.class "w--group/w" ]
+                    [ HA.class "w--flex w--group/w" ]
                     [ H.input
-                        [ HA.class "w--h-0 w--p-0 w--m-0 w--border-0 w--opacity-0"
+                        [ HA.class "w--h-0 w--w-0 w--p-0 w--m-0 w--border-0 w--opacity-0 w--overflow-hidden"
                         , HA.value props.value
                         , HE.onFocus (props.onInput "")
                         , HE.onInput
@@ -138,7 +138,7 @@ view =
                             |> List.map
                                 (\index ->
                                     H.div
-                                        [ HA.class "w--border-solid w--border-accent w--border-2"
+                                        [ HA.class "w--cfg-border"
                                         , HA.class "w--w-[2.5rem] w--h-[3.5rem] w--rounded-md"
                                         , HA.class "w--flex w--items-center w--justify-center"
                                         , HA.class "w--font-heading w--text-3xl w--text-default"

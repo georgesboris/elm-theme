@@ -11,7 +11,7 @@ import W.Skeleton
 import W.Theme
 
 
-view : Book.Page msg
+view : Book.Page model msg
 view =
     Book.pageWithExamples "Feedback"
         [ ( "Badge"

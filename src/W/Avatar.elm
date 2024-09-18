@@ -1,4 +1,16 @@
-module W.Avatar exposing (custom, image, large, name, names, small, theme, view)
+module W.Avatar exposing
+    ( view, Attribute
+    , name, names, image, custom
+    , large, small, theme
+    )
+
+{-|
+
+@docs view, Attribute
+@docs name, names, image, custom
+@docs large, small, theme
+
+-}
 
 import Attr
 import Html as H

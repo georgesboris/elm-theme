@@ -1,4 +1,32 @@
-module W.Button exposing (alignLeft, alignRight, danger, disabled, extraSmall, full, icon, invisible, large, outline, primary, radius, rounded, secondary, small, success, tint, view, viewDummy, viewLink, viewSubmit, warning)
+module W.Button exposing
+    ( view, viewLink, viewSubmit, viewDummy, Attribute
+    , primary, secondary, success, warning, danger
+    , outline, invisible, tint
+    , rounded, radius
+    , full, icon
+    , disabled
+    , large, small, extraSmall
+    , alignLeft, alignRight
+    , id
+    )
+
+{-|
+
+@docs view, viewLink, viewSubmit, viewDummy, Attribute
+
+@docs primary, secondary, success, warning, danger
+@docs outline, invisible, tint
+
+@docs rounded, radius
+@docs full, icon
+
+@docs disabled
+@docs large, small, extraSmall
+@docs alignLeft, alignRight
+
+@docs id
+
+-}
 
 import Attr
 import Html as H
@@ -13,11 +41,11 @@ import W.Theme
 
 
 {-| -}
-type alias Attribute =
-    Attr.Attr Attributes
+type alias Attribute msg =
+    Attr.Attr (Attributes msg)
 
 
-type alias Attributes =
+type alias Attributes msg =
     { id : Maybe String
     , style : ButtonStyle
     , disabled : Bool
@@ -27,6 +55,7 @@ type alias Attributes =
     , full : Bool
     , variant : ButtonVariant
     , alignClass : String
+    , msg : Maybe msg
     }
 
 
@@ -53,7 +82,7 @@ type ButtonVariant
     | Danger
 
 
-defaultAttrs : Attributes
+defaultAttrs : Attributes msg
 defaultAttrs =
     { id = Nothing
     , style = Basic
@@ -64,6 +93,7 @@ defaultAttrs =
     , icon = False
     , full = False
     , alignClass = "w--justify-center"
+    , msg = Nothing
     }
 
 
@@ -72,7 +102,13 @@ defaultAttrs =
 
 
 {-| -}
-disabled : Attribute
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
+
+
+{-| -}
+disabled : Attribute msg
 disabled =
     Attr.attr (\attrs -> { attrs | disabled = True })
 
@@ -82,31 +118,31 @@ disabled =
 
 
 {-| -}
-primary : Attribute
+primary : Attribute msg
 primary =
     Attr.attr (\attrs -> { attrs | variant = Primary })
 
 
 {-| -}
-secondary : Attribute
+secondary : Attribute msg
 secondary =
     Attr.attr (\attrs -> { attrs | variant = Secondary })
 
 
 {-| -}
-success : Attribute
+success : Attribute msg
 success =
     Attr.attr (\attrs -> { attrs | variant = Success })
 
 
 {-| -}
-warning : Attribute
+warning : Attribute msg
 warning =
     Attr.attr (\attrs -> { attrs | variant = Warning })
 
 
 {-| -}
-danger : Attribute
+danger : Attribute msg
 danger =
     Attr.attr (\attrs -> { attrs | variant = Danger })
 
@@ -116,19 +152,19 @@ danger =
 
 
 {-| -}
-outline : Attribute
+outline : Attribute msg
 outline =
     Attr.attr (\attrs -> { attrs | style = Outline })
 
 
 {-| -}
-tint : Attribute
+tint : Attribute msg
 tint =
     Attr.attr (\attrs -> { attrs | style = Tint })
 
 
 {-| -}
-invisible : Attribute
+invisible : Attribute msg
 invisible =
     Attr.attr (\attrs -> { attrs | style = Invisible })
 
@@ -138,13 +174,13 @@ invisible =
 
 
 {-| -}
-rounded : Attribute
+rounded : Attribute msg
 rounded =
     Attr.attr (\attrs -> { attrs | radius = Just "999px" })
 
 
 {-| -}
-radius : Float -> Attribute
+radius : Float -> Attribute msg
 radius v =
     Attr.attr (\attrs -> { attrs | radius = Just (WH.rem v) })
 
@@ -154,13 +190,13 @@ radius v =
 
 
 {-| -}
-alignLeft : Attribute
+alignLeft : Attribute msg
 alignLeft =
     Attr.attr (\attrs -> { attrs | alignClass = "w--justify-start" })
 
 
 {-| -}
-alignRight : Attribute
+alignRight : Attribute msg
 alignRight =
     Attr.attr (\attrs -> { attrs | alignClass = "w--justify-end" })
 
@@ -170,19 +206,19 @@ alignRight =
 
 
 {-| -}
-extraSmall : Attribute
+extraSmall : Attribute msg
 extraSmall =
     Attr.attr (\attrs -> { attrs | size = ExtraSmall })
 
 
 {-| -}
-small : Attribute
+small : Attribute msg
 small =
     Attr.attr (\attrs -> { attrs | size = Small })
 
 
 {-| -}
-large : Attribute
+large : Attribute msg
 large =
     Attr.attr (\attrs -> { attrs | size = Large })
 
@@ -192,13 +228,13 @@ large =
 
 
 {-| -}
-full : Attribute
+full : Attribute msg
 full =
     Attr.attr (\attrs -> { attrs | full = True })
 
 
 {-| -}
-icon : Attribute
+icon : Attribute msg
 icon =
     Attr.attr (\attrs -> { attrs | icon = True })
 
@@ -209,7 +245,7 @@ icon =
 
 {-| -}
 view :
-    List Attribute
+    List (Attribute msg)
     ->
         { label : List (H.Html msg)
         , onClick : msg
@@ -226,7 +262,7 @@ view =
 
 {-| -}
 viewSubmit :
-    List Attribute
+    List (Attribute msg)
     -> List (H.Html msg)
     -> H.Html msg
 viewSubmit =
@@ -240,7 +276,7 @@ viewSubmit =
 
 {-| -}
 viewDummy :
-    List Attribute
+    List (Attribute msg)
     -> List (H.Html msg)
     -> H.Html msg
 viewDummy =
@@ -254,7 +290,7 @@ viewDummy =
 
 {-| -}
 viewLink :
-    List Attribute
+    List (Attribute msg)
     ->
         { label : List (H.Html msg)
         , href : String
@@ -273,7 +309,7 @@ viewLink =
 -- Views : Helpers
 
 
-htmlAttrs : Attributes -> List (H.Attribute msg)
+htmlAttrs : Attributes msg -> List (H.Attribute msg)
 htmlAttrs attrs =
     let
         styles : List ( String, String )
@@ -385,7 +421,7 @@ htmlAttrs attrs =
             HA.class
                 ("w/focus "
                     ++ " w--border-accent hover:w--border-accent-strong active:w--border-accent-subtle"
-                    ++ " w--bg hover:w--bg-tint-subtle active:w--bg-bg-subtle"
+                    ++ " w--bg hover:w--bg-tint-subtle active:w--bg-subtle"
                 )
 
         Tint ->

@@ -17,7 +17,7 @@ module W.InputColor exposing
 
 # Styles
 
-@docs small, size, rounded
+@docs small, rounded
 
 
 # Html

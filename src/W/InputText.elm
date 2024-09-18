@@ -1,5 +1,5 @@
 module W.InputText exposing
-    ( view
+    ( view, Attribute
     , email, password, search, telephone, url, numeric, decimal
     , small, placeholder, mask, prefix, suffix
     , autofocus, disabled, readOnly

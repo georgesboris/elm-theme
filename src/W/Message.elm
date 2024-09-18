@@ -3,6 +3,7 @@ module W.Message exposing
     , icon, footer
     , variant, noBorder, borderWidth
     , href, onClick
+    , id
     )
 
 {-|
@@ -15,11 +16,6 @@ module W.Message exposing
 @docs icon, footer
 
 
-# Themes
-
-@docs primary, secondary, success, warning, danger
-
-
 # Styles
 
 @docs variant, noBorder, borderWidth
@@ -28,6 +24,11 @@ module W.Message exposing
 # Actions
 
 @docs href, onClick
+
+
+# Html
+
+@docs id
 
 -}
 
@@ -77,6 +78,12 @@ defaultAttrs =
 
 
 -- Attributes : Setters
+
+
+{-| -}
+id : String -> Attribute msg
+id v =
+    Attr.attr (\attrs -> { attrs | id = Just v })
 
 
 {-| -}

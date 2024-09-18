@@ -1,19 +1,20 @@
 module W.DataRow exposing
-    ( Attribute
-    , gap
-    , padding
-    , view
-    , viewExtra
+    ( view, viewExtra, Attribute
+    , gap, padding
     )
+
+{-|
+
+@docs view, viewExtra, Attribute
+@docs gap, padding
+
+-}
 
 import Attr
 import Html as H
 import Html.Attributes as HA
-import Html.Events as HE
 import W.Box
-import W.Internal.Helpers as WH
 import W.Spacing
-import W.Theme
 
 
 {-| -}
@@ -46,11 +47,13 @@ type ClickArea
     | Full
 
 
+{-| -}
 padding : W.Spacing.Spacing -> Attribute msg
 padding v =
     Attr.attr (\attrs -> { attrs | padding = v })
 
 
+{-| -}
 gap : W.Spacing.Spacing -> Attribute msg
 gap v =
     Attr.attr (\attrs -> { attrs | padding = v })
