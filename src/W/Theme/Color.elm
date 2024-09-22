@@ -1,5 +1,5 @@
 module W.Theme.Color exposing
-    ( ColorPalette, ColorScale, ColorVariant(..)
+    ( ColorPalette, ColorVariant(..), ColorScale
     , asBase, asPrimary, asSecondary, asSuccess, asWarning, asDanger
     , asTint, asSolid, asFocusable
     , bg, bgSubtle, tint, tintSubtle, tintStrong, accent, accentSubtle, accentStrong, solid, solidSubtle, solidStrong, solidText, text, textSubtle, shadow
@@ -11,12 +11,66 @@ module W.Theme.Color exposing
     , dangerBg, dangerBgSubtle, dangerTint, dangerTintSubtle, dangerTintStrong, dangerAccent, dangerAccentSubtle, dangerAccentStrong, dangerSolid, dangerSolidSubtle, dangerSolidStrong, dangerSolidText, dangerText, dangerTextSubtle, dangerShadow
     )
 
-{-|
+{-| A theme is defined of a color palette made of six semantic color scales. These scales are the "variants" of a theme and represent different things like a "base" or "neutral" color, a "primary" brand color, status-focused colors like "success", "warning" and "danger", and a "secondary" color used for increased expresiveness.
 
-@docs ColorPalette, ColorScale, ColorVariant
+@docs ColorPalette, ColorVariant, ColorScale
+
+A `ColorScale` is made of a number of color shades. But don't worry! There is dozens of handmade scales ready to be used through [elm-theme-colors](https://package.elm-lang.org/packages/georgesboris/elm-theme-colors/latest/).
 
 
-# Using Colors
+## The Color Scale
+
+Instead of using the common 100-900 scale found in systems like [TailwindCSS](https://tailwindcss.com/docs/customizing-colors) or [Material Design](https://m2.material.io/design/color/the-color-system.html#color-usage-and-palettes), we went for a more semantic approach based on what you would find on [Radix UI](https://www.radix-ui.com/colors). However, [W Theme](https://github.com/georgesboris/w-theme/) names colors directly instead of relying on a numeric scale. It also provides more variations than Radix, so no default use cases fall outside the provided scale.
+
+
+### Background
+
+  - **bg** — the main background of your ui
+  - **bg-subtle** — an alternate, slightly darker, color of your main background. useful for creating depth.
+
+
+### Tint
+
+  - **tint **— useful for subtle backgrounds of some UI elements.
+  - **tint-subtle **— subtler variation, useful for "pressed" states.
+  - **tint-strong **— stronger variation, useful for "hovered" states.
+
+
+### Accent
+
+  - **accent** — useful for dividers, borders and other small UI elements.
+  - **accent-subtle** — subtle variation, useful for "pressed" states.
+  - **accent-strong** — stronger variation, useful for "hovered" states.
+
+Accent colors are not made for background or text usage as they're not guaranteed to have proper contrast, they should be used for colored elements.
+
+
+### Solid
+
+  - **solid** — useful for solid elements such as buttons.
+  - **solid-subtle** — subtle variation, useful for "pressed" states.
+  - **solid-strong** — stronger variation, useful for "hovered" states.
+  - **solid-text** — contrasting color ensuring legibility of text over solid backgrounds
+
+Solid colors should use solid-text as their text color for proper accessibility.
+
+
+### Text
+
+  - **text** — the main text color of your application.
+  - **text-subtle** — subtler variation for secondary text.
+
+Both text colors are guaranteed to be accessible over any background and tint colors.
+
+
+### Shadow
+
+  - **shadow** — a darker shade of the color, useful for coloring shadows.
+
+Shadows are usually used with alpha values.
+
+
+# Using Color Variants
 
 You should mostly use colors according to the current variant.
 This will make your styles more dynamic. Each html element can easily set its own variant, like so:
@@ -41,26 +95,34 @@ However, if you wish to specify variant-specific colors regardless of context yo
         ]
         [ ... ]
 
+@docs asBase, asPrimary, asSecondary, asSuccess, asWarning, asDanger
 
-## Shadows
+
+# Using Color Components
+
+There are a few utility components that can be used to quickly apply some styles to your elements.
+
+@docs asTint, asSolid, asFocusable
+
+
+# Using Shadows
 
 Shadow colors receive an alpha value as they're meant to be used with transparency.
 
     Html.div
         [ W.Theme.styleList
-            [ ( "box-shadow", "0 0 8px " ++ W.Theme.Color.shadow 0.1 )
+            [ ( "box-shadow"
+              , "0 0 8px " ++ W.Theme.Color.shadow 0.1 )
             ]
         ]
         [ ... ]
 
 
-# Variant - Scopes & Components
-
-@docs asBase, asPrimary, asSecondary, asSuccess, asWarning, asDanger
-@docs asTint, asSolid, asFocusable
-
-
 # Variant Colors
+
+These colors will be related to the currently available variant.
+
+By default, the `base` variant is selected.
 
 @docs bg, bgSubtle, tint, tintSubtle, tintStrong, accent, accentSubtle, accentStrong, solid, solidSubtle, solidStrong, solidText, text, textSubtle, shadow
 

@@ -6,7 +6,6 @@ A design system framework for Elm applications.
 
 ## Features
 
-
 ### **A curated set of design tokens**
 
 Taking inspiration from other frameworks like [radix-ui](https://www.radix-ui.com/), [tailwindcss](https://tailwindcss.com/), [shadcn](https://ui.shadcn.com/), [daisyui](https://daisyui.com/) and others.

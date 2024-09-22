@@ -1,7 +1,7 @@
 module W.Theme.Radius exposing
     ( RadiusScale
     , Radius
-    , none, xs, sm, md, lg, xl, xl2, xl3, custom
+    , none, xs, sm, md, lg, xl, xl2, xl3, full, custom
     , toCSS
     )
 
@@ -34,7 +34,7 @@ The value can be transformed into a CSS value later:
         ]
 
 @docs Radius
-@docs none, xs, sm, md, lg, xl, xl2, xl3, custom
+@docs none, xs, sm, md, lg, xl, xl2, xl3, full, custom
 @docs toCSS
 
 -}
@@ -105,6 +105,12 @@ xl2 =
 xl3 : Radius
 xl3 =
     Radius (WH.cssValue "radius-3xl")
+
+
+{-| -}
+full : Radius
+full =
+    Radius "9999px"
 
 
 {-| A custom value using `rem` as unit.

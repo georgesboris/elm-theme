@@ -1,37 +1,85 @@
 module W.Theme exposing
-    ( globalTheme, classTheme, themeComponents
-    , lightTheme, darkTheme, Theme
-    , noDarkMode, darkModeFromClass, darkModeFromSystemPreferences, DarkMode
+    ( globalTheme
+    , classTheme
+    , themeComponents
+    , DarkMode, noDarkMode, darkModeFromClass, darkModeFromSystemPreferences
+    , Theme, lightTheme, darkTheme
     , withId
     , withHeadingFont, withTextFont, withCodeFont
-    , withSpacing, withRadius
+    , withSpacing, withSizing, withRadius
     , withColorPalette, withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
-    , toId, toFontPalette, toSpacingScale, toRadiusScale, toColorPalette, toExtraVariables
     , styleList, styleListIf
+    , toId, toFontPalette, toColorPalette, toSpacingScale, toSizingScale, toRadiusScale, toExtraVariables
     )
 
 {-|
 
 
-## Setting Themes
+# Setting Up
 
-@docs globalTheme, classTheme, themeComponents
-@docs lightTheme, darkTheme, Theme
-@docs noDarkMode, darkModeFromClass, darkModeFromSystemPreferences, DarkMode
+@docs globalTheme
+
+Theme's are most commonly set globally. By using `globalTheme` the theme will be applied to the `body` element directly.
+
+@docs classTheme
+
+However, if you want to set up multiple themes in the same page, or if you don't want to use Elm Theme for your whole application but just for part of it, you can set `class` based themes.
+
+@docs themeComponents
+
+**When not using global themes**, you should add the styles for your theme components manually. These will enable features such as `W.Theme.Color.asPrimary` and `W.Theme.Color.asSolid`.
 
 
-## Creating Custom Themes
+# Dark Modes
+
+When applying a theme using any of the available methods, you can also provide a dark mode strategy.
+
+Not that the themes passed in for dark modes will only change color tokens. Other tokens will still be configured based on the main theme.
+
+@docs DarkMode, noDarkMode, darkModeFromClass, darkModeFromSystemPreferences
+
+
+# Creating Custom Themes
+
+You should always start a new theme by extending one of the default themes:
+
+    W.Theme.lightTheme
+        |> W.Theme.withTextFont "Roboto"
+        |> W.Theme.withPrimaryColor myProductColor
+
+@docs Theme, lightTheme, darkTheme
+
+
+## Theme Id
 
 @docs withId
+
+This setting can be useful for debugging theme inheritance.
+
+
+## Theme Fonts
+
 @docs withHeadingFont, withTextFont, withCodeFont
-@docs withSpacing, withRadius
+
+
+## Theme Radius, Sizing & Spacing
+
+@docs withSpacing, withSizing, withRadius
+
+
+## Theme Colors
+
 @docs withColorPalette, withBaseColor, withPrimaryColor, withSecondaryColor, withSuccessColor, withWarningColor, withDangerColor
-@docs toId, toFontPalette, toSpacingScale, toRadiusScale, toColorPalette, toExtraVariables
 
 
-## Using Theme Values
+# Styling Helpers
 
 @docs styleList, styleListIf
+
+
+# Extracting Theme Values
+
+@docs toId, toFontPalette, toColorPalette, toSpacingScale, toSizingScale, toRadiusScale, toExtraVariables
 
 -}
 
@@ -43,6 +91,7 @@ import W.Internal.Helpers as WH
 import W.Theme.Color
 import W.Theme.Font
 import W.Theme.Radius
+import W.Theme.Sizing
 import W.Theme.Spacing
 
 
@@ -60,6 +109,7 @@ type alias ThemeData =
     , fontPalette : W.Theme.Font.FontPalette
     , radius : W.Theme.Radius.RadiusScale
     , spacing : W.Theme.Spacing.SpacingScale
+    , sizing : W.Theme.Sizing.SizingScale
     , colorPalette : W.Theme.Color.ColorPalette
     , extraCSSVariables : List ( String, String )
     }
@@ -85,6 +135,12 @@ toFontPalette (Theme theme) =
 toSpacingScale : Theme -> W.Theme.Spacing.SpacingScale
 toSpacingScale (Theme theme) =
     theme.spacing
+
+
+{-| -}
+toSizingScale : Theme -> W.Theme.Sizing.SizingScale
+toSizingScale (Theme theme) =
+    theme.sizing
 
 
 {-| -}
@@ -117,6 +173,7 @@ lightTheme =
         , fontPalette = defaultFonts
         , radius = defaultRadiusScale
         , spacing = defaultSpacingScale
+        , sizing = defaultSizingScale
         , colorPalette =
             { base = W.Color.slate
             , primary = W.Color.blue
@@ -137,6 +194,7 @@ darkTheme =
         , fontPalette = defaultFonts
         , radius = defaultRadiusScale
         , spacing = defaultSpacingScale
+        , sizing = defaultSizingScale
         , colorPalette =
             { base = W.Color.slateDark
             , primary = W.Color.blueDark
@@ -188,6 +246,18 @@ defaultRadiusScale =
     , xl = 0.75
     , xl2 = 1.0
     , xl3 = 1.5
+    }
+
+
+defaultSizingScale : W.Theme.Sizing.SizingScale
+defaultSizingScale =
+    { xs = 16
+    , sm = 20
+    , md = 24
+    , lg = 36
+    , xl = 48
+    , xl2 = 64
+    , xl3 = 80
     }
 
 
@@ -273,6 +343,12 @@ withRadius value (Theme theme) =
 withSpacing : W.Theme.Spacing.SpacingScale -> Theme -> Theme
 withSpacing value (Theme theme) =
     Theme { theme | spacing = value }
+
+
+{-| -}
+withSizing : W.Theme.Sizing.SizingScale -> Theme -> Theme
+withSizing value (Theme theme) =
+    Theme { theme | sizing = value }
 
 
 {-| -}
@@ -552,6 +628,13 @@ themeBaseStyles (Theme theme) =
     , WH.cssVar "radius-xl" (WH.rem theme.radius.xl)
     , WH.cssVar "radius-2xl" (WH.rem theme.radius.xl2)
     , WH.cssVar "radius-3xl" (WH.rem theme.radius.xl3)
+    , WH.cssVar "sizing-xs" (WH.rem theme.sizing.xs)
+    , WH.cssVar "sizing-sm" (WH.rem theme.sizing.sm)
+    , WH.cssVar "sizing-md" (WH.rem theme.sizing.md)
+    , WH.cssVar "sizing-lg" (WH.rem theme.sizing.lg)
+    , WH.cssVar "sizing-xl" (WH.rem theme.sizing.xl)
+    , WH.cssVar "sizing-2xl" (WH.rem theme.sizing.xl2)
+    , WH.cssVar "sizing-3xl" (WH.rem theme.sizing.xl3)
     ]
         |> String.join ";"
 

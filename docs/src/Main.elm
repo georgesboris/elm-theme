@@ -6,6 +6,7 @@ import W.Theme
 import W.Theme.Color
 import W.Theme.Font
 import W.Theme.Radius
+import W.Theme.Sizing
 import W.Theme.Spacing
 
 
@@ -45,8 +46,7 @@ demo =
                 , ( "border-radius", W.Theme.Radius.toCSS W.Theme.Radius.xl2 )
                 , ( "border", "1px solid " ++ W.Theme.Color.accentSubtle )
                 , ( "width", "100%" )
-                , ( "max-width", "640px" )
-                , ( "min-width", "560px" )
+                , ( "max-width", W.Theme.Sizing.toCSS W.Theme.Sizing.xl )
                 , ( "display", "flex" )
                 , ( "flex-direction", "column" )
                 ]
@@ -65,7 +65,7 @@ demo =
                         , ( "padding-bottom", W.Theme.Spacing.toCSS W.Theme.Spacing.xs )
                         ]
                     ]
-                    [ H.text "w theme"
+                    [ H.text "elm-theme"
                     ]
                 , H.p
                     [ W.Theme.styleList
@@ -75,7 +75,7 @@ demo =
                         , ( "font-size", "1rem" )
                         ]
                     ]
-                    [ H.text "A theme schema designed for consistency and flexibility."
+                    [ H.text "A design system framework for Elm applications."
                     ]
                 ]
             , [ ( "base", "w/base" )
