@@ -1,4 +1,4 @@
-module W.Sizing exposing
+module W.Theme.Sizing exposing
     ( Sizing
     , xs, sm, md, lg, xl, xl2, xl3
     , none, full, custom

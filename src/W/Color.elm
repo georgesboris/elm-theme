@@ -1,4 +1,4 @@
-module W.Theme.Colors exposing (amber, amberDark, blue, blueDark, bronze, bronzeDark, brown, brownDark, crimson, crimsonDark, cyan, cyanDark, gold, goldDark, grass, grassDark, gray, grayDark, green, greenDark, indigo, indigoDark, iris, irisDark, jade, jadeDark, lime, limeDark, mauve, mauveDark, mint, mintDark, olive, oliveDark, orange, orangeDark, pink, pinkDark, plum, plumDark, purple, purpleDark, red, redDark, ruby, rubyDark, sage, sageDark, sand, sandDark, sky, skyDark, slate, slateDark, teal, tealDark, tomato, tomatoDark, violet, violetDark, yellow, yellowDark)
+module W.Color exposing (amber, amberDark, blue, blueDark, bronze, bronzeDark, brown, brownDark, crimson, crimsonDark, cyan, cyanDark, gold, goldDark, grass, grassDark, gray, grayDark, green, greenDark, indigo, indigoDark, iris, irisDark, jade, jadeDark, lime, limeDark, mauve, mauveDark, mint, mintDark, olive, oliveDark, orange, orangeDark, pink, pinkDark, plum, plumDark, purple, purpleDark, red, redDark, ruby, rubyDark, sage, sageDark, sand, sandDark, sky, skyDark, slate, slateDark, teal, tealDark, tomato, tomatoDark, violet, violetDark, yellow, yellowDark)
 
 {-|
 

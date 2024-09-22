@@ -2,11 +2,10 @@
   "name": "elm-widgets",
   "scripts": {
     "postinstall": "elm-tooling install",
-    "start": "run-pty % npm run start:elm % npm run start:http % npm run start:tailwind % npm run start:gen:styles",
+    "start": "run-pty % npm run start:elm % npm run start:http % npm run start:tailwind",
     "start:elm": "elm-watch hot",
     "start:http": "serve public --single",
     "start:tailwind": "tailwindcss -i ./src/index.css -o ./public/index.css --watch --minify",
-    "start:gen:styles": "node gen-styles.js",
     "start:docs": "elm-doc-preview ./"
   },
   "devDependencies": {
