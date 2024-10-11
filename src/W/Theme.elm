@@ -583,17 +583,7 @@ themeRootStyles themeClass =
                 |> Maybe.withDefault "body"
     in
     prefix ++ """ {
-  background-color: """ ++ W.Theme.Color.bg ++ """;
-  color: """ ++ W.Theme.Color.text ++ """;
   font-family: """ ++ W.Theme.Font.text ++ """;
-}
-""" ++ prefix ++ """ h1,
-""" ++ prefix ++ """ h2,
-""" ++ prefix ++ """ h3,
-""" ++ prefix ++ """ h4,
-""" ++ prefix ++ """ h5,
-""" ++ prefix ++ """ h6 {
-  font-family: """ ++ W.Theme.Font.heading ++ """;
 }
 """ ++ prefix ++ """ code,
 """ ++ prefix ++ """ kbd,
