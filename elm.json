@@ -1,24 +1,24 @@
 {
-  "type": "package",
-  "name": "georgesboris/elm-theme",
-  "summary": "A design system framework for Elm applications.",
-  "license": "MPL-2.0",
-  "version": "1.0.0",
-  "exposed-modules": [
-    "W.Theme",
-    "W.Theme.Color",
-    "W.Theme.Font",
-    "W.Theme.Radius",
-    "W.Theme.Sizing",
-    "W.Theme.Spacing"
-  ],
-  "elm-version": "0.19.0 <= v < 0.20.0",
-  "dependencies": {
-    "avh4/elm-color": "1.0.0 <= v < 2.0.0",
-    "elm/core": "1.0.0 <= v < 2.0.0",
-    "elm/html": "1.0.0 <= v < 2.0.0"
-  },
-  "test-dependencies": {
-    "elm-explorations/test": "2.0.0 <= v < 3.0.0"
-  }
+    "type": "package",
+    "name": "georgesboris/elm-theme",
+    "summary": "A design system framework for Elm applications.",
+    "license": "MPL-2.0",
+    "version": "1.0.1",
+    "exposed-modules": [
+        "W.Theme",
+        "W.Theme.Color",
+        "W.Theme.Font",
+        "W.Theme.Radius",
+        "W.Theme.Sizing",
+        "W.Theme.Spacing"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+        "avh4/elm-color": "1.0.0 <= v < 2.0.0",
+        "elm/core": "1.0.0 <= v < 2.0.0",
+        "elm/html": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {
+        "elm-explorations/test": "2.0.0 <= v < 3.0.0"
+    }
 }
